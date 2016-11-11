@@ -48,7 +48,7 @@
     "@covalent/http": "0.8.1",
     "@covalent/json-formatter": "0.8.1",
     "@covalent/markdown": "0.8.1",
-    "@covalent/data": "0.2.0",
+    "@covalent/data": "0.4.0",
     "ts-helpers": "^1.1.1"
   },
   "devDependencies": {
