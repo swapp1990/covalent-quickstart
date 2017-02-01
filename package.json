@@ -14,7 +14,7 @@
     "e2e-test": "protractor ./protractor.conf.js",
     "lint": "tslint -c ./tslint.json \"./src/**/*.ts\" -e \"./src/**/typings.d.ts\" -e \"./src/environments/**\"",
     "reinstall": "rm -rf node_modules tmp deploy dist && npm i",
-    "postinstall": "ng build --aot -prod",
+    "postinstall": "ng build -prod",
     "start-api": "cd mock-api && covalent-data &",
     "stop-api": "pkill covalent-data",
     "test": "ng test --code-coverage --single-run",
