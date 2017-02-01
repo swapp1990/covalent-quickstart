@@ -32,6 +32,7 @@ import { ChartComponent } from '../components/chart/chart.component';
 import { RequestInterceptor } from '../config/interceptors/request.interceptor';
 
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import {MyDashboardComponent} from "./my-dashboard/my-dashboard.component";
 
 const httpInterceptorProviders: Type<any>[] = [
   RequestInterceptor,
@@ -42,6 +43,7 @@ const httpInterceptorProviders: Type<any>[] = [
     AppComponent,
     MainComponent,
     DashboardComponent,
+    MyDashboardComponent,
     DashboardProductComponent,
     ProductOverviewComponent,
     ProductStatsComponent,

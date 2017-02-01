@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 export class MainComponent {
 
   routes: Object[] = [{
-      title: 'Dashboard',
+      title: 'MyDashboard',
       route: '/',
       icon: 'dashboard',
     }, {
