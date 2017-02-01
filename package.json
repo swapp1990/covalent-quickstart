@@ -9,6 +9,7 @@
     "reusable"
   ],
   "scripts": {
+    "start": "ng serve",
     "e2e": "protractor",
     "e2e-test": "protractor ./protractor.conf.js",
     "lint": "tslint -c ./tslint.json \"./src/**/*.ts\" -e \"./src/**/typings.d.ts\" -e \"./src/environments/**\"",
