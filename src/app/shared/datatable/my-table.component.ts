@@ -3,7 +3,8 @@ import {Component, OnInit, OnChanges, Input} from "@angular/core";
 @Component({
   selector: 'my-table',
   template: `
-    <my-ngx-table [rows]="rows" [cols]="cols"></my-ngx-table>
+    <!--<my-ngx-table [rows]="rows" [cols]="cols"></my-ngx-table>-->
+    <my-cov-table [rows]="rows" [cols]="cols"></my-cov-table>
   `,
 })
 

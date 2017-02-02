@@ -53,9 +53,9 @@ export class MyDashboardComponent implements AfterViewInit {
   // ];
 
   cols = [
-    { prop: 'date' },
-    { prop: 'name' },
-    { prop: 'price' }
+    { name: 'date', label: 'Date' },
+    { name: 'name', label: 'Name' },
+    { name: 'price', label: 'Price' }
   ];
 
   constructor(private _titleService: Title,

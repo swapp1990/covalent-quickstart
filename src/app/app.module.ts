@@ -38,6 +38,7 @@ import {MyDashboardComponent} from "./my-dashboard/my-dashboard.component";
 import {TransactionService} from "../services/transactions.service";
 import {MyTable} from "./shared/datatable/my-table.component";
 import {MyNGXTable} from "./shared/datatable/ngx/ngx-table.component";
+import {MyCovTable} from "./shared/datatable/covalent/covalent-table.component";
 
 const httpInterceptorProviders: Type<any>[] = [
   RequestInterceptor,
@@ -51,6 +52,7 @@ const httpInterceptorProviders: Type<any>[] = [
     MyDashboardComponent,
     MyTable,
     MyNGXTable,
+    MyCovTable,
     DashboardProductComponent,
     ProductOverviewComponent,
     ProductStatsComponent,
