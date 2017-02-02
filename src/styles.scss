@@ -1,3 +1,6 @@
+@import '~@swimlane/ngx-datatable/release/material.css';
+@import '~@swimlane/ngx-datatable/release/assets/icons.css';
+
 // Custom style for loading elements without height
 .will-load {
     min-height: 80px;
@@ -10,4 +13,24 @@ a[md-icon-button] {
 // Capitalize
 .text-capital {
   text-transform: capitalize;
+}
+
+.ngx-datatable,
+.info {
+  text-align: left;
+  width: 75%;
+  margin: 0 auto;
+}
+
+.info {
+  box-sizing: border-box;
+  padding: 0 1em;
+  border: solid 1px #ccc;
+  background: white;
+  font-size: .8em;
+  margin-bottom: 1em;
+}
+
+.ngx-datatable.scroll-vertical {
+  height: 70vh;
 }

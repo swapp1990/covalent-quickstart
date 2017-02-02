@@ -32,7 +32,12 @@ import { ChartComponent } from '../components/chart/chart.component';
 import { RequestInterceptor } from '../config/interceptors/request.interceptor';
 
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+
 import {MyDashboardComponent} from "./my-dashboard/my-dashboard.component";
+import {TransactionService} from "../services/transactions.service";
+import {MyTable} from "./shared/datatable/my-table.component";
+import {MyNGXTable} from "./shared/datatable/ngx/ngx-table.component";
 
 const httpInterceptorProviders: Type<any>[] = [
   RequestInterceptor,
@@ -44,6 +49,8 @@ const httpInterceptorProviders: Type<any>[] = [
     MainComponent,
     DashboardComponent,
     MyDashboardComponent,
+    MyTable,
+    MyNGXTable,
     DashboardProductComponent,
     ProductOverviewComponent,
     ProductStatsComponent,
@@ -60,6 +67,7 @@ const httpInterceptorProviders: Type<any>[] = [
     DashboardTemplateComponent,
     EmailTemplateComponent,
     EditorTemplateComponent,
+
   ], // directives, components, and pipes owned by this NgModule
   imports: [
     BrowserModule,
@@ -74,11 +82,13 @@ const httpInterceptorProviders: Type<any>[] = [
     CovalentMarkdownModule.forRoot(),
     appRoutes,
     NgxChartsModule,
+    NgxDatatableModule
   ], // modules needed to run this module
   providers: [
     appRoutingProviders,
     httpInterceptorProviders,
     Title,
+    TransactionService
   ], // additional providers needed for this module
   entryComponents: [ ],
   bootstrap: [ AppComponent ],

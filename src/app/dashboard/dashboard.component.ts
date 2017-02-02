@@ -7,6 +7,8 @@ import { TdLoadingService } from '@covalent/core';
 import { ItemsService, UsersService, ProductsService, AlertsService } from '../../services';
 
 import { multi } from './data';
+import {TransactionService} from "../../services/transactions.service";
+import {TransactionData} from "../../models/transaction";
 
 @Component({
   selector: 'qs-dashboard',
@@ -49,7 +51,8 @@ export class DashboardComponent implements AfterViewInit {
               private _usersService: UsersService,
               private _alertsService: AlertsService,
               private _productsService: ProductsService,
-              private _loadingService: TdLoadingService) {
+              private _loadingService: TdLoadingService,
+              private transService: TransactionService) {
                 // Chart
                 this.multi = multi.map((group: any) => {
                   group.series = group.series.map((dataItem: any) => {
@@ -61,6 +64,7 @@ export class DashboardComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+   
     this._titleService.setTitle( 'Covalent Quickstart' );
     this._loadingService.register('items.load');
     this._itemsService.query().subscribe((items: Object[]) => {

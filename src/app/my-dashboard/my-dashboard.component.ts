@@ -7,6 +7,8 @@ import { TdLoadingService } from '@covalent/core';
 import { ItemsService, UsersService, ProductsService, AlertsService } from '../../services';
 
 import { multi } from './data';
+import {TransactionData} from "../../models/transaction";
+import {TransactionService} from "../../services/transactions.service";
 
 @Component({
   selector: 'qs-dashboard',
@@ -20,7 +22,7 @@ export class MyDashboardComponent implements AfterViewInit {
   users: Object[];
   products: Object[];
   alerts: Object[];
-
+  monthlyData: TransactionData[] = [];
   // Chart
   single: any[];
   multi: any[];
@@ -44,12 +46,25 @@ export class MyDashboardComponent implements AfterViewInit {
   // line, area
   autoScale: boolean = true;
 
+  // rows = [
+  //   { price: '453', date: '24', name: 'Swimlane', category: "Grocery" },
+  //   { price: '76', date: '26', name: 'KFC' },
+  //   { price: '25', date: '13', name: 'Burger King' },
+  // ];
+
+  cols = [
+    { prop: 'date' },
+    { prop: 'name' },
+    { prop: 'price' }
+  ];
+
   constructor(private _titleService: Title,
               private _itemsService: ItemsService,
               private _usersService: UsersService,
               private _alertsService: AlertsService,
               private _productsService: ProductsService,
-              private _loadingService: TdLoadingService) {
+              private _loadingService: TdLoadingService,
+              private transService: TransactionService) {
                 // Chart
                 this.multi = multi.map((group: any) => {
                   group.series = group.series.map((dataItem: any) => {
@@ -61,6 +76,16 @@ export class MyDashboardComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.transService.getMonthlyData().subscribe (
+      (monthlyData: TransactionData[]) => {
+        console.log(monthlyData);
+        this.monthlyData = monthlyData;
+      },
+      err => {
+        console.log(err);
+      }
+    );
+
     this._titleService.setTitle( 'Covalent Quickstart' );
     this._loadingService.register('items.load');
     this._itemsService.query().subscribe((items: Object[]) => {
