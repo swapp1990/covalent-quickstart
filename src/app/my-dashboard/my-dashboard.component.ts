@@ -2,55 +2,28 @@ import { Component, AfterViewInit } from '@angular/core';
 
 import { Title }     from '@angular/platform-browser';
 
-import { TdLoadingService } from '@covalent/core';
+import {TdLoadingService, TdMediaService} from '@covalent/core';
 
 import { ItemsService, UsersService, ProductsService, AlertsService } from '../../services';
 
 import { multi } from './data';
 import {TransactionData} from "../../models/transaction";
 import {TransactionService} from "../../services/transactions.service";
+import {EnumUtils} from "../../data/enums/EnumUtils";
+import {Amount, Category} from "../../models/catagory";
 
 @Component({
   selector: 'qs-dashboard',
   templateUrl: './my-dashboard.component.html',
   styleUrls: ['./my-dashboard.component.scss'],
-  viewProviders: [ ItemsService, UsersService, ProductsService, AlertsService ],
+  viewProviders: [ ],
 })
 export class MyDashboardComponent implements AfterViewInit {
-
-  items: Object[];
-  users: Object[];
-  products: Object[];
-  alerts: Object[];
-  monthlyData: TransactionData[] = [];
-  // Chart
-  single: any[];
-  multi: any[];
-
-  view: any[] = [700, 400];
-
-  // options
-  showXAxis: boolean = true;
-  showYAxis: boolean = true;
-  gradient: boolean = false;
-  showLegend: boolean = false;
-  showXAxisLabel: boolean = true;
-  xAxisLabel: string = '';
-  showYAxisLabel: boolean = true;
-  yAxisLabel: string = 'Sales';
-
-  colorScheme: any = {
-    domain: ['#1565C0', '#2196F3', '#81D4FA', '#FF9800', '#EF6C00'],
-  };
-
-  // line, area
-  autoScale: boolean = true;
-
-  // rows = [
-  //   { price: '453', date: '24', name: 'Swimlane', category: "Grocery" },
-  //   { price: '76', date: '26', name: 'KFC' },
-  //   { price: '25', date: '13', name: 'Burger King' },
-  // ];
+  rows = [
+    { price: '453', date: '24', name: 'Swimlane', category: "Grocery" },
+    { price: '76', date: '26', name: 'KFC' },
+    { price: '25', date: '13', name: 'Burger King' },
+  ];
 
   cols = [
     { name: 'date', label: 'Date' },
@@ -58,83 +31,74 @@ export class MyDashboardComponent implements AfterViewInit {
     { name: 'price', label: 'Price' }
   ];
 
-  constructor(private _titleService: Title,
-              private _itemsService: ItemsService,
-              private _usersService: UsersService,
-              private _alertsService: AlertsService,
-              private _productsService: ProductsService,
-              private _loadingService: TdLoadingService,
-              private transService: TransactionService) {
-                // Chart
-                this.multi = multi.map((group: any) => {
-                  group.series = group.series.map((dataItem: any) => {
-                    dataItem.name = new Date(dataItem.name);
-                    return dataItem;
-                  });
-                  return group;
-                });
+  categories: Category[]; //Category List
+
+  monthlyData: TransactionData[] = [];
+
+  types: string[] = ["Expense", "Income"];
+  selectedType: string = "Expense";
+  selectedMonth: string = "November";
+  months: any[] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+  selectedCategory: string = "";
+
+  constructor(private transService: TransactionService,
+              public media: TdMediaService) {
+
   }
 
   ngAfterViewInit(): void {
-    this.transService.getMonthlyData().subscribe (
-      (monthlyData: TransactionData[]) => {
-        console.log(monthlyData);
-        this.monthlyData = monthlyData;
-      },
-      err => {
-        console.log(err);
-      }
-    );
+    // broadcast to all listener observables when loading the page
+    this.media.broadcast();
+    this.initializeCategories();
+    this.getMonthlyDataByCategory("");
+  }
 
-    this._titleService.setTitle( 'Covalent Quickstart' );
-    this._loadingService.register('items.load');
-    this._itemsService.query().subscribe((items: Object[]) => {
-      this.items = items;
-      setTimeout(() => {
-        this._loadingService.resolve('items.load');
-      }, 750);
-    }, (error: Error) => {
-      this._itemsService.staticQuery().subscribe((items: Object[]) => {
-        this.items = items;
-        setTimeout(() => {
-          this._loadingService.resolve('items.load');
-        }, 750);
+  //Show Categories
+  initializeCategories() {
+    this.categories = [];
+    if(this.selectedType === "Expense") {
+      EnumUtils.getExpenseCategoriesString().map(expense => {
+        this.categories.push({name: expense, icon:'local_grocery_store', monthlyAmount: new Amount(), expectedAmount: 0});
       });
-    });
-    this._loadingService.register('alerts.load');
-    this._alertsService.query().subscribe((alerts: Object[]) => {
-      this.alerts = alerts;
-      setTimeout(() => {
-        this._loadingService.resolve('alerts.load');
-      }, 750);
-    });
-    this._loadingService.register('products.load');
-    this._productsService.query().subscribe((products: Object[]) => {
-      this.products = products;
-      setTimeout(() => {
-        this._loadingService.resolve('products.load');
-      }, 750);
-    });
-    this._loadingService.register('favorites.load');
-    this._productsService.query().subscribe((products: Object[]) => {
-      this.products = products;
-      setTimeout(() => {
-        this._loadingService.resolve('favorites.load');
-      }, 750);
-    });
-    this._loadingService.register('users.load');
-    this._usersService.query().subscribe((users: Object[]) => {
-      this.users = users;
-      setTimeout(() => {
-        this._loadingService.resolve('users.load');
-      }, 750);
-    }, (error: Error) => {
-      this._usersService.staticQuery().subscribe((users: Object[]) => {
-        this.users = users;
-        setTimeout(() => {
-          this._loadingService.resolve('users.load');
-        }, 750);
+    } else {
+      EnumUtils.getIncomeCategoriesString().map(income => {
+        this.categories.push({name: income, icon:'local_grocery_store', monthlyAmount: new Amount(), expectedAmount: 0});
       });
-    });
+    }
+    this.selectedCategory = "";
+  }
+
+
+  getMonthlyDataByCategory(changedCategory: string) {
+      this.transService.getMonthlyDataByCategory(this.selectedMonth, changedCategory)
+        .subscribe (
+          (monthlyData: TransactionData[]) => {
+            this.monthlyData = monthlyData;
+            //console.log("Get Data", this.monthlyData);
+          },
+          err => {
+            console.log(err);
+          }
+        );
+  }
+
+  onSelected(category) {
+    console.log("Sel ", category);
+    this.getMonthlyDataByCategory(category.name);
+  }
+
+  onTypeChange() {
+    this.initializeCategories();
+    this.getMonthlyDataByCategory("");
+  }
+
+  onMonthChange() {
+    console.log("Month");
+    this.getMonthlyDataByCategory(this.selectedCategory);
+  }
+
+  ngOnChanges(): void {
+    this.getMonthlyDataByCategory(this.selectedCategory);
   }
 }

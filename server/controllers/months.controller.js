@@ -20,3 +20,21 @@ module.exports.monthGetAll = function(req, res) {
       res.json(months);
     });
 };
+
+module.exports.monthGetCategory = function(req, res) {
+  var query = {
+    month: req.query.month
+  };
+
+  if(req.query && req.query.category) {
+    console.log(req.query.category);
+    query.category = req.query.category;
+  }
+  Transaction
+    .find()
+    .where(query)
+    .exec(function(err, months) {
+      //console.log("Found Rows", months.length);
+      res.json(months);
+    });
+};
