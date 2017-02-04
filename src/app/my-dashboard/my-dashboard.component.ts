@@ -41,6 +41,10 @@ export class MyDashboardComponent implements AfterViewInit {
   months: any[] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
   selectedCategory: string = "";
+  totalForCategory: number = 0;
+
+  rowSelected: boolean = false;
+  selectedTransaction: TransactionData = null;
 
   constructor(private transService: TransactionService,
               public media: TdMediaService) {
@@ -76,6 +80,7 @@ export class MyDashboardComponent implements AfterViewInit {
           (monthlyData: TransactionData[]) => {
             this.monthlyData = monthlyData;
             //console.log("Get Data", this.monthlyData);
+            console.log("Got Data ", this.monthlyData.length);
           },
           err => {
             console.log(err);
@@ -85,6 +90,7 @@ export class MyDashboardComponent implements AfterViewInit {
 
   onSelected(category) {
     console.log("Sel ", category);
+    this.selectedCategory = category.name;
     this.getMonthlyDataByCategory(category.name);
   }
 
@@ -96,6 +102,52 @@ export class MyDashboardComponent implements AfterViewInit {
   onMonthChange() {
     console.log("Month");
     this.getMonthlyDataByCategory(this.selectedCategory);
+  }
+
+  onSelectTableRow(data) {
+    console.log("Dash ", data);
+    this.rowSelected = data.selected;
+    if(data.selected) {
+      this.selectedTransaction = data.row;
+    } else {
+      this.selectedTransaction = null;
+    }
+  }
+
+  createMonthData(data: TransactionData) {
+    this.transService.createMonthData(data)
+      .subscribe(
+        data => {
+          console.log("Create ", data);
+          this.getMonthlyDataByCategory(this.selectedCategory);
+        },
+        err => {console.log(err);}
+      );
+  }
+
+  deleteMonthData(data: TransactionData) {
+    this.transService.deleteMonthlyData(this.selectedTransaction._id)
+      .subscribe (
+        data => {
+          console.log("Delete " + data);
+          this.getMonthlyDataByCategory(this.selectedCategory);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+  }
+
+  onCopyTransaction() {
+    this.createMonthData(this.selectedTransaction);
+  }
+
+  onDeleteTransaction() {
+    this.deleteMonthData(this.selectedTransaction);
+  }
+
+  onEditTransaction() {
+
   }
 
   ngOnChanges(): void {

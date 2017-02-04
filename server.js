@@ -2,6 +2,7 @@ require('./server/data/db.js');
 // server.js
 const express = require('express');
 var routes = require('./server/routes');
+var bodyParser = require('body-parser');
 const app = express();
 const path = require('path');
 // Run the app by serving the static files
@@ -14,6 +15,8 @@ var server = app.listen(process.env.PORT || 8080, function () {
   console.log('Magic happens on port ' + port);
 });
 
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use('/api', routes);
 
 // For all GET requests, send back index.html

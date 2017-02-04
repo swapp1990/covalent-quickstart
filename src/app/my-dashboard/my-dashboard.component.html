@@ -31,10 +31,38 @@
         <div flex-gt-sm="60">
           <div layout="column">
             <md-card>
-              <!--<md-card-title>Monthly Data</md-card-title>-->
-              <!--<md-card-subtitle>monthly transactions of user</md-card-subtitle>-->
+              <!--<md-card-title>{{selectedCategory}}</md-card-title>-->
+              <md-card-subtitle>Total {{totalForCategory}}</md-card-subtitle>
+              <!--<md-divider></md-divider>-->
+              <div layout="row" layout-align="start center" class="pad-left-sm pad-right-sm">
+                <span class="push-left-sm">
+                  <span class="md-title">{{selectedCategory}}</span>
+                </span>
+                <td-search-box #searchBox backIcon="arrow_back" class="push-right-sm" placeholder="Search here" flex>
+                </td-search-box>
+                <button *ngIf="rowSelected" (click)="onEditTransaction()" md-icon-button>
+                    <md-icon>edit</md-icon>
+                </button>
+                <button *ngIf="rowSelected" (click)="onCopyTransaction()" md-icon-button>
+                    <md-icon>content_copy</md-icon>
+                </button>
+                <button *ngIf="rowSelected" (click)="onDeleteTransaction()" md-icon-button>
+                    <md-icon>delete</md-icon>
+                </button>
+                <button *ngIf="!rowSelected" md-icon-button>
+                    <md-icon>more_vert</md-icon>
+                </button>
+              </div>
               <md-divider></md-divider>
-              <my-table [rows]="monthlyData" [cols]="cols"></my-table>
+              <my-table [rows]="monthlyData" [cols]="cols" (selectOutput)="onSelectTableRow($event)"></my-table>
+            </md-card>
+            <md-card>
+              <td-expansion-panel label="label" sublabel="sublabel" expand="true">
+                <td-expansion-summary>
+                  ... add summary that will be shown when expansion-panel is "collapsed".
+                </td-expansion-summary>
+                ... add content that will be shown when the step is "expanded"
+              </td-expansion-panel>
             </md-card>
           </div>
         </div>
