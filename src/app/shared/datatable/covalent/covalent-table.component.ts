@@ -6,6 +6,7 @@ import {ITdDataTableColumn, TdDataTableService, IPageChangeEvent, TdDialogServic
   template:
     `
 <td-data-table
+  *ngIf="!isInlineEdit"
   [data]="filteredData"
   [columns]="cols"
   [selectable]="true"
@@ -16,18 +17,18 @@ import {ITdDataTableColumn, TdDataTableService, IPageChangeEvent, TdDialogServic
   (sortChange)="sort($event)"
   (rowSelect)="selectEvent($event)">
 </td-data-table>
-<!--<table td-data-table>-->
-  <!--<th td-data-table-column-->
-      <!--*ngFor="let column of cols"-->
-      <!--[numeric]="column.numeric">-->
-    <!--{{column.label}}-->
-  <!--</th>-->
-   <!--<tr td-data-table-row *ngFor="let row of filteredData">-->
-    <!--<td td-data-table-cell *ngFor="let column of cols" (click)="inlineEdit(row, column.name)" [numeric]="column.numeric">-->
-      <!--{{row[column.name]}}-->
-    <!--</td>-->
-   <!--</tr>-->
-<!--</table>-->
+<table td-data-table *ngIf="isInlineEdit">
+  <th td-data-table-column
+      *ngFor="let column of cols"
+      [numeric]="column.numeric">
+    {{column.label}}
+  </th>
+   <tr td-data-table-row *ngFor="let row of filteredData">
+    <td td-data-table-cell *ngFor="let column of cols" (click)="inlineEdit(row, column.name)" [numeric]="column.numeric">
+      {{row[column.name]}}
+    </td>
+   </tr>
+</table>
 <td-paging-bar [pageSizes]="[5, 10, 15, 20]" [total]="filteredTotal" (change)="page($event)"></td-paging-bar>
     `,
 })
@@ -35,6 +36,7 @@ import {ITdDataTableColumn, TdDataTableService, IPageChangeEvent, TdDialogServic
 export class MyCovTable {
   @Input() rows: any;
   @Input() cols: any;
+  @Input() isInlineEdit: boolean = false;
 
   filteredData: any[] = [];
   filteredTotal: number = 0;
@@ -43,6 +45,7 @@ export class MyCovTable {
   pageSize: number = 5;
 
   @Output() selectOutput = new EventEmitter();
+  @Output() updatedRow = new EventEmitter();
 
   constructor(private _dataTableService: TdDataTableService,
               private _dialogService: TdDialogService) {}
@@ -52,6 +55,7 @@ export class MyCovTable {
   }
 
   ngOnChanges(): void {
+    this.currentPage = 1;
     this.filter();
   }
 
@@ -63,6 +67,7 @@ export class MyCovTable {
   }
 
   filter(): void {
+    console.log("Filter");
     let newData: any[] = this.rows;
     this.filteredTotal = newData.length;
     newData = this._dataTableService.pageData(newData, this.fromRow, this.currentPage * this.pageSize);
@@ -76,6 +81,8 @@ export class MyCovTable {
     }).afterClosed().subscribe((value: any) => {
       if (value !== undefined) {
         row[name] = value;
+        //console.log("Row ", row);
+        this.updatedRow.emit(row);
       }
     });
   }

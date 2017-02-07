@@ -1,0 +1,41 @@
+[{
+	"id" : "1",
+		"name" : "Smith's",
+		"date" : "8",
+		"price" : "56.6",
+		"category" : "Grocery",
+		"payment" : "D",
+		"type" : "Essential"
+},{
+	"id" : "2",
+		"name" : "Smith's",
+		"date" : "9",
+		"price" : "34",
+		"category" : "Grocery",
+		"payment" : "D",
+		"type" : "Essential"
+},{
+	"id" : "3",
+		"name" : "Indian Store",
+		"date" : "15",
+		"price" : "42.34",
+		"category" : "Grocery",
+		"payment" : "D",
+		"type" : "Essential"
+},{
+  "id" : "4",
+    "name" : "Subway",
+    "date" : "8",
+    "price" : "9",
+    "category" : "Food",
+    "payment" : "D",
+    "type" : "Essential"
+},{
+   "id" : "5",
+    "name" : "Sushi",
+    "date" : "17",
+    "price" : "12",
+    "category" : "Food",
+    "payment" : "D",
+    "type" : "Essential"
+}]

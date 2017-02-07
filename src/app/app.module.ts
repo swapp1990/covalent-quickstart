@@ -34,7 +34,7 @@ import { RequestInterceptor } from '../config/interceptors/request.interceptor';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
-import {MyDashboardComponent} from "./my-dashboard/my-dashboard.component";
+import {MyDashboardComponent, MyDialogContent} from "./my-dashboard/my-dashboard.component";
 import {TransactionService} from "../services/transactions.service";
 import {MyTable} from "./shared/datatable/my-table.component";
 import {MyNGXTable} from "./shared/datatable/ngx/ngx-table.component";
@@ -57,6 +57,7 @@ const httpInterceptorProviders: Type<any>[] = [
     MyCovTable,
     MySideTabs,
     MyCovSideNav,
+    MyDialogContent,
     DashboardProductComponent,
     ProductOverviewComponent,
     ProductStatsComponent,

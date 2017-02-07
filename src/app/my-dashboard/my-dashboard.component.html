@@ -40,21 +40,42 @@
                 </span>
                 <td-search-box #searchBox backIcon="arrow_back" class="push-right-sm" placeholder="Search here" flex>
                 </td-search-box>
-                <button *ngIf="rowSelected" (click)="onEditTransaction()" md-icon-button>
-                    <md-icon>edit</md-icon>
-                </button>
+                <!--<button *ngIf="rowSelected" (click)="onEditTransaction()" md-icon-button>-->
+                    <!--<md-icon>edit</md-icon>-->
+                <!--</button>-->
                 <button *ngIf="rowSelected" (click)="onCopyTransaction()" md-icon-button>
                     <md-icon>content_copy</md-icon>
                 </button>
                 <button *ngIf="rowSelected" (click)="onDeleteTransaction()" md-icon-button>
                     <md-icon>delete</md-icon>
                 </button>
-                <button *ngIf="!rowSelected" md-icon-button>
-                    <md-icon>more_vert</md-icon>
+                <button *ngIf="!rowSelected" (click)="onCreateClicked()"md-icon-button>
+                    <md-icon>add</md-icon>
+                </button>
+                <button *ngIf="!rowSelected" (click)="onInlineEditClicked()"md-icon-button>
+                  <md-icon>edit</md-icon>
                 </button>
               </div>
+              <form *ngIf="createNew">
+                <div layout="row" layout-margin>
+                  <md-input-container flex>
+                    <input #edate type="number" md-input placeholder="Date">
+                  </md-input-container>
+                  <md-input-container flex>
+                    <input #ename md-input placeholder="Name">
+                  </md-input-container>
+                  <md-input-container flex>
+                    <input #eprice type="number" md-input placeholder="Price">
+                  </md-input-container>
+                  <button md-mini-fab color="accent" (click)="addTransaction(edate.value, ename.value, eprice.value)">
+                    <md-icon>add</md-icon>
+                  </button>
+                </div>
+              </form>
               <md-divider></md-divider>
-              <my-table [rows]="monthlyData" [cols]="cols" (selectOutput)="onSelectTableRow($event)"></my-table>
+              <my-table [rows]="monthlyData" [cols]="cols" [isInlineEdit]="isInlineEdit"
+                        (selectOutput)="onSelectTableRow($event)"
+                        (updatedRow)="onUpdateRow($event)"></my-table>
             </md-card>
             <md-card>
               <td-expansion-panel label="label" sublabel="sublabel" expand="true">

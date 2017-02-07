@@ -2,7 +2,7 @@ import { Component, AfterViewInit } from '@angular/core';
 
 import { Title }     from '@angular/platform-browser';
 
-import {TdLoadingService, TdMediaService} from '@covalent/core';
+import {TdLoadingService, TdMediaService, TdDialogService} from '@covalent/core';
 
 import { ItemsService, UsersService, ProductsService, AlertsService } from '../../services';
 
@@ -11,12 +11,28 @@ import {TransactionData} from "../../models/transaction";
 import {TransactionService} from "../../services/transactions.service";
 import {EnumUtils} from "../../data/enums/EnumUtils";
 import {Amount, Category} from "../../models/catagory";
+import {ComponentType} from "@angular/material";
+
+@Component({
+  selector: 'dialog-content',
+  template:
+    `
+      <h1> My Box </h1>
+    `
+})
+
+export class MyDialogContent {
+
+}
 
 @Component({
   selector: 'qs-dashboard',
   templateUrl: './my-dashboard.component.html',
   styleUrls: ['./my-dashboard.component.scss'],
   viewProviders: [ ],
+  entryComponents: [
+    MyDialogContent
+  ]
 })
 export class MyDashboardComponent implements AfterViewInit {
   rows = [
@@ -46,8 +62,12 @@ export class MyDashboardComponent implements AfterViewInit {
   rowSelected: boolean = false;
   selectedTransaction: TransactionData = null;
 
+  createNew: boolean = false;
+  isInlineEdit: boolean = false;
+
   constructor(private transService: TransactionService,
-              public media: TdMediaService) {
+              public media: TdMediaService,
+              private _dialogService: TdDialogService) {
 
   }
 
@@ -81,6 +101,9 @@ export class MyDashboardComponent implements AfterViewInit {
             this.monthlyData = monthlyData;
             //console.log("Get Data", this.monthlyData);
             console.log("Got Data ", this.monthlyData.length);
+            if(this.monthlyData.length == 0) {
+              this.rowSelected = false;
+            }
           },
           err => {
             console.log(err);
@@ -109,6 +132,7 @@ export class MyDashboardComponent implements AfterViewInit {
     this.rowSelected = data.selected;
     if(data.selected) {
       this.selectedTransaction = data.row;
+      this.createNew = false;
     } else {
       this.selectedTransaction = null;
     }
@@ -119,6 +143,17 @@ export class MyDashboardComponent implements AfterViewInit {
       .subscribe(
         data => {
           console.log("Create ", data);
+          this.getMonthlyDataByCategory(this.selectedCategory);
+        },
+        err => {console.log(err);}
+      );
+  }
+
+  updateMonthData(data: TransactionData) {
+    this.transService.updateMonthlyData(data._id, data)
+      .subscribe(
+        data => {
+          console.log("Updated ", data);
           this.getMonthlyDataByCategory(this.selectedCategory);
         },
         err => {console.log(err);}
@@ -147,7 +182,33 @@ export class MyDashboardComponent implements AfterViewInit {
   }
 
   onEditTransaction() {
+    this.openCreateDialog();
+  }
 
+  onCreateClicked() {
+    this.createNew = !this.createNew;
+  }
+
+  onUpdateRow(row) {
+    //console.log("On ", row);
+    this.updateMonthData(row);
+  }
+
+  onInlineEditClicked() {
+    this.isInlineEdit = !this.isInlineEdit;
+  }
+
+  openCreateDialog(): void {
+    this._dialogService.open(MyDialogContent);
+  }
+
+  addTransaction(date: number, name: string, price: number) {
+    let newData:TransactionData  = new TransactionData(this.selectedCategory, this.selectedMonth, "false", "false");
+    newData.date = date;
+    newData.name = name;
+    newData.price = price;
+    console.log("Data ", newData);
+    this.createMonthData(newData);
   }
 
   ngOnChanges(): void {
