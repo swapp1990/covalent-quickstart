@@ -41,6 +41,10 @@ import {MyNGXTable} from "./shared/datatable/ngx/ngx-table.component";
 import {MyCovTable} from "./shared/datatable/covalent/covalent-table.component";
 import {MySideTabs} from "./shared/side-tabs/my-side-tabs.component";
 import {MyCovSideNav} from "./shared/side-tabs/covalent/covalent-sidenav.component";
+import {DetailView} from "./my-dashboard/detail-view/detail-view.component";
+import {MyExpansionPanel} from "./shared/expansion-panel/expansion-panel.component";
+import DynamicComponent from "./shared/dynamic-component/dynamic-component";
+import {DetailViewTable} from "./my-dashboard/detail-view/detail-view-table.component";
 
 const httpInterceptorProviders: Type<any>[] = [
   RequestInterceptor,
@@ -52,6 +56,10 @@ const httpInterceptorProviders: Type<any>[] = [
     MainComponent,
     DashboardComponent,
     MyDashboardComponent,
+    DynamicComponent,
+    DetailView,
+    DetailViewTable,
+    MyExpansionPanel,
     MyTable,
     MyNGXTable,
     MyCovTable,

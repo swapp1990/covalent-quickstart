@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import {Component, AfterViewInit, ChangeDetectorRef} from '@angular/core';
 
 import { Title }     from '@angular/platform-browser';
 
@@ -67,7 +67,8 @@ export class MyDashboardComponent implements AfterViewInit {
 
   constructor(private transService: TransactionService,
               public media: TdMediaService,
-              private _dialogService: TdDialogService) {
+              private _dialogService: TdDialogService,
+              private changeDetector: ChangeDetectorRef) {
 
   }
 
@@ -125,6 +126,12 @@ export class MyDashboardComponent implements AfterViewInit {
   onMonthChange() {
     console.log("Month");
     this.getMonthlyDataByCategory(this.selectedCategory);
+  }
+
+  onUpdatedDetail(updatedTransaction) {
+    //console.log("Updated ", updatedTransaction);
+    this.selectedTransaction = updatedTransaction;
+    this.updateMonthData(updatedTransaction);
   }
 
   onSelectTableRow(data) {
@@ -213,5 +220,6 @@ export class MyDashboardComponent implements AfterViewInit {
 
   ngOnChanges(): void {
     this.getMonthlyDataByCategory(this.selectedCategory);
+    this.changeDetector.detectChanges();
   }
 }

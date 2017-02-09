@@ -67,7 +67,7 @@ export class MyCovTable {
   }
 
   filter(): void {
-    console.log("Filter");
+    //console.log("Filter");
     let newData: any[] = this.rows;
     this.filteredTotal = newData.length;
     newData = this._dataTableService.pageData(newData, this.fromRow, this.currentPage * this.pageSize);

@@ -77,13 +77,8 @@
                         (selectOutput)="onSelectTableRow($event)"
                         (updatedRow)="onUpdateRow($event)"></my-table>
             </md-card>
-            <md-card>
-              <td-expansion-panel label="label" sublabel="sublabel" expand="true">
-                <td-expansion-summary>
-                  ... add summary that will be shown when expansion-panel is "collapsed".
-                </td-expansion-summary>
-                ... add content that will be shown when the step is "expanded"
-              </td-expansion-panel>
+            <md-card *ngIf="rowSelected">
+              <detail-view [inputData]="selectedTransaction" (updatedDetails)="onUpdatedDetail($event)"></detail-view>
             </md-card>
           </div>
         </div>
