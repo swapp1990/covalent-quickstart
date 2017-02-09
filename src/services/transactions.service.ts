@@ -57,4 +57,28 @@ export class TransactionService {
       .delete(newUrl)
       .map((response: Response) => null);
   }
+
+  //Get all Amount (Income & Expense) for Monthly Data.
+  monthGetAllAmount(month: string): Observable<any[]> {
+    let newUrl = this.monthsUrl +'/price'+ '?month='+ month;
+    return this.http
+      .get(newUrl)
+      .map((response: Response) => response.json());
+  }
+
+  //Get all Essential
+  monthGetAllEssentialCost(month: string): Observable<any[]> {
+    let newUrl = this.monthsUrl +'/price'+ '?month='+ month +'&isEssential=true';
+    return this.http
+      .get(newUrl)
+      .map((response: Response) => response.json());
+  }
+
+  //Get all Incomes for Monthly Data.
+  monthGetAllIncomes(month: string, isIncome: string): Observable<any[]> {
+    let newUrl = this.monthsUrl +'/price'+ '?month='+ month + '&isIncome' + isIncome;
+    return this.http
+      .get(newUrl)
+      .map((response: Response) => response.json());
+  }
 }

@@ -142,3 +142,44 @@ module.exports.monthUpdateOne = function(req,res) {
       }
     });
 };
+
+
+//Aggregation function
+module.exports.getTotalCost = function(req, res) {
+  var query = {};
+  if(req.query) {
+    if(req.query.month) {
+      query.month = req.query.month;
+    }
+    if(req.query.category) {
+      query.category = req.query.category;
+    }
+    if(req.query && req.query.isIncome) {
+      query.isIncome = req.query.isIncome;
+    }
+    if(req.query.isEssential) {
+      query.isEssential = req.query.isEssential;
+    }
+  }
+  Transaction.aggregate([
+    {
+      $match: query
+    },
+    {
+      $group: {
+        _id: {
+          "category": "$category",
+          "month": "$month"
+        },
+        balance: { $sum: "$price"  }
+      }
+    }
+  ], function (err, result) {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    //console.log(result);
+    res.json(result);
+  });
+}

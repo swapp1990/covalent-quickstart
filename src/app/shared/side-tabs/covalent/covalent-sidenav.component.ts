@@ -9,7 +9,9 @@ import {ITdDataTableColumn, TdDataTableService, IPageChangeEvent} from "@covalen
         md-ripple class="block relative"
         (click)="onClick(row)">
         <md-icon md-list-icon>{{row.icon}}</md-icon>
-        {{row.name}}
+        {{row.name}} - {{row.monthlyAmount.total}} ({{row.monthlyAmount.once}})
+        <md-divider></md-divider>
+        
       </a>
     `,
 })

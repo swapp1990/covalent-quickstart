@@ -44,7 +44,8 @@ export class MyDashboardComponent implements AfterViewInit {
   cols = [
     { name: 'date', label: 'Date' },
     { name: 'name', label: 'Name' },
-    { name: 'price', label: 'Price' }
+    { name: 'price', label: 'Price' },
+    { name: 'isEssential', label: 'Is Essential?'}
   ];
 
   categories: Category[]; //Category List
@@ -67,6 +68,8 @@ export class MyDashboardComponent implements AfterViewInit {
   createNew: boolean = false;
   isInlineEdit: boolean = false;
 
+  totalAmountByType: number = 0;
+  totalAmountOnceByType: number = 0;
   constructor(private transService: TransactionService,
               public media: TdMediaService,
               private _dialogService: TdDialogService,
@@ -94,8 +97,40 @@ export class MyDashboardComponent implements AfterViewInit {
       });
     }
     this.selectedCategory = "";
+    this.calculateTotalAmount(this.selectedMonth);
   }
 
+  resetEachCategoryTotal() {
+    this.totalAmountByType = 0;
+    this.totalAmountOnceByType = 0;
+    this.categories.map((category: Category) => {
+      category.monthlyAmount = new Amount();
+    });
+  }
+
+  //Total Spent for Monthly Data.
+  calculateTotalAmount(month) {
+    this.resetEachCategoryTotal();
+    this.transService.monthGetAllAmount(month)
+      .subscribe (
+        amountData => {
+          amountData.map(body => {
+            this.setEachCategoryTotal(body._id.category, body.balance);
+            //console.log("Total Amount by Type:" + this.totalAmountByType);
+          });
+        });
+  }
+
+  //Sets amount for each category and also calculates total amount.
+  setEachCategoryTotal(categoryName: string, totalAmount: number) {
+    this.categories.map((category: Category) => {
+      if(category.name === categoryName) {
+        category.monthlyAmount.total = Math.round(totalAmount);
+        this.totalAmountByType += category.monthlyAmount.total;
+        this.totalAmountByType = Math.round(this.totalAmountByType);
+      }
+    });
+  }
 
   getMonthlyDataByCategory(changedCategory: string) {
       this.transService.getMonthlyDataByCategory(this.selectedMonth, changedCategory)

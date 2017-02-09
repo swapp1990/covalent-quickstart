@@ -11,4 +11,7 @@ router.route('/months/:monthId')
   .put(ctrlMonths.monthUpdateOne)
   .delete(ctrlMonths.monthDeleteOne);
 
+router.route('/months/price')
+  .get(ctrlMonths.getTotalCost);
+
 module.exports = router;
