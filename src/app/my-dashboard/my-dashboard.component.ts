@@ -55,6 +55,8 @@ export class MyDashboardComponent implements AfterViewInit {
   selectedType: string = "Expense";
   selectedMonth: string = "November";
   months: any[] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  selectedYear: string = "2016";
+  years: any[] = ["2016", "2017"];
 
   selectedCategory: string = "";
   totalForCategory: number = 0;
@@ -124,7 +126,11 @@ export class MyDashboardComponent implements AfterViewInit {
   }
 
   onMonthChange() {
-    console.log("Month");
+    //console.log("Month");
+    this.getMonthlyDataByCategory(this.selectedCategory);
+  }
+
+  onYearChange() {
     this.getMonthlyDataByCategory(this.selectedCategory);
   }
 
@@ -135,7 +141,7 @@ export class MyDashboardComponent implements AfterViewInit {
   }
 
   onSelectTableRow(data) {
-    console.log("Dash ", data);
+    //console.log("Dash ", data);
     this.rowSelected = data.selected;
     if(data.selected) {
       this.selectedTransaction = data.row;
@@ -143,6 +149,7 @@ export class MyDashboardComponent implements AfterViewInit {
     } else {
       this.selectedTransaction = null;
     }
+    console.log("Selected ", this.selectedTransaction);
   }
 
   createMonthData(data: TransactionData) {
@@ -157,6 +164,9 @@ export class MyDashboardComponent implements AfterViewInit {
   }
 
   updateMonthData(data: TransactionData) {
+    if(!data.year) {
+      data.year = "2016";
+    }
     this.transService.updateMonthlyData(data._id, data)
       .subscribe(
         data => {

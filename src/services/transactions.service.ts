@@ -21,7 +21,7 @@ export class TransactionService {
 
   //Get monthly data for category types
   getMonthlyDataByCategory(month: string, category: string): Observable<TransactionData[]> {
-    let newUrl = this.monthsUrl + '?category='+ category+'&month='+ month;
+    let newUrl = this.monthsUrl + '?category='+ category+'&month='+ month;//+'&year=2016';
     return this.http
       .get(newUrl)
       .map((response: Response) => response.json());

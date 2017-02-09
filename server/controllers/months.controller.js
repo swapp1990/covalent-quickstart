@@ -30,6 +30,10 @@ module.exports.monthGetCategory = function(req, res) {
     console.log(req.query.category);
     query.category = req.query.category;
   }
+  if(req.query && req.query.year) {
+    //console.log(req.query.category);
+    query.year = req.query.year;
+  }
   Transaction
     .find()
     .where(query)
@@ -49,6 +53,7 @@ module.exports.monthCreateOne = function(req,res) {
       payment : req.body.payment,
       category: req.body.category,
       month: req.body.month,
+      year: req.body.year,
       isIncome: req.body.isIncome,
       isEssential: req.body.isEssential,
       details: req.body.details
@@ -115,6 +120,7 @@ module.exports.monthUpdateOne = function(req,res) {
           doc.category = req.body.category;
           doc.payment = req.body.payment;
           doc.month = req.body.month;
+          doc.year = req.body.year;
           doc.isIncome = req.body.isIncome;
           doc.isEssential = req.body.isEssential;
           if(req.body.details) {

@@ -87,9 +87,21 @@ export class DetailView implements OnInit, OnChanges {
   onAddRow(rowData) {
     let columns: string[] = Object.keys(rowData);
     if(this.inputData.details) {
-      this.inputData.details.forEach(detail => {
-        detail[columns[0]] = rowData[columns[0]];
-      });
+      if(this.inputData.details.length == 0) {
+        var newDetail = {};
+        newDetail[columns[0]]= rowData[columns[0]];
+        this.inputData.details.push(newDetail);
+      } else {
+        this.inputData.details.forEach(detail => {
+          detail[columns[0]] = rowData[columns[0]];
+        });
+      }
+
+    } else {
+      this.inputData.details = [];
+      var newDetail = {};
+      newDetail[columns[0]]= rowData[columns[0]];
+      this.inputData.details.push(newDetail);
     }
     //console.log("Updated Detail", this.inputData);
     this.updatedDetails.emit(this.inputData);

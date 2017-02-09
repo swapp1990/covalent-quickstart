@@ -15,7 +15,7 @@ var transactionSchema = new mongoose.Schema({
   payment : String,
   type : String,
   month: String,
-  year: Number,
+  year: String,
   isIncome: String,
   isEssential: String,
   details: mongoose.Schema.Types.Mixed

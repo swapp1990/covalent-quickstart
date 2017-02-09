@@ -24,6 +24,11 @@
             {{mth}}
         </md-option>
       </md-select>
+      <md-select flex="20" placeholder="Select Year" [(ngModel)]="selectedYear"  (ngModelChange)="onMonthChange($event)">
+        <md-option *ngFor="let year of years" [value]="year">
+          {{year}}
+        </md-option>
+      </md-select>
 
     </div>
     <div class="md-content" flex md-scroll-y>
@@ -65,7 +70,7 @@
                     <input #ename md-input placeholder="Name">
                   </md-input-container>
                   <md-input-container flex>
-                    <input #eprice type="number" md-input placeholder="Price">
+                    <input #eprice type="number" step="0.01" md-input placeholder="Price">
                   </md-input-container>
                   <button md-mini-fab color="accent" (click)="addTransaction(edate.value, ename.value, eprice.value)">
                     <md-icon>add</md-icon>

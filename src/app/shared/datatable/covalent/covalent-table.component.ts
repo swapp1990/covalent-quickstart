@@ -56,6 +56,7 @@ export class MyCovTable {
 
   ngOnChanges(): void {
     this.currentPage = 1;
+    this.fromRow = 1;
     this.filter();
   }
 
