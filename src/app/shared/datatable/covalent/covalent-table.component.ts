@@ -29,7 +29,7 @@ import {ITdDataTableColumn, TdDataTableService, IPageChangeEvent, TdDialogServic
     </td>
    </tr>
 </table>
-<td-paging-bar [pageSizes]="[5, 10, 15, 20]" [total]="filteredTotal" (change)="page($event)"></td-paging-bar>
+<td-paging-bar *ngIf="showPageBar" [pageSizes]="[5, 10, 15, 20]" [total]="filteredTotal" (change)="page($event)"></td-paging-bar>
     `,
 })
 
@@ -37,7 +37,8 @@ export class MyCovTable {
   @Input() rows: any;
   @Input() cols: any;
   @Input() isInlineEdit: boolean = false;
-
+  @Input() showPageBar: boolean = true;
+  
   filteredData: any[] = [];
   filteredTotal: number = 0;
   fromRow: number = 1;

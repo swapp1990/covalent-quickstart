@@ -5,7 +5,7 @@ import { CovalentCoreModule } from '@covalent/core';
 import { CovalentHttpModule, IHttpInterceptor } from '@covalent/http';
 import { CovalentHighlightModule } from '@covalent/highlight';
 import { CovalentMarkdownModule } from '@covalent/markdown';
-import { CovalentChartsModule } from '@covalent/charts';
+import {CovalentChartsModule, TdChartsComponent} from '@covalent/charts';
 
 import { AppComponent } from './app.component';
 import { MainComponent } from './main/main.component';
@@ -45,6 +45,7 @@ import {DetailView} from "./my-dashboard/detail-view/detail-view.component";
 import {MyExpansionPanel} from "./shared/expansion-panel/expansion-panel.component";
 import DynamicComponent from "./shared/dynamic-component/dynamic-component";
 import {DetailViewTable} from "./my-dashboard/detail-view/detail-view-table.component";
+import {MySearchView} from "./search-view/search-view.component";
 
 const httpInterceptorProviders: Type<any>[] = [
   RequestInterceptor,
@@ -56,6 +57,7 @@ const httpInterceptorProviders: Type<any>[] = [
     MainComponent,
     DashboardComponent,
     MyDashboardComponent,
+    MySearchView,
     DynamicComponent,
     DetailView,
     DetailViewTable,
@@ -81,8 +83,7 @@ const httpInterceptorProviders: Type<any>[] = [
     TemplatesComponent,
     DashboardTemplateComponent,
     EmailTemplateComponent,
-    EditorTemplateComponent,
-
+    EditorTemplateComponent
   ], // directives, components, and pipes owned by this NgModule
   imports: [
     BrowserModule,

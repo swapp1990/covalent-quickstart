@@ -43,6 +43,39 @@ module.exports.monthGetCategory = function(req, res) {
     });
 };
 
+module.exports.getDataBasedOnQuery = function(req, res) {
+  var query = {
+
+  };
+
+  if(req.query) {
+    if(req.query.name) {
+      query.name = req.query.name;
+    }
+  }
+  Transaction
+    .find()
+    .where(query)
+    //.where('details.Game','Gone Home')
+    .exec(function(err, months) {
+      console.log("Found Rows", months.length);
+      res.json(months);
+    });
+};
+
+module.exports.getDataByDetails = function(req, res) {
+  var key = 'details.';
+  key = key + req.query.key;
+
+  Transaction
+    .find()
+    .where(key,req.query.value)
+    .exec(function(err, months) {
+      console.log("Found Rows", months.length);
+      res.json(months);
+    });
+};
+
 module.exports.monthCreateOne = function(req,res) {
   console.log("Create ", req.body);
   Transaction

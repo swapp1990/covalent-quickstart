@@ -9,6 +9,7 @@ import "rxjs/add/operator/map";
 @Injectable()
 export class TransactionService {
   private monthsUrl = '/api/months';
+  private searchurl = '/api/search';
 
   constructor(private http: Http) { }
 
@@ -77,6 +78,26 @@ export class TransactionService {
   //Get all Incomes for Monthly Data.
   monthGetAllIncomes(month: string, isIncome: string): Observable<any[]> {
     let newUrl = this.monthsUrl +'/price'+ '?month='+ month + '&isIncome' + isIncome;
+    return this.http
+      .get(newUrl)
+      .map((response: Response) => response.json());
+  }
+
+  //Get Data based on Query.
+  getAllDataBasedOnQuery(name: string): Observable<TransactionData[]> {
+    let newUrl = this.searchurl;
+    if(name) {
+      newUrl = this.searchurl + '?name=' + name;
+    }
+
+    return this.http
+      .get(newUrl)
+      .map((response: Response) => response.json());
+  }
+
+  //Get all data based on details query
+  getDataBasedOnDetails(key: string, value: string): Observable<TransactionData[]> {
+    let newUrl = this.monthsUrl + '/details' + '?key=' + key + '&value=' + value;
     return this.http
       .get(newUrl)
       .map((response: Response) => response.json());

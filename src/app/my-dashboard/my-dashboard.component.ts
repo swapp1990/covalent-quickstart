@@ -162,6 +162,7 @@ export class MyDashboardComponent implements AfterViewInit {
 
   onMonthChange() {
     //console.log("Month");
+    this.calculateTotalAmount(this.selectedMonth);
     this.getMonthlyDataByCategory(this.selectedCategory);
   }
 
