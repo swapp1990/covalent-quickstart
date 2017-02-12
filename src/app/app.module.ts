@@ -46,6 +46,8 @@ import {MyExpansionPanel} from "./shared/expansion-panel/expansion-panel.compone
 import DynamicComponent from "./shared/dynamic-component/dynamic-component";
 import {DetailViewTable} from "./my-dashboard/detail-view/detail-view-table.component";
 import {MySearchView} from "./search-view/search-view.component";
+import {EducationLoan} from "./my-dashboard/detail-view/special/education-loan.dyn.component";
+import {CarLoan} from "./my-dashboard/detail-view/special/car-loan.dyn.component";
 
 const httpInterceptorProviders: Type<any>[] = [
   RequestInterceptor,
@@ -61,6 +63,8 @@ const httpInterceptorProviders: Type<any>[] = [
     DynamicComponent,
     DetailView,
     DetailViewTable,
+    EducationLoan,
+    CarLoan,
     MyExpansionPanel,
     MyTable,
     MyNGXTable,

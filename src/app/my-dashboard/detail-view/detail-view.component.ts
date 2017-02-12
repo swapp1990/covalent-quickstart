@@ -1,6 +1,8 @@
 import {Component, OnInit, OnChanges, Input, Output, EventEmitter} from "@angular/core";
 import {DetailViewTable} from "./detail-view-table.component";
 import {TransactionData} from "../../../models/transaction";
+import {EducationLoan} from "./special/education-loan.dyn.component";
+import {CarLoan} from "./special/car-loan.dyn.component";
 
 @Component({
   selector: 'detail-view',
@@ -9,6 +11,8 @@ import {TransactionData} from "../../../models/transaction";
                         <!--[componentData]="componentData"></my-expansion-panel>-->
     <detail-view-table [colsI]="detailCols" [rowsI]="detailRows" 
                        (updatedRow)="onUpdatedRow($event)" (addRow)="onAddRow($event)"></detail-view-table>                    
+    <!--<education-loan></education-loan>-->
+    <dynamic-component [componentData]="renderedComponent"></dynamic-component>
   `,
 })
 
@@ -16,6 +20,9 @@ export class DetailView implements OnInit, OnChanges {
   @Input() inputData: TransactionData;
   detailCols: any = [];
   detailRows: any = [];
+  selectedDataLabel: string = "";
+
+  renderedComponent: any = null;
 
   @Output() updatedDetails = new EventEmitter();
   // @Input() cols: any;
@@ -26,22 +33,34 @@ export class DetailView implements OnInit, OnChanges {
   componentData = null;
 
   ngOnInit(): void {
-    this.componentData = {
-      component: DetailViewTable,
-      inputs: {
-        cols : this.detailCols,
-        rows: this.detailRows
-      }
-    };
+
   }
 
   ngOnChanges(changes) {
     //console.log("I ", this.inputData);
     this.refreshDetails();
-
+    this.updateSpecialComponent();
     //console.log("Col ", this.detailCols);
     //console.log("Row ", this.detailRows);
     //this.detailCols = [{name: 'new', label: 'New'}];
+  }
+
+  updateSpecialComponent() {
+    if(this.inputData.name === 'India Education Loan') {
+      this.renderedComponent = {
+        component: EducationLoan,
+        inputs: {
+          selectedTransaction: this.inputData
+        }
+      };
+    } else if(this.inputData.name === 'Car Loan') {
+      this.renderedComponent = {
+        component: CarLoan,
+        inputs: {
+          selectedTransaction: this.inputData
+        }
+      };
+    }
   }
 
   refreshDetails() {
@@ -63,6 +82,10 @@ export class DetailView implements OnInit, OnChanges {
 
   selectEvent(data) {
     //this.selectOutput.emit(data);
+  }
+
+  isLabelEmpty() {
+
   }
 
   onUpdatedRow(rowData) {

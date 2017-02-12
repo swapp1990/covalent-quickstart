@@ -12,10 +12,22 @@ import {Month} from "../../data/enums/months";
         <md-card tdMediaToggle="gt-xs" [mediaClasses]="['push']">
            <td-search-box class="push-left push-right" placeholder="search" [alwaysVisible]="true"
            (searchDebounce)="filterResult($event)"></td-search-box>
+           <button *ngIf="rowSelected" (click)="onCopyTransaction()" md-icon-button>
+                    <md-icon>content_copy</md-icon>
+           </button>
+           <button *ngIf="rowSelected" (click)="onDeleteTransaction()" md-icon-button>
+                    <md-icon>delete</md-icon>
+           </button>
+           <button *ngIf="!rowSelected" (click)="onInlineEditClicked()"md-icon-button>
+                  <md-icon>edit</md-icon>
+           </button>
            <md-divider></md-divider>
            <my-table [rows]="data" [cols]="cols" [isInlineEdit]="isInlineEdit" [showPageBar]="true"
                         (selectOutput)="onSelectTableRow($event)"
                         (updatedRow)="onUpdateRow($event)"></my-table>
+        </md-card>
+        <md-card *ngIf="rowSelected">
+          <detail-view [inputData]="selectedTransaction" (updatedDetails)="onUpdatedDetail($event)"></detail-view>
         </md-card>
         <md-card tdMediaToggle="gt-xs" [mediaClasses]="['push']">
           <td-charts title="Sales Bar Chart"
@@ -34,6 +46,7 @@ import {Month} from "../../data/enums/months";
           </td-chart-bar>
         </td-charts>
         </md-card>
+        
         <!--<td-layout-footer>-->
           <!--<div layout="row" layout-align="start center">-->
           <!--<span class="md-caption">Copyright &copy; 2017 OldMonk90. All rights reserved</span>-->
@@ -79,6 +92,8 @@ export class MySearchView implements AfterViewInit {
     {'x': 'Nov', 'y': 0},
     {'x': 'Dec', 'y': 0}];
 
+  rowSelected: boolean = false;
+  selectedTransaction: TransactionData = null;
 
   isInlineEdit: boolean = true;
   searchText: string = "";
@@ -105,6 +120,30 @@ export class MySearchView implements AfterViewInit {
           this.getDataBySearchTag(this.searchText);
         },
         err => {console.log(err);}
+      );
+  }
+
+  createMonthData(data: TransactionData) {
+    this.transService.createMonthData(data)
+      .subscribe(
+        data => {
+          //console.log("Create ", data);
+          this.getDataBySearchTag(this.searchText);
+        },
+        err => {console.log(err);}
+      );
+  }
+
+  deleteMonthData(data: TransactionData) {
+    this.transService.deleteMonthlyData(this.selectedTransaction._id)
+      .subscribe (
+        data => {
+          //console.log("Delete " + data);
+          this.getDataBySearchTag(this.searchText);
+        },
+        err => {
+          console.log(err);
+        }
       );
   }
 
@@ -146,5 +185,39 @@ export class MySearchView implements AfterViewInit {
     console.log(this.graphData);
     this.changeDetector.detectChanges();
     this.graphData = this.graphData.slice();
+  }
+
+  onSelectTableRow(data) {
+    //console.log("Dash ", data);
+    this.rowSelected = data.selected;
+    if(data.selected) {
+      this.selectedTransaction = data.row;
+      //this.createNew = false;
+    } else {
+      this.selectedTransaction = null;
+    }
+    console.log("Selected ", this.selectedTransaction);
+  }
+
+  onCopyTransaction() {
+    this.createMonthData(this.selectedTransaction);
+  }
+
+  onDeleteTransaction() {
+    this.deleteMonthData(this.selectedTransaction);
+  }
+
+  onEditTransaction() {
+    //this.openCreateDialog();
+  }
+
+  onUpdatedDetail(updatedTransaction) {
+    //console.log("Updated ", updatedTransaction);
+    this.selectedTransaction = updatedTransaction;
+    this.updateMonthData(updatedTransaction);
+  }
+
+  onInlineEditClicked() {
+    this.isInlineEdit = !this.isInlineEdit;
   }
 }

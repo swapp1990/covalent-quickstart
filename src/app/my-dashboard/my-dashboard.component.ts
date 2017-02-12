@@ -133,7 +133,7 @@ export class MyDashboardComponent implements AfterViewInit {
   }
 
   getMonthlyDataByCategory(changedCategory: string) {
-      this.transService.getMonthlyDataByCategory(this.selectedMonth, changedCategory)
+      this.transService.getMonthlyDataByCategory(this.selectedYear, this.selectedMonth, changedCategory)
         .subscribe (
           (monthlyData: TransactionData[]) => {
             this.monthlyData = monthlyData;
@@ -256,7 +256,7 @@ export class MyDashboardComponent implements AfterViewInit {
   }
 
   addTransaction(date: number, name: string, price: number) {
-    let newData:TransactionData  = new TransactionData(this.selectedCategory, this.selectedMonth, "false", "false");
+    let newData:TransactionData  = new TransactionData(this.selectedCategory, this.selectedYear, this.selectedMonth, "false", "false");
     newData.date = date;
     newData.name = name;
     newData.price = price;

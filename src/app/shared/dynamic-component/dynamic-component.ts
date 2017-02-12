@@ -1,9 +1,11 @@
 import {Component, Input, ViewContainerRef, ViewChild, ReflectiveInjector, ComponentFactoryResolver} from '@angular/core';
 import {DetailViewTable} from "../../my-dashboard/detail-view/detail-view-table.component";
+import {EducationLoan} from "../../my-dashboard/detail-view/special/education-loan.dyn.component";
+import {CarLoan} from "../../my-dashboard/detail-view/special/car-loan.dyn.component";
 
 @Component({
   selector: 'dynamic-component',
-  entryComponents: [DetailViewTable], // Reference to the components must be here in order to dynamically create them
+  entryComponents: [DetailViewTable, EducationLoan, CarLoan], // Reference to the components must be here in order to dynamically create them
   template: `
     <div #dynamicComponentContainer></div>
   `,
