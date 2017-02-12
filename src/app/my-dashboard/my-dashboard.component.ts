@@ -54,9 +54,9 @@ export class MyDashboardComponent implements AfterViewInit {
 
   types: string[] = ["Expense", "Income"];
   selectedType: string = "Expense";
-  selectedMonth: string = "November";
+  selectedMonth: string = "January";
   months: any[] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-  selectedYear: string = "2016";
+  selectedYear: string = "2017";
   years: any[] = ["2016", "2017"];
 
   selectedCategory: string = "";
@@ -97,7 +97,7 @@ export class MyDashboardComponent implements AfterViewInit {
       });
     }
     this.selectedCategory = "";
-    this.calculateTotalAmount(this.selectedMonth);
+    this.calculateTotalAmount(this.selectedMonth, this.selectedYear);
   }
 
   resetEachCategoryTotal() {
@@ -109,9 +109,9 @@ export class MyDashboardComponent implements AfterViewInit {
   }
 
   //Total Spent for Monthly Data.
-  calculateTotalAmount(month) {
+  calculateTotalAmount(month, year) {
     this.resetEachCategoryTotal();
-    this.transService.monthGetAllAmount(month)
+    this.transService.monthGetAllAmount(month, year)
       .subscribe (
         amountData => {
           amountData.map(body => {
@@ -150,8 +150,9 @@ export class MyDashboardComponent implements AfterViewInit {
   }
 
   onSelected(category) {
-    console.log("Sel ", category);
+    //console.log("Sel ", category);
     this.selectedCategory = category.name;
+    this.calculateTotalAmount(this.selectedMonth, this.selectedYear);
     this.getMonthlyDataByCategory(category.name);
   }
 
@@ -162,7 +163,7 @@ export class MyDashboardComponent implements AfterViewInit {
 
   onMonthChange() {
     //console.log("Month");
-    this.calculateTotalAmount(this.selectedMonth);
+    this.calculateTotalAmount(this.selectedMonth, this.selectedYear);
     this.getMonthlyDataByCategory(this.selectedCategory);
   }
 

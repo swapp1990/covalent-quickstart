@@ -54,12 +54,16 @@ module.exports.getDataBasedOnQuery = function(req, res) {
     }
   }
   Transaction
-    .find()
-    .where(query)
+    .find({"name":{ "$regex": req.query.name, "$options": "i" } })
+    //.where(query)
     //.where('details.Game','Gone Home')
     .exec(function(err, months) {
-      console.log("Found Rows", months.length);
-      res.json(months);
+      if(months) {
+        console.log("Found Rows", months.length);
+        res.json(months);
+      } else {
+        res.json("");
+      }
     });
 };
 
@@ -184,6 +188,9 @@ module.exports.getTotalCost = function(req, res) {
     if(req.query.month) {
       query.month = req.query.month;
     }
+    if(req.query.year) {
+      query.year = req.query.year;
+    }
     if(req.query.category) {
       query.category = req.query.category;
     }
@@ -202,7 +209,8 @@ module.exports.getTotalCost = function(req, res) {
       $group: {
         _id: {
           "category": "$category",
-          "month": "$month"
+          "month": "$month",
+          "year": "$year"
         },
         balance: { $sum: "$price"  }
       }

@@ -60,8 +60,8 @@ export class TransactionService {
   }
 
   //Get all Amount (Income & Expense) for Monthly Data.
-  monthGetAllAmount(month: string): Observable<any[]> {
-    let newUrl = this.monthsUrl +'/price'+ '?month='+ month;
+  monthGetAllAmount(month: string, year: string): Observable<any[]> {
+    let newUrl = this.monthsUrl +'/price'+ '?month='+ month+ '&year='+ year;
     return this.http
       .get(newUrl)
       .map((response: Response) => response.json());

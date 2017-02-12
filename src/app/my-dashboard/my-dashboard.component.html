@@ -54,11 +54,13 @@
                 <button *ngIf="rowSelected" (click)="onDeleteTransaction()" md-icon-button>
                     <md-icon>delete</md-icon>
                 </button>
-                <button *ngIf="!rowSelected" (click)="onCreateClicked()"md-icon-button>
-                    <md-icon>add</md-icon>
+                <button *ngIf="!rowSelected" (click)="onCreateClicked()" md-icon-button>
+                  <md-icon *ngIf="!createNew">add</md-icon>
+                  <md-icon *ngIf="createNew" color="primary">add</md-icon>
                 </button>
-                <button *ngIf="!rowSelected" (click)="onInlineEditClicked()"md-icon-button>
-                  <md-icon>edit</md-icon>
+                <button (click)="onInlineEditClicked()" md-icon-button>
+                  <md-icon *ngIf="isInlineEdit">edit</md-icon>
+                  <md-icon *ngIf="!isInlineEdit" color="primary">edit</md-icon>
                 </button>
               </div>
               <form *ngIf="createNew">

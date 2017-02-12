@@ -149,7 +149,9 @@ export class MySearchView implements AfterViewInit {
 
   filterResult(displayName: string = ''): void {
     this.searchText = displayName;
-    this.getDataBySearchTag(displayName);
+    if(this.searchText !== "") {
+      this.getDataBySearchTag(displayName);
+    }
   }
 
   getDataBySearchTag(searchText: string) {

@@ -38,7 +38,7 @@ export class MyCovTable {
   @Input() cols: any;
   @Input() isInlineEdit: boolean = false;
   @Input() showPageBar: boolean = true;
-  
+
   filteredData: any[] = [];
   filteredTotal: number = 0;
   fromRow: number = 1;
@@ -56,9 +56,12 @@ export class MyCovTable {
   }
 
   ngOnChanges(): void {
+    this.filter();
+  }
+
+  reset() {
     this.currentPage = 1;
     this.fromRow = 1;
-    this.filter();
   }
 
   page(pagingEvent: IPageChangeEvent): void {
