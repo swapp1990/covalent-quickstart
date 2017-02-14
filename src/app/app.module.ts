@@ -39,8 +39,6 @@ import {TransactionService} from "../services/transactions.service";
 import {MyTable} from "./shared/datatable/my-table.component";
 import {MyNGXTable} from "./shared/datatable/ngx/ngx-table.component";
 import {MyCovTable} from "./shared/datatable/covalent/covalent-table.component";
-import {MySideTabs} from "./shared/side-tabs/my-side-tabs.component";
-import {MyCovSideNav} from "./shared/side-tabs/covalent/covalent-sidenav.component";
 
 const httpInterceptorProviders: Type<any>[] = [
   RequestInterceptor,
@@ -55,8 +53,6 @@ const httpInterceptorProviders: Type<any>[] = [
     MyTable,
     MyNGXTable,
     MyCovTable,
-    MySideTabs,
-    MyCovSideNav,
     DashboardProductComponent,
     ProductOverviewComponent,
     ProductStatsComponent,
