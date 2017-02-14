@@ -35,6 +35,34 @@ export class MyDialogContent {
   ]
 })
 export class MyDashboardComponent implements AfterViewInit {
+  single = [
+    {
+      "name": "Germany",
+      "value": 8940000
+    },
+    {
+      "name": "USA",
+      "value": 5000000
+    },
+    {
+      "name": "France",
+      "value": 7200000
+    }
+  ];
+  multi: any[];
+  view: any[] = [350, 200];
+  // options
+  showLegend = true;
+
+  colorScheme = {
+    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
+  };
+
+  // pie
+  showLabels = true;
+  explodeSlices = false;
+  doughnut = false;
+
   rows = [
     { price: '453', date: '24', name: 'Swimlane', category: "Grocery" },
     { price: '76', date: '26', name: 'KFC' },

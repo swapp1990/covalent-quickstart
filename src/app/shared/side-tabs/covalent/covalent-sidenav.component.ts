@@ -5,14 +5,21 @@ import {ITdDataTableColumn, TdDataTableService, IPageChangeEvent} from "@covalen
   selector: 'my-cov-sidenav',
   template:
     `
-      <a *ngFor="let row of rows" md-list-item 
-        md-ripple class="block relative"
-        (click)="onClick(row)">
-        <md-icon md-list-icon>{{row.icon}}</md-icon>
-        {{row.name}} - {{row.monthlyAmount.total}} ({{row.monthlyAmount.once}})
-        <md-divider></md-divider>
-        
-      </a>
+      <md-list class="will-load alert-list">
+        <template tdLoading="alerts.load">
+          <template let-item let-last="last" ngFor [ngForOf]="rows">
+            <md-list-item layout-align="row" (click)="onClick(item)">
+              <md-icon *ngIf="isSelected(item)" md-list-avatar class="bgc-amber-800">{{item.icon}}</md-icon>
+              <md-icon *ngIf="!isSelected(item)" md-list-avatar>{{item.icon}}</md-icon>
+              <h3 md-line> {{item.name}} </h3>
+              <p md-line> {{item.monthlyAmount.total}} ({{item.monthlyAmount.once}}) </p>
+              
+              <my-progress-bar></my-progress-bar>
+            </md-list-item>
+            <md-divider *ngIf="!last" md-inset></md-divider>
+          </template>
+        </template>
+      </md-list>
     `,
 })
 
@@ -21,18 +28,26 @@ export class MyCovSideNav {
 
   @Output() selected = new EventEmitter();
 
+  selectedTab: any;
+
   constructor() {}
 
   ngAfterViewInit(): void {
-    console.log(this.rows);
+    //console.log(this.rows);
   }
 
   ngOnChanges(): void {
 
   }
 
+  isSelected(item) {
+    if(item === this.selectedTab) return true;
+    return false;
+  }
+
   onClick(event) {
-    //console.log(event);
+    console.log("Se ", event);
     this.selected.emit(event);
+    this.selectedTab = event;
   }
 }

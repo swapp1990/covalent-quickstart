@@ -48,6 +48,7 @@ import {DetailViewTable} from "./my-dashboard/detail-view/detail-view-table.comp
 import {MySearchView} from "./search-view/search-view.component";
 import {EducationLoan} from "./my-dashboard/detail-view/special/education-loan.dyn.component";
 import {CarLoan} from "./my-dashboard/detail-view/special/car-loan.dyn.component";
+import {MyProgressBar} from "./shared/progress-bar/my-progress-bar.component";
 
 const httpInterceptorProviders: Type<any>[] = [
   RequestInterceptor,
@@ -71,6 +72,7 @@ const httpInterceptorProviders: Type<any>[] = [
     MyCovTable,
     MySideTabs,
     MyCovSideNav,
+    MyProgressBar,
     MyDialogContent,
     DashboardProductComponent,
     ProductOverviewComponent,
