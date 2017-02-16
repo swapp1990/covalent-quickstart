@@ -5,7 +5,7 @@ import { CovalentCoreModule } from '@covalent/core';
 import { CovalentHttpModule, IHttpInterceptor } from '@covalent/http';
 import { CovalentHighlightModule } from '@covalent/highlight';
 import { CovalentMarkdownModule } from '@covalent/markdown';
-import { CovalentChartsModule } from '@covalent/charts';
+import {CovalentChartsModule, TdChartsComponent} from '@covalent/charts';
 
 import { AppComponent } from './app.component';
 import { MainComponent } from './main/main.component';
@@ -34,11 +34,21 @@ import { RequestInterceptor } from '../config/interceptors/request.interceptor';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
-import {MyDashboardComponent} from "./my-dashboard/my-dashboard.component";
+import {MyDashboardComponent, MyDialogContent} from "./my-dashboard/my-dashboard.component";
 import {TransactionService} from "../services/transactions.service";
 import {MyTable} from "./shared/datatable/my-table.component";
 import {MyNGXTable} from "./shared/datatable/ngx/ngx-table.component";
 import {MyCovTable} from "./shared/datatable/covalent/covalent-table.component";
+import {MySideTabs} from "./shared/side-tabs/my-side-tabs.component";
+import {MyCovSideNav} from "./shared/side-tabs/covalent/covalent-sidenav.component";
+import {DetailView} from "./my-dashboard/detail-view/detail-view.component";
+import {MyExpansionPanel} from "./shared/expansion-panel/expansion-panel.component";
+import DynamicComponent from "./shared/dynamic-component/dynamic-component";
+import {DetailViewTable} from "./my-dashboard/detail-view/detail-view-table.component";
+import {MySearchView} from "./search-view/search-view.component";
+import {EducationLoan} from "./my-dashboard/detail-view/special/education-loan.dyn.component";
+import {CarLoan} from "./my-dashboard/detail-view/special/car-loan.dyn.component";
+import {MyProgressBar} from "./shared/progress-bar/my-progress-bar.component";
 
 const httpInterceptorProviders: Type<any>[] = [
   RequestInterceptor,
@@ -50,9 +60,20 @@ const httpInterceptorProviders: Type<any>[] = [
     MainComponent,
     DashboardComponent,
     MyDashboardComponent,
+    MySearchView,
+    DynamicComponent,
+    DetailView,
+    DetailViewTable,
+    EducationLoan,
+    CarLoan,
+    MyExpansionPanel,
     MyTable,
     MyNGXTable,
     MyCovTable,
+    MySideTabs,
+    MyCovSideNav,
+    MyProgressBar,
+    MyDialogContent,
     DashboardProductComponent,
     ProductOverviewComponent,
     ProductStatsComponent,
@@ -68,8 +89,7 @@ const httpInterceptorProviders: Type<any>[] = [
     TemplatesComponent,
     DashboardTemplateComponent,
     EmailTemplateComponent,
-    EditorTemplateComponent,
-
+    EditorTemplateComponent
   ], // directives, components, and pipes owned by this NgModule
   imports: [
     BrowserModule,

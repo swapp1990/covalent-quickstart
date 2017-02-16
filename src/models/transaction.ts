@@ -7,13 +7,14 @@ export class TransactionData {
   type: string;
   date: number;
   month: string;
+  year: string;
   isIncome: string;
   isEssential: string = "false";
 
   details: any;
   detailsView: any;
-  
-  constructor(category: string, month: string, isIncome: string, isEssential: string) {
+
+  constructor(category: string, year: string, month: string, isIncome: string, isEssential: string) {
     this.name = "";
     this.price = 0;
     this.category = category;
@@ -21,6 +22,7 @@ export class TransactionData {
     this.type = "";
     this.date = 1;
     this.month = month;
+    this.year = year;
     this.isIncome = isIncome;
     this.isEssential = isEssential;
 
