@@ -12,14 +12,52 @@ import {CarLoan} from "./special/car-loan.dyn.component";
     <detail-view-table [colsI]="detailCols" [rowsI]="detailRows" 
                        (updatedRow)="onUpdatedRow($event)" (addRow)="onAddRow($event)"></detail-view-table>                    
     <!--<education-loan></education-loan>-->
-    <dynamic-component [componentData]="renderedComponent"></dynamic-component>
+    <!--<dynamic-component [componentData]="renderedComponent"></dynamic-component>-->
+    <div flex-gt-xs="50">
+      <md-card>
+        <!--<md-card-title>Gauge</md-card-title>-->
+        <md-card-actions layout="row" layout-align="end center">
+          <md-select flex="20" placeholder="Select Chart" [(ngModel)]="selectedMode">
+            <md-option *ngFor="let mode of charts" [value]="mode">
+              {{mode}}
+            </md-option>
+          </md-select>
+        </md-card-actions>
+        <md-divider></md-divider>
+        <my-chart [mode]="selectedMode"></my-chart>
+      </md-card>
+    </div>
   `,
 })
 
 export class DetailView implements OnInit, OnChanges {
   @Input() inputData: TransactionData;
-  detailCols: any = [];
-  detailRows: any = [];
+  charts = ['Gauge', 'Pie', 'Bar-V', 'Bar-H'];
+  //detailCols: any = [];
+  //detailRows: any = [];
+  //----- Sample ------//
+  detailRows = [
+    {
+      "name": "Germany",
+      "value": 8940000
+    },
+    {
+      "name": "USA",
+      "value": 5000000
+    },
+    {
+      "name": "France",
+      "value": 7200000
+    }
+  ];
+
+  detailCols = [
+    { name: 'name', label: 'Name' },
+    { name: 'value', label: 'Value' }
+  ];
+  //----- Sample ------//
+  selectedMode: string = "Gauge";
+
   selectedDataLabel: string = "";
 
   renderedComponent: any = null;
@@ -34,6 +72,10 @@ export class DetailView implements OnInit, OnChanges {
 
   ngOnInit(): void {
 
+  }
+
+  onChartChange(mode) {
+    //this.selectedMode = mode;
   }
 
   ngOnChanges(changes) {
@@ -64,20 +106,20 @@ export class DetailView implements OnInit, OnChanges {
   }
 
   refreshDetails() {
-    this.detailCols = [];
-    this.detailRows = [];
-    if(this.inputData.details) {
-      this.inputData.details.forEach(detail => {
-        let columns: string[] = Object.keys(detail);
-        let rowInfo = [];
-        columns.forEach(col => {
-          let colInfo = {name: col, label: col};
-          this.detailCols.push(colInfo);
-          rowInfo[col] = detail[col];
-        });
-        this.detailRows.push(rowInfo);
-      });
-    }
+    // this.detailCols = [];
+    // this.detailRows = [];
+    // if(this.inputData.details) {
+    //   this.inputData.details.forEach(detail => {
+    //     let columns: string[] = Object.keys(detail);
+    //     let rowInfo = [];
+    //     columns.forEach(col => {
+    //       let colInfo = {name: col, label: col};
+    //       this.detailCols.push(colInfo);
+    //       rowInfo[col] = detail[col];
+    //     });
+    //     this.detailRows.push(rowInfo);
+    //   });
+    // }
   }
 
   selectEvent(data) {

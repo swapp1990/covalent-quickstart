@@ -15,7 +15,7 @@ import {Component, OnInit, OnChanges, Input, Output, EventEmitter, Injector} fro
       </md-input-container>
       <button (click)="onAddCol(newcolname.value, newcolvalue.value)" md-icon-button>  <md-icon>check</md-icon> </button>
     </div>
-    <my-table [rows]="rowsI" [cols]="colsI" [isInlineEdit]="isInlineEdit"
+    <my-table [rows]="rowsI" [cols]="colsI" [isInlineEdit]="isInlineEdit" [showPageBar]="false"
                         (selectOutput)="onSelectTableRow($event)"
                         (updatedRow)="onUpdateRow($event)"></my-table>
   `,
@@ -39,7 +39,7 @@ export class DetailViewTable implements OnInit, OnChanges {
   @Output() selectOutput = new EventEmitter();
   @Output() updatedRow = new EventEmitter();
   @Output() addRow = new EventEmitter();
-  
+
   isNewColumn: boolean = false;
 
   constructor(private injector: Injector) {
@@ -61,7 +61,7 @@ export class DetailViewTable implements OnInit, OnChanges {
   onUpdateRow(rowData) {
     this.updatedRow.emit(rowData);
     console.log(rowData);
-    
+
   }
 
   onNewColumn() {

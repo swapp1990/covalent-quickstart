@@ -92,59 +92,16 @@
       </div>
     </div>
 
-    <!--<div class="md-content" flex layout="row">-->
-    <!--<div flex="33" layout="column">-->
-      <!--<md-card class="md-card-colored" flex>-->
-        <!--<md-card-content class="text-center">-->
-          <!--<div class="md-headline">{{ '2341'| digits }} <md-icon class="tc-green-500 text-sm">arrow_upward</md-icon></div>-->
-          <!--<md-icon class="icon tc-indigo-700">perm_contact_calendar</md-icon>-->
-          <!--<div layout="column">-->
-            <!--<div class="md-subhead">Active Users</div>-->
-            <!--<div class="md-caption tc-grey-600">updated {{ '2016-06-17 12:59:59' }}</div>-->
-          <!--</div>-->
-        <!--</md-card-content>-->
-      <!--</md-card>-->
-    <!--</div>-->
-    <!--<div flex="33" layout="column">-->
-      <!--<md-card class="md-card-colored" flex>-->
-        <!--<md-card-content>-->
-          <!--<ngx-charts-pie-chart-->
-            <!--[scheme]="colorScheme"-->
-            <!--[results]="single"-->
-            <!--[legend]="false"-->
-            <!--[explodeSlices]="explodeSlices"-->
-            <!--[labels]="false"-->
-            <!--[doughnut]="doughnut"-->
-            <!--[gradient]="gradient"-->
-            <!--(select)="onSelect($event)">-->
-          <!--</ngx-charts-pie-chart>-->
-        <!--</md-card-content>-->
-      <!--</md-card>-->
-    <!--</div>-->
-    <!--</div>-->
-
     <div layout-gt-xs="row" flex>
+      <!--<div flex-gt-xs="100">-->
+        <!--<ngx-charts-number-card-->
+          <!--[scheme]="colorScheme"-->
+          <!--[results]="single">-->
+        <!--</ngx-charts-number-card>-->
+      <!--</div>-->
       <div flex-gt-xs="100">
-        <ngx-charts-number-card
-          [scheme]="colorScheme"
-          [results]="single">
-        </ngx-charts-number-card>
-      </div>
-      <div flex-gt-xs="50">
         <md-card>
-          <md-card-title>Gauge</md-card-title>
-          <md-divider></md-divider>
-          <div style="height:250px;">
-            <ngx-charts-gauge
-              [scheme]="colorScheme"
-              [results]="single"
-              [min]="0"
-              [max]="100"
-              [units]="'usage'"
-              [bigSegments]="10"
-              [smallSegments]="5">
-            </ngx-charts-gauge>
-          </div>
+          <detail-view></detail-view>
         </md-card>
       </div>
     </div>

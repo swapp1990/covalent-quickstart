@@ -35,6 +35,11 @@ export class MyDialogContent {
   ]
 })
 export class MyDashboardComponent implements AfterViewInit {
+
+  colorScheme: any = {
+    domain: ['#1565C0', '#03A9F4', '#FFA726', '#FFCC80'],
+  };
+
   single = [
     {
       "name": "Germany",
@@ -49,20 +54,7 @@ export class MyDashboardComponent implements AfterViewInit {
       "value": 7200000
     }
   ];
-  multi: any[];
-  view: any[] = [350, 200];
-  // options
-  showLegend = true;
-
-  colorScheme = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
-  };
-
-  // pie
-  showLabels = true;
-  explodeSlices = false;
-  doughnut = false;
-
+  
   rows = [
     { price: '453', date: '24', name: 'Swimlane', category: "Grocery" },
     { price: '76', date: '26', name: 'KFC' },
