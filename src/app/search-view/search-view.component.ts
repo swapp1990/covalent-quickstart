@@ -29,24 +29,24 @@ import {Month} from "../../data/enums/months";
         <md-card *ngIf="rowSelected">
           <detail-view [inputData]="selectedTransaction" (updatedDetails)="onUpdatedDetail($event)"></detail-view>
         </md-card>
-        <md-card tdMediaToggle="gt-xs" [mediaClasses]="['push']">
-          <td-charts title="Sales Bar Chart"
-                  [shadow]="true"
-                  fillOpacity="0.95">
-          <td-axis-x [link]="chartBar1" [ticks]="true" [show]="true" [grid]="true"  legend="Day Offset"></td-axis-x>
-          <td-axis-y-left [link]="chartBar1" [show]="true" [grid]="false" legend="Sales"></td-axis-y-left>
-          <td-chart-bar #chartBar1 [colors]="['pink', 'deepPurple']"
-                        [data]="graphData"
-                        [padding]="0.1"
-                        bottomAxis="x"
-                        columns="y"
-                        [transition]="true"
-                        transitionDuration="1000"
-                        transitionDelay="3000">
-          </td-chart-bar>
-        </td-charts>
-        </md-card>
-        
+        <!--<md-card tdMediaToggle="gt-xs" [mediaClasses]="['push']">-->
+          <!--<td-charts title="Sales Bar Chart"-->
+                  <!--[shadow]="true"-->
+                  <!--fillOpacity="0.95">-->
+          <!--<td-axis-x [link]="chartBar1" [ticks]="true" [show]="true" [grid]="true"  legend="Day Offset"></td-axis-x>-->
+          <!--<td-axis-y-left [link]="chartBar1" [show]="true" [grid]="false" legend="Sales"></td-axis-y-left>-->
+          <!--<td-chart-bar #chartBar1 [colors]="['pink', 'deepPurple']"-->
+                        <!--[data]="graphData"-->
+                        <!--[padding]="0.1"-->
+                        <!--bottomAxis="x"-->
+                        <!--columns="y"-->
+                        <!--[transition]="true"-->
+                        <!--transitionDuration="1000"-->
+                        <!--transitionDelay="3000">-->
+          <!--</td-chart-bar>-->
+        <!--</td-charts>-->
+        <!--</md-card>-->
+        <!---->
         <!--<td-layout-footer>-->
           <!--<div layout="row" layout-align="start center">-->
           <!--<span class="md-caption">Copyright &copy; 2017 OldMonk90. All rights reserved</span>-->

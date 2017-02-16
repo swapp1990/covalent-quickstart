@@ -1,7 +1,11 @@
-import {Component, OnInit, OnChanges, Input, Output, EventEmitter, ChangeDetectorRef} from "@angular/core";
+import {
+  Component, OnInit, OnChanges, Input, Output, EventEmitter, ChangeDetectorRef,
+  ChangeDetectionStrategy
+} from "@angular/core";
 
 @Component({
   selector: 'my-chart',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
              <div *ngIf="mode=='Gauge'"style="height:250px;">
               <ngx-charts-gauge
@@ -75,9 +79,7 @@ import {Component, OnInit, OnChanges, Input, Output, EventEmitter, ChangeDetecto
                 [autoScale]="true"
                 (select)="onSelect($event)">
               </ngx-charts-line-chart>
-             </div>
-             
-             
+             </div>    
   `,
 })
 
@@ -86,21 +88,22 @@ export class MyChart implements OnInit, OnChanges {
     domain: ['#1565C0', '#03A9F4', '#FFA726', '#FFCC80'],
   };
 
-  single = [
-    {
-      "name": "Germany",
-      "value": 8940000
-    },
-    {
-      "name": "USA",
-      "value": 5000000
-    },
-    {
-      "name": "France",
-      "value": 7200000
-    }
-  ];
+  // single = [
+  //   {
+  //     "name": "Germany",
+  //     "value": 8940000
+  //   },
+  //   {
+  //     "name": "USA",
+  //     "value": 5000000
+  //   },
+  //   {
+  //     "name": "France",
+  //     "value": 7200000
+  //   }
+  // ];
 
+  @Input() single: any = [];
   @Input() mode: string = 'Gauge';
 
   //@Output() selected = new EventEmitter();
