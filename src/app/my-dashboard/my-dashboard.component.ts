@@ -143,6 +143,16 @@ export class MyDashboardComponent implements AfterViewInit {
         });
   }
 
+  getTotalIncome(month, year) {
+    this.transService.monthGetTotalIncome(month, year)
+      .subscribe (
+        totalIncome => {
+          this.totalIncome = totalIncome[0].balance;
+          this.totalIncome = Math.round(this.totalIncome);
+          this.changeDetector.detectChanges();
+        });
+  }
+
   //Total Spent for Monthly Data.
   calculateTotalAmount(month, year) {
     this.resetEachCategoryTotal();
@@ -188,6 +198,7 @@ export class MyDashboardComponent implements AfterViewInit {
     this.getMonthlyDataByCategory(this.selectedCategory);
     this.getTotalExpense(this.selectedMonth, this.selectedYear);
     this.calculateTotalAmount(this.selectedMonth, this.selectedYear);
+    this.getTotalIncome(this.selectedMonth, this.selectedYear);
   }
 
   onSelected(category) {
@@ -199,17 +210,17 @@ export class MyDashboardComponent implements AfterViewInit {
 
   onTypeChange() {
     this.initializeCategories();
-    this.getMonthlyDataByCategory("");
+    this.selectedCategory = this.categories[0].name;
+    this.getMonthlyDataByCategory(this.selectedCategory);
   }
 
   onMonthChange() {
     //console.log("Month");
-    this.calculateTotalAmount(this.selectedMonth, this.selectedYear);
-    this.getMonthlyDataByCategory(this.selectedCategory);
+    this.updateRendering();
   }
 
   onYearChange() {
-    this.getMonthlyDataByCategory(this.selectedCategory);
+    this.updateRendering();
   }
 
   onUpdatedDetail(updatedTransaction) {

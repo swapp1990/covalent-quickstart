@@ -67,6 +67,14 @@ export class TransactionService {
       .map((response: Response) => response.json());
   }
 
+  //Get Total income for given month and year
+  monthGetTotalIncome(month: string, year: string): Observable<any[]> {
+    let newUrl = this.monthsUrl +'/totalincome'+ '?month='+ month+ '&year='+ year;
+    return this.http
+      .get(newUrl)
+      .map((response: Response) => response.json());
+  }
+
   //Get all Amount (Income & Expense) for Monthly Data.
   monthGetAllAmount(month: string, year: string): Observable<any[]> {
     let newUrl = this.monthsUrl +'/price'+ '?month='+ month+ '&year='+ year;
