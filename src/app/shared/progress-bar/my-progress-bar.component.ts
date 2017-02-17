@@ -4,7 +4,7 @@ import {Component, OnInit, OnChanges, Input, Output, EventEmitter} from "@angula
   selector: 'my-progress-bar',
   template: `
               <md-progress-bar
-                style="margin: 0 70px 0 10px;"
+                style="margin: 0 70px 0 0;"
                 [attr.color]="color"
                 [mode]="mode"
                 [value]="percent">

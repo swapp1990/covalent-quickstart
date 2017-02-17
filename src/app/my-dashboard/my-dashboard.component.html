@@ -12,24 +12,37 @@
     <md-nav-list td-sidenav-content>
       <my-side-tabs [rows]="categories" (selected)="onSelected($event)"></my-side-tabs>
     </md-nav-list>
-    <div td-toolbar-content layout="row" layout-align="start center" flex>
-      <md-radio-group name="group1" layout-align="right" (change)="onTypeChange()" [(ngModel)]="selectedType">
-        <md-radio-button *ngFor="let t of types" [value]="t">
+    <div td-toolbar-content layout="row" flex>
+      <md-card flex flex-gt-xs="20">
+        <md-card-content>
+          <md-radio-group layout="column" name="group1" layout-align="right" (change)="onTypeChange()" [(ngModel)]="selectedType">
+          <md-radio-button *ngFor="let t of types" [value]="t">
           {{t}}
-        </md-radio-button>
-      </md-radio-group>
-      <span flex></span>
-      <md-select flex="20" placeholder="Select Month" [(ngModel)]="selectedMonth"  (ngModelChange)="onMonthChange($event)">
-        <md-option *ngFor="let mth of months" [value]="mth">
-            {{mth}}
-        </md-option>
-      </md-select>
-      <md-select flex="20" placeholder="Select Year" [(ngModel)]="selectedYear"  (ngModelChange)="onMonthChange($event)">
-        <md-option *ngFor="let year of years" [value]="year">
-          {{year}}
-        </md-option>
-      </md-select>
-
+          </md-radio-button>
+          </md-radio-group>
+        </md-card-content>
+      </md-card>
+      <md-card flex flex-gt-xs="40">
+        <md-card-content style="padding: 8px">
+          <h1 align="center" style="margin-bottom: 0px;"><span style="color:blue">+{{totalIncome}}</span>
+            /<span style="color:red">-{{totalExpense}}</span></h1>
+          <h3 align="center" style="margin-top: 0px;">{{highestSpentName}}</h3>
+        </md-card-content>
+      </md-card>
+      <md-card flex >
+        <md-card-content layout-align="center" style="padding-top: 30px">
+          <md-select flex placeholder="Select Month" [(ngModel)]="selectedMonth"  (ngModelChange)="onMonthChange($event)">
+            <md-option *ngFor="let mth of months" [value]="mth">
+              {{mth}}
+            </md-option>
+          </md-select>
+          <md-select flex="20" placeholder="Select Year" [(ngModel)]="selectedYear"  (ngModelChange)="onMonthChange($event)">
+            <md-option *ngFor="let year of years" [value]="year">
+              {{year}}
+            </md-option>
+          </md-select>
+        </md-card-content>
+      </md-card>
     </div>
     <div class="md-content" flex md-scroll-y>
       <div layout="column" layout-gt-sm="row" class="inset">
@@ -37,7 +50,7 @@
           <div layout="column">
             <md-card>
               <!--<md-card-title>{{selectedCategory}}</md-card-title>-->
-              <md-card-subtitle>Total {{totalForCategory}}</md-card-subtitle>
+              <!--<md-card-subtitle>Total {{totalForCategory}}</md-card-subtitle>-->
               <!--<md-divider></md-divider>-->
               <div layout="row" layout-align="start center" class="pad-left-sm pad-right-sm">
                 <span class="push-left-sm">
@@ -92,19 +105,13 @@
       </div>
     </div>
 
-    <div layout-gt-xs="row" flex>
+    <!--<div layout-gt-xs="row" flex>-->
       <!--<div flex-gt-xs="100">-->
-        <!--<ngx-charts-number-card-->
-          <!--[scheme]="colorScheme"-->
-          <!--[results]="single">-->
-        <!--</ngx-charts-number-card>-->
+        <!--<md-card>-->
+          <!--<detail-view></detail-view>-->
+        <!--</md-card>-->
       <!--</div>-->
-      <div flex-gt-xs="100">
-        <md-card>
-          <detail-view></detail-view>
-        </md-card>
-      </div>
-    </div>
+    <!--</div>-->
   </td-layout-manage-list>
 
   <td-layout-footer>
