@@ -4,7 +4,9 @@ import {Component, OnInit, OnChanges, Input, Output, EventEmitter} from "@angula
   selector: 'my-table',
   template: `
     <!--<my-ngx-table [rows]="rows" [cols]="cols"></my-ngx-table>-->
-    <my-cov-table [rows]="rows" [cols]="cols" [isInlineEdit]="isInlineEdit" [showPageBar]="showPageBar"
+    <my-cov-table [rows]="rows" [cols]="cols" [isInlineEdit]="isInlineEdit" 
+                  [isMultipleSelection]="isMultipleSelection" [selectedRows]="selectedRows"
+                  [showPageBar]="showPageBar"
                   (selectOutput)="selectEvent($event)"
                   (updatedRow)="updateRow($event)"></my-cov-table>
   `,
@@ -14,8 +16,10 @@ export class MyTable implements OnInit, OnChanges {
   @Input() rows: any;
   @Input() cols: any;
   @Input() isInlineEdit: boolean = false;
+  @Input() isMultipleSelection: boolean = false;
   @Input() showPageBar: boolean = true;
-  
+  @Input() selectedRows: any[] = [];
+
   @Output() selectOutput = new EventEmitter();
   @Output() updatedRow = new EventEmitter();
 

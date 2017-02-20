@@ -10,11 +10,12 @@ import {ITdDataTableColumn, TdDataTableService, IPageChangeEvent, TdDialogServic
   [data]="filteredData"
   [columns]="cols"
   [selectable]="true"
-  [multiple]="false"
+  [multiple]="isMultipleSelection"
   [sortable]="true"
   [sortBy]="sortBy"
   [sortOrder]="sortOrder"
   (sortChange)="sort($event)"
+  [(ngModel)]="selectedRows"
   (rowSelect)="selectEvent($event)">
 </td-data-table>
 <table td-data-table *ngIf="isInlineEdit">
@@ -37,8 +38,10 @@ export class MyCovTable {
   @Input() rows: any;
   @Input() cols: any;
   @Input() isInlineEdit: boolean = false;
+  @Input() isMultipleSelection: boolean = false;
   @Input() showPageBar: boolean = true;
-
+  @Input() selectedRows: any[] = [];
+  
   filteredData: any[] = [];
   filteredTotal: number = 0;
   fromRow: number = 1;

@@ -83,10 +83,11 @@ export class MyDashboardComponent implements AfterViewInit {
   totalForCategory: number = 0;
 
   rowSelected: boolean = false;
-  selectedTransaction: TransactionData = null;
+  selectedRows: TransactionData[] = [];
 
   createNew: boolean = false;
   isInlineEdit: boolean = false;
+  isMultipleEdit: boolean = false;
 
   totalIncome: number = 0;
   totalExpense: number = 0;
@@ -137,9 +138,11 @@ export class MyDashboardComponent implements AfterViewInit {
     this.transService.monthGetTotalExpense(month, year)
       .subscribe (
         totalExpense => {
-          this.totalExpense = totalExpense[0].balance;
-          this.totalExpense = Math.round(this.totalExpense);
-          this.changeDetector.detectChanges();
+          if(totalExpense.length > 0) {
+            this.totalExpense = totalExpense[0].balance;
+            this.totalExpense = Math.round(this.totalExpense);
+            this.changeDetector.detectChanges();
+          }
         });
   }
 
@@ -147,9 +150,11 @@ export class MyDashboardComponent implements AfterViewInit {
     this.transService.monthGetTotalIncome(month, year)
       .subscribe (
         totalIncome => {
-          this.totalIncome = totalIncome[0].balance;
-          this.totalIncome = Math.round(this.totalIncome);
-          this.changeDetector.detectChanges();
+          if(totalIncome.length > 0) {
+            this.totalIncome = totalIncome[0].balance;
+            this.totalIncome = Math.round(this.totalIncome);
+            this.changeDetector.detectChanges();
+          }
         });
   }
 
@@ -225,20 +230,39 @@ export class MyDashboardComponent implements AfterViewInit {
 
   onUpdatedDetail(updatedTransaction) {
     //console.log("Updated ", updatedTransaction);
-    this.selectedTransaction = updatedTransaction;
-    this.updateMonthData(updatedTransaction);
+    if(!this.isMultipleEdit) {
+      this.updateMonthData(updatedTransaction);
+    }
   }
 
   onSelectTableRow(data) {
     //console.log("Dash ", data);
     this.rowSelected = data.selected;
-    if(data.selected) {
-      this.selectedTransaction = data.row;
-      this.createNew = false;
+    if(!this.isMultipleEdit) {
+      if(data.selected) {
+        this.createNew = false;
+      }
+      console.log(" Mul: ", this.selectedRows);
     } else {
-      this.selectedTransaction = null;
+      if(data.selected) {
+
+      } else {
+
+      }
+      console.log(" Mul: ", this.selectedRows);
     }
-    console.log("Selected ", this.selectedTransaction);
+  }
+
+  getSelectedData() {
+    if(!this.isMultipleEdit) {
+      if(this.selectedRows.length > 0) {
+        let lastSelectedRow: TransactionData = this.selectedRows[this.selectedRows.length-1];
+        if(lastSelectedRow && lastSelectedRow.details) {
+          return this.selectedRows[this.selectedRows.length-1];
+        }
+      }
+    }
+    return null;
   }
 
   createMonthData(data: TransactionData) {
@@ -270,7 +294,7 @@ export class MyDashboardComponent implements AfterViewInit {
   }
 
   deleteMonthData(data: TransactionData) {
-    this.transService.deleteMonthlyData(this.selectedTransaction._id)
+    this.transService.deleteMonthlyData(data._id)
       .subscribe (
         data => {
           console.log("Delete " + data);
@@ -283,11 +307,15 @@ export class MyDashboardComponent implements AfterViewInit {
   }
 
   onCopyTransaction() {
-    this.createMonthData(this.selectedTransaction);
+    if(!this.isMultipleEdit) {
+      this.createMonthData(this.selectedRows[0]);
+    }
   }
 
   onDeleteTransaction() {
-    this.deleteMonthData(this.selectedTransaction);
+    if(!this.isMultipleEdit) {
+      this.deleteMonthData(this.selectedRows[0]);
+    }
   }
 
   onEditTransaction() {
@@ -304,7 +332,20 @@ export class MyDashboardComponent implements AfterViewInit {
   }
 
   onInlineEditClicked() {
-    this.isInlineEdit = !this.isInlineEdit;
+    if(!this.isInlineEdit && !this.isMultipleEdit) {
+      this.isMultipleEdit = true;
+      this.isInlineEdit = false;
+    }
+    else if(this.isMultipleEdit) {
+      this.isInlineEdit = true;
+      this.isMultipleEdit = false;
+      this.rowSelected = false;
+      this.selectedRows = [];
+    }
+    else if(this.isInlineEdit) {
+      this.isInlineEdit = false;
+      this.isMultipleEdit = false;
+    }
   }
 
   openCreateDialog(): void {

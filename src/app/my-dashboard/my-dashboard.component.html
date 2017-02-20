@@ -73,7 +73,8 @@
                 </button>
                 <button (click)="onInlineEditClicked()" md-icon-button>
                   <md-icon *ngIf="isInlineEdit">edit</md-icon>
-                  <md-icon *ngIf="!isInlineEdit" color="primary">edit</md-icon>
+                  <md-icon *ngIf="!isInlineEdit && !this.isMultipleEdit" color="primary">edit</md-icon>
+                  <md-icon *ngIf="isMultipleEdit" color="primary">dehaze</md-icon>
                 </button>
               </div>
               <form *ngIf="createNew">
@@ -94,11 +95,12 @@
               </form>
               <md-divider></md-divider>
               <my-table [rows]="monthlyData" [cols]="cols" [isInlineEdit]="isInlineEdit"
+                        [isMultipleSelection]="isMultipleEdit" [selectedRows]="selectedRows"
                         (selectOutput)="onSelectTableRow($event)"
                         (updatedRow)="onUpdateRow($event)"></my-table>
             </md-card>
-            <md-card *ngIf="rowSelected">
-              <detail-view [inputData]="selectedTransaction" (updatedDetails)="onUpdatedDetail($event)"></detail-view>
+            <md-card *ngIf="rowSelected && !isMultipleEdit">
+              <detail-view [inputData]="getSelectedData()" (updatedDetails)="onUpdatedDetail($event)"></detail-view>
             </md-card>
           </div>
         </div>
