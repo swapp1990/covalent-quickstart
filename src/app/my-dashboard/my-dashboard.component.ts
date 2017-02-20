@@ -11,7 +11,7 @@ import {TransactionData} from "../../models/transaction";
 import {TransactionService} from "../../services/transactions.service";
 import {EnumUtils} from "../../data/enums/EnumUtils";
 import {Amount, Category} from "../../models/catagory";
-import {ComponentType} from "@angular/material";
+import {ComponentType, MdSnackBar} from "@angular/material";
 
 @Component({
   selector: 'dialog-content',
@@ -97,6 +97,7 @@ export class MyDashboardComponent implements AfterViewInit {
   totalAmountOnceByType: number = 0;
   constructor(private transService: TransactionService,
               public media: TdMediaService,
+              private _snackBarService: MdSnackBar,
               private _dialogService: TdDialogService,
               private changeDetector: ChangeDetectorRef) {
 
@@ -270,7 +271,10 @@ export class MyDashboardComponent implements AfterViewInit {
       .subscribe(
         data => {
           console.log("Create ", data);
+          this._snackBarService.open('Create Success!', 'Close', { duration: 3000 });
           this.updateRendering();
+          this.selectedRows = [];
+          this.rowSelected = false;
         },
         err => {console.log(err);}
       );
@@ -286,7 +290,8 @@ export class MyDashboardComponent implements AfterViewInit {
     this.transService.updateMonthlyData(data._id, data)
       .subscribe(
         data => {
-          console.log("Updated ", data);
+          //console.log("Updated ", data);
+          this._snackBarService.open('Update Success!', 'Close', { duration: 3000 });
           this.updateRendering();
         },
         err => {console.log(err);}
@@ -297,8 +302,11 @@ export class MyDashboardComponent implements AfterViewInit {
     this.transService.deleteMonthlyData(data._id)
       .subscribe (
         data => {
-          console.log("Delete " + data);
+          //console.log("Delete " + data);
+          this._snackBarService.open('Delete Success!', 'Close', { duration: 3000 });
+          this.selectedRows = [];
           this.updateRendering();
+          this.rowSelected = false;
         },
         err => {
           console.log(err);

@@ -5,32 +5,32 @@ import {ITdDataTableColumn, TdDataTableService, IPageChangeEvent, TdDialogServic
   selector: 'my-cov-table',
   template:
     `
-<td-data-table
-  *ngIf="!isInlineEdit"
-  [data]="filteredData"
-  [columns]="cols"
-  [selectable]="true"
-  [multiple]="isMultipleSelection"
-  [sortable]="true"
-  [sortBy]="sortBy"
-  [sortOrder]="sortOrder"
-  (sortChange)="sort($event)"
-  [(ngModel)]="selectedRows"
-  (rowSelect)="selectEvent($event)">
-</td-data-table>
-<table td-data-table *ngIf="isInlineEdit">
-  <th td-data-table-column
-      *ngFor="let column of cols"
-      [numeric]="column.numeric">
-    {{column.label}}
-  </th>
-   <tr td-data-table-row *ngFor="let row of filteredData">
-    <td td-data-table-cell *ngFor="let column of cols" (click)="inlineEdit(row, column.name)" [numeric]="column.numeric">
-      {{row[column.name]}}
-    </td>
-   </tr>
-</table>
-<td-paging-bar *ngIf="showPageBar" [pageSizes]="[5, 10, 15, 20]" [total]="filteredTotal" (change)="page($event)"></td-paging-bar>
+      <td-data-table
+        *ngIf="!isInlineEdit"
+        [data]="filteredData"
+        [columns]="cols"
+        [selectable]="true"
+        [multiple]="isMultipleSelection"
+        [sortable]="true"
+        [sortBy]="sortBy"
+        [sortOrder]="sortOrder"
+        (sortChange)="sort($event)"
+        [(ngModel)]="selectedRows"
+        (rowSelect)="selectEvent($event)">
+      </td-data-table>
+      <table td-data-table *ngIf="isInlineEdit">
+        <th td-data-table-column
+            *ngFor="let column of cols"
+            [numeric]="column.numeric">
+          {{column.label}}
+        </th>
+         <tr td-data-table-row *ngFor="let row of filteredData">
+          <td td-data-table-cell *ngFor="let column of cols" (click)="inlineEdit(row, column.name)" [numeric]="column.numeric">
+            {{row[column.name]}}
+          </td>
+         </tr>
+      </table>
+      <td-paging-bar *ngIf="showPageBar" [pageSizes]="[5, 10, 15, 20]" [total]="filteredTotal" (change)="page($event)"></td-paging-bar>
     `,
 })
 
@@ -41,7 +41,7 @@ export class MyCovTable {
   @Input() isMultipleSelection: boolean = false;
   @Input() showPageBar: boolean = true;
   @Input() selectedRows: any[] = [];
-  
+
   filteredData: any[] = [];
   filteredTotal: number = 0;
   fromRow: number = 1;

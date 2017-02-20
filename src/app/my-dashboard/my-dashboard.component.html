@@ -1,4 +1,4 @@
-<td-layout-nav logo="assets:covalent">
+<td-layout-nav>  <!--logo="assets:covalent">-->
   <div td-toolbar-content layout="row" layout-align="center center" flex>
     <span>Expense App</span>
     <span flex></span>
@@ -13,12 +13,12 @@
       <my-side-tabs [rows]="categories" (selected)="onSelected($event)"></my-side-tabs>
     </md-nav-list>
     <div td-toolbar-content layout="row" flex>
-      <md-card flex flex-gt-xs="20">
+      <md-card flex hide-xs flex-gt-xs="20">
         <md-card-content>
           <md-radio-group layout="column" name="group1" layout-align="right" (change)="onTypeChange()" [(ngModel)]="selectedType">
-          <md-radio-button *ngFor="let t of types" [value]="t">
-          {{t}}
-          </md-radio-button>
+            <md-radio-button *ngFor="let t of types" [value]="t">
+              {{t}}
+            </md-radio-button>
           </md-radio-group>
         </md-card-content>
       </md-card>
@@ -29,7 +29,7 @@
           <h3 align="center" style="margin-top: 0px;">{{highestSpentName}}</h3>
         </md-card-content>
       </md-card>
-      <md-card flex >
+      <md-card flex hide-xs>
         <md-card-content layout-align="center" style="padding-top: 30px">
           <md-select flex placeholder="Select Month" [(ngModel)]="selectedMonth"  (ngModelChange)="onMonthChange($event)">
             <md-option *ngFor="let mth of months" [value]="mth">

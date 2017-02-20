@@ -5,6 +5,7 @@ import {Http, Response, Headers} from "@angular/http";
 import {TransactionData} from "../models/transaction";
 import "rxjs/add/operator/catch";
 import "rxjs/add/operator/map";
+import {MdSnackBar} from "@angular/material";
 
 @Injectable()
 export class TransactionService {
