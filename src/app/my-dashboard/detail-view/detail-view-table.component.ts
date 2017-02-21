@@ -34,7 +34,7 @@ export class DetailViewTable implements OnInit, OnChanges {
   @Input() colsI = [];
   @Input() rowsI = [];
 
-  @Input() isInlineEdit: boolean = true;
+  @Input() isInlineEdit: boolean = false;
 
   @Output() selectOutput = new EventEmitter();
   @Output() updatedRow = new EventEmitter();

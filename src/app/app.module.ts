@@ -1,7 +1,7 @@
 import { NgModule, Type } from '@angular/core';
 import { BrowserModule, Title }  from '@angular/platform-browser';
 
-import { CovalentCoreModule } from '@covalent/core';
+import {CovalentCoreModule, CovalentJsonFormatterModule} from '@covalent/core';
 import { CovalentHttpModule, IHttpInterceptor } from '@covalent/http';
 import { CovalentHighlightModule } from '@covalent/highlight';
 import { CovalentMarkdownModule } from '@covalent/markdown';
@@ -50,6 +50,7 @@ import {EducationLoan} from "./my-dashboard/detail-view/special/education-loan.d
 import {CarLoan} from "./my-dashboard/detail-view/special/car-loan.dyn.component";
 import {MyProgressBar} from "./shared/progress-bar/my-progress-bar.component";
 import {MyChart} from "./shared/charts/my-chart.component";
+import {MyJsonEditor} from "./shared/json formatter/my-json-editor.component";
 
 const httpInterceptorProviders: Type<any>[] = [
   RequestInterceptor,
@@ -76,6 +77,7 @@ const httpInterceptorProviders: Type<any>[] = [
     MyProgressBar,
     MyChart,
     MyDialogContent,
+    MyJsonEditor,
     DashboardProductComponent,
     ProductOverviewComponent,
     ProductStatsComponent,
@@ -104,6 +106,7 @@ const httpInterceptorProviders: Type<any>[] = [
     }),
     CovalentHighlightModule.forRoot(),
     CovalentMarkdownModule.forRoot(),
+    CovalentJsonFormatterModule.forRoot(),
     appRoutes,
     NgxChartsModule,
     NgxDatatableModule

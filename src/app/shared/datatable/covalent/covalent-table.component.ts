@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter} from "@angular/core";
+import {Component, Input, Output, EventEmitter, ChangeDetectorRef} from "@angular/core";
 import {ITdDataTableColumn, TdDataTableService, IPageChangeEvent, TdDialogService} from "@covalent/core";
 
 @Component({
@@ -17,6 +17,15 @@ import {ITdDataTableColumn, TdDataTableService, IPageChangeEvent, TdDialogServic
         (sortChange)="sort($event)"
         [(ngModel)]="selectedRows"
         (rowSelect)="selectEvent($event)">
+        
+        <div *ngFor="let col of jsonCols"> 
+          <template let-column="column" tdDataTableTemplate="{{col}}" let-value="value" let-row="row">
+            <div layout="row">
+              <my-json-editor [jsonObject]="value"></my-json-editor>
+            </div>
+          </template>
+        </div>
+        
       </td-data-table>
       <table td-data-table *ngIf="isInlineEdit">
         <th td-data-table-column
@@ -42,6 +51,8 @@ export class MyCovTable {
   @Input() showPageBar: boolean = true;
   @Input() selectedRows: any[] = [];
 
+  jsonCols = [];
+
   filteredData: any[] = [];
   filteredTotal: number = 0;
   fromRow: number = 1;
@@ -52,10 +63,25 @@ export class MyCovTable {
   @Output() updatedRow = new EventEmitter();
 
   constructor(private _dataTableService: TdDataTableService,
-              private _dialogService: TdDialogService) {}
+              private _dialogService: TdDialogService,
+              private detectorChanges: ChangeDetectorRef) {}
+
+  ngOnInit() {
+    let jsonColsT = [];
+    this.cols.forEach(col => {
+      if(col.isJsonColumn) {
+        jsonColsT.push(col.name);
+      }
+    });
+    this.jsonCols = jsonColsT;
+    console.log("Col json", this.jsonCols);
+    this.detectorChanges.detectChanges();
+  }
 
   ngAfterViewInit(): void {
     this.filter();
+    //console.log("Col ", this.cols);
+
   }
 
   ngOnChanges(): void {

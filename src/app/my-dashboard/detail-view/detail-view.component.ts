@@ -1,4 +1,4 @@
-import {Component, OnInit, OnChanges, Input, Output, EventEmitter} from "@angular/core";
+import {Component, OnInit, OnChanges, Input, Output, EventEmitter, ChangeDetectorRef} from "@angular/core";
 import {DetailViewTable} from "./detail-view-table.component";
 import {TransactionData} from "../../../models/transaction";
 import {EducationLoan} from "./special/education-loan.dyn.component";
@@ -11,7 +11,7 @@ import {CarLoan} from "./special/car-loan.dyn.component";
                         <!--[componentData]="componentData"></my-expansion-panel>-->
     <detail-view-table [colsI]="detailCols" [rowsI]="detailRows" 
                        (updatedRow)="onUpdatedRow($event)" (addRow)="onAddRow($event)"></detail-view-table>                    
-
+    <!--<my-json-editor></my-json-editor>-->
     <dynamic-component [componentData]="renderedComponent"></dynamic-component>
     <!--<div flex-gt-xs="50">-->
       <!--<md-card>-->
@@ -70,8 +70,62 @@ export class DetailView implements OnInit, OnChanges {
   // @Output() updatedRow = new EventEmitter();
   componentData = null;
 
+  constructor(private detectorChanges: ChangeDetectorRef) {}
   ngOnInit(): void {
-
+    //----- Sample ------//
+    this.inputData = new TransactionData("Utilities", "2017", "January", "Expense", "true");
+    this.inputData.details = [
+      {
+        "Total Bill": 320,
+        "Billing Cycle": "January",
+        "Paid": {
+          "Credit Card": "Discover",
+          "Amount": 315
+        },
+        "Family Plan": {
+          "Prashant": {
+            "Amount": 24,
+            "Transfer Date": "March "
+          },
+          "Binoy": {
+            "Amount": 24,
+            "Transfer Date": "March "
+          },
+          "Abhiram": {
+            "Amount": 62,
+            "Transfer Date": "March "
+          },
+          "Hitesh": {
+            "Amount": 48,
+            "Credit": 4,
+            "Transfer Date": "March "
+          },
+          "Shreyas": {
+            "Amount": 32,
+            "Transfer Date": "March "
+          },
+          "Swapnil": {
+            "Amount": 87,
+            "Division": {
+              "HTC Phone": 25,
+              "Extra": {
+                "Data Pass": {
+                  "Type": "7 Day International",
+                  "Timeline": "January 1st week",
+                  "Amount": 25
+                },
+                "Talk": {
+                  "Type": "Roaming International",
+                  "Amount": 13
+                }
+              }
+            }
+          },
+        },
+      }
+    ];
+    //----- Sample ------//
+    this.refreshDetails();
   }
 
   onChartChange(mode) {
@@ -105,20 +159,62 @@ export class DetailView implements OnInit, OnChanges {
     }
   }
 
+  /**
+   * TODO: get a recursive function for data
+   * @param jsonData
+   */
+  getColumnData(jsonData) {
+    let columns: string[] = Object.keys(jsonData);
+    columns.forEach(colO => {
+      let colInfo = {name: colO, label: colO};
+    });
+  }
+
+  /**
+   * In String Format
+   * @param jsonData
+   * @returns {string}
+   */
+  getNestedRowData(jsonData) {
+    let nestedCols: string[]  = Object.keys(jsonData);
+    let stringForm: string = '';
+    nestedCols.forEach(colN => {
+      let nestedData: string = "";
+      if(jsonData[colN] instanceof Object) {
+        nestedData += this.getNestedRowData(jsonData[colN]);
+      } else {
+        nestedData = jsonData[colN];
+      }
+      stringForm += colN + " - " + nestedData + ",\n ";
+    });
+    return stringForm;
+  }
+
   refreshDetails() {
     this.detailCols = [];
     this.detailRows = [];
     if(this.inputData.details) {
+      //console.log(this.inputData.details);
       this.inputData.details.forEach(detail => {
         let columns: string[] = Object.keys(detail);
         let rowInfo = [];
-        columns.forEach(col => {
-          let colInfo = {name: col, label: col};
-          this.detailCols.push(colInfo);
-          rowInfo[col] = detail[col];
+        columns.forEach(colO => {
+          let colInfo = {name: colO, label: colO};
+
+          rowInfo[colO] = detail[colO];
+          if(rowInfo[colO] instanceof Object) {
+            //rowInfo[colO] = this.getNestedRowData(rowInfo[colO]);
+            colInfo['isJsonColumn'] = 'true';
+            this.detailCols.push(colInfo);
+          } else {
+            this.detailCols.push(colInfo);
+          }
         });
+
         this.detailRows.push(rowInfo);
       });
+      //this.detailRows = this.inputData.details;
+      this.detectorChanges.detectChanges();
     }
   }
 
