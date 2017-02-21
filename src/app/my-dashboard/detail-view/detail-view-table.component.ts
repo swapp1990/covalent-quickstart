@@ -3,6 +3,9 @@ import {Component, OnInit, OnChanges, Input, Output, EventEmitter, Injector} fro
 @Component({
   selector: 'detail-view-table',
   template: `
+    <button (click)="onEdit()" md-icon-button>
+                    <md-icon>edit</md-icon>
+    </button>
     <button *ngIf="!isNewColumn" (click)="onNewColumn()" md-icon-button>
                     <md-icon>add</md-icon>
     </button>
@@ -66,6 +69,10 @@ export class DetailViewTable implements OnInit, OnChanges {
 
   onNewColumn() {
     this.isNewColumn = true;
+  }
+
+  onEdit() {
+    this.isInlineEdit = !this.isInlineEdit;
   }
 
   onAddCol(newColName: string, newcolvalue: string) {

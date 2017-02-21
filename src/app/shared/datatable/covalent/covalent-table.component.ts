@@ -21,7 +21,7 @@ import {ITdDataTableColumn, TdDataTableService, IPageChangeEvent, TdDialogServic
         <div *ngFor="let col of jsonCols"> 
           <template let-column="column" tdDataTableTemplate="{{col}}" let-value="value" let-row="row">
             <div layout="row">
-              <my-json-editor [jsonObject]="value"></my-json-editor>
+              <my-json-viewer [jsonObject]="value"></my-json-viewer>
             </div>
           </template>
         </div>

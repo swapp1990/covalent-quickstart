@@ -3,6 +3,7 @@ import {DetailViewTable} from "./detail-view-table.component";
 import {TransactionData} from "../../../models/transaction";
 import {EducationLoan} from "./special/education-loan.dyn.component";
 import {CarLoan} from "./special/car-loan.dyn.component";
+import {MobileBill} from "./special/mobile-bill.dyn.component";
 
 @Component({
   selector: 'detail-view',
@@ -10,23 +11,9 @@ import {CarLoan} from "./special/car-loan.dyn.component";
     <!--<my-expansion-panel [label]="'Details'" [sublabel]="'No Details'" -->
                         <!--[componentData]="componentData"></my-expansion-panel>-->
     <detail-view-table [colsI]="detailCols" [rowsI]="detailRows" 
-                       (updatedRow)="onUpdatedRow($event)" (addRow)="onAddRow($event)"></detail-view-table>                    
-    <!--<my-json-editor></my-json-editor>-->
+                       (updatedRow)="onUpdatedRow($event)" (addRow)="onAddRow($event)"></detail-view-table>   
+    <my-json-editor></my-json-editor>                
     <dynamic-component [componentData]="renderedComponent"></dynamic-component>
-    <!--<div flex-gt-xs="50">-->
-      <!--<md-card>-->
-        <!--&lt;!&ndash;<md-card-title>Gauge</md-card-title>&ndash;&gt;-->
-        <!--<md-card-actions layout="row" layout-align="end center">-->
-          <!--<md-select flex="20" placeholder="Select Chart" [(ngModel)]="selectedMode">-->
-            <!--<md-option *ngFor="let mode of charts" [value]="mode">-->
-              <!--{{mode}}-->
-            <!--</md-option>-->
-          <!--</md-select>-->
-        <!--</md-card-actions>-->
-        <!--<md-divider></md-divider>-->
-        <!--<my-chart [mode]="selectedMode"></my-chart>-->
-      <!--</md-card>-->
-    <!--</div>-->
   `,
 })
 
@@ -71,9 +58,11 @@ export class DetailView implements OnInit, OnChanges {
   componentData = null;
 
   constructor(private detectorChanges: ChangeDetectorRef) {}
+
   ngOnInit(): void {
     //----- Sample ------//
     this.inputData = new TransactionData("Utilities", "2017", "January", "Expense", "true");
+    this.inputData.name = "Mobile Bill";
     this.inputData.details = [
       {
         "Total Bill": 320,
@@ -126,6 +115,7 @@ export class DetailView implements OnInit, OnChanges {
     ];
     //----- Sample ------//
     this.refreshDetails();
+    this.updateSpecialComponent();
   }
 
   onChartChange(mode) {
@@ -156,6 +146,14 @@ export class DetailView implements OnInit, OnChanges {
           selectedTransaction: this.inputData
         }
       };
+    }
+      else if(this.inputData.name === 'Mobile Bill') {
+        this.renderedComponent = {
+          component: MobileBill,
+          inputs: {
+            selectedTransaction: this.inputData
+          }
+        };
     }
   }
 

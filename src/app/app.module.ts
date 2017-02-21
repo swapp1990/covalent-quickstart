@@ -50,6 +50,8 @@ import {EducationLoan} from "./my-dashboard/detail-view/special/education-loan.d
 import {CarLoan} from "./my-dashboard/detail-view/special/car-loan.dyn.component";
 import {MyProgressBar} from "./shared/progress-bar/my-progress-bar.component";
 import {MyChart} from "./shared/charts/my-chart.component";
+import {MobileBill} from "./my-dashboard/detail-view/special/mobile-bill.dyn.component";
+import {MyJsonViewer} from "./shared/json formatter/my-json-viewer.component";
 import {MyJsonEditor} from "./shared/json formatter/my-json-editor.component";
 
 const httpInterceptorProviders: Type<any>[] = [
@@ -68,6 +70,7 @@ const httpInterceptorProviders: Type<any>[] = [
     DetailViewTable,
     EducationLoan,
     CarLoan,
+    MobileBill,
     MyExpansionPanel,
     MyTable,
     MyNGXTable,
@@ -77,6 +80,7 @@ const httpInterceptorProviders: Type<any>[] = [
     MyProgressBar,
     MyChart,
     MyDialogContent,
+    MyJsonViewer,
     MyJsonEditor,
     DashboardProductComponent,
     ProductOverviewComponent,

@@ -339,6 +339,10 @@ export class MyDashboardComponent implements AfterViewInit {
     this.updateMonthData(row);
   }
 
+  onDateChangedMobile() {
+    
+  }
+
   onInlineEditClicked() {
     if(!this.isInlineEdit && !this.isMultipleEdit) {
       this.isMultipleEdit = true;

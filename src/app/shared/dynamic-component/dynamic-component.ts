@@ -2,10 +2,11 @@ import {Component, Input, ViewContainerRef, ViewChild, ReflectiveInjector, Compo
 import {DetailViewTable} from "../../my-dashboard/detail-view/detail-view-table.component";
 import {EducationLoan} from "../../my-dashboard/detail-view/special/education-loan.dyn.component";
 import {CarLoan} from "../../my-dashboard/detail-view/special/car-loan.dyn.component";
+import {MobileBill} from "../../my-dashboard/detail-view/special/mobile-bill.dyn.component";
 
 @Component({
   selector: 'dynamic-component',
-  entryComponents: [DetailViewTable, EducationLoan, CarLoan], // Reference to the components must be here in order to dynamically create them
+  entryComponents: [DetailViewTable, EducationLoan, CarLoan, MobileBill], // Reference to the components must be here in order to dynamically create them
   template: `
     <div #dynamicComponentContainer></div>
   `,

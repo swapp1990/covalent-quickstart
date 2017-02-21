@@ -44,9 +44,9 @@ export class CarLoan implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getDataBySearchTag();
-    this.updateInputs();
-  }
+  this.getDataBySearchTag();
+  this.updateInputs();
+}
 
   getDataBySearchTag() {
     this.monthlyService.getAllDataBasedOnQuery("Car Loan")
