@@ -12,7 +12,6 @@ import {MobileBill} from "./special/mobile-bill.dyn.component";
                         <!--[componentData]="componentData"></my-expansion-panel>-->
     <detail-view-table [colsI]="detailCols" [rowsI]="detailRows" 
                        (updatedRow)="onUpdatedRow($event)" (addRow)="onAddRow($event)"></detail-view-table>   
-    <my-json-editor></my-json-editor>                
     <dynamic-component [componentData]="renderedComponent"></dynamic-component>
   `,
 })

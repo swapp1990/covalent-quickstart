@@ -8,7 +8,8 @@ import {Component, OnInit, OnChanges, Input, Output, EventEmitter} from "@angula
                   [isMultipleSelection]="isMultipleSelection" [selectedRows]="selectedRows"
                   [showPageBar]="showPageBar"
                   (selectOutput)="selectEvent($event)"
-                  (updatedRow)="updateRow($event)"></my-cov-table>
+                  (updatedRow)="updateRow($event)"
+                  (isObjectEdit)="onObjectEdit($event)"></my-cov-table>
   `,
 })
 
@@ -22,7 +23,8 @@ export class MyTable implements OnInit, OnChanges {
 
   @Output() selectOutput = new EventEmitter();
   @Output() updatedRow = new EventEmitter();
-
+  @Output() isObjectEdit = new EventEmitter();
+  
   ngOnInit(): void {
 
   }
@@ -37,5 +39,9 @@ export class MyTable implements OnInit, OnChanges {
 
   updateRow(rowData) {
     this.updatedRow.emit(rowData);
+  }
+
+  onObjectEdit(data) {
+    this.isObjectEdit.emit(data);
   }
 }

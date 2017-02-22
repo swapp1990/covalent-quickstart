@@ -53,6 +53,7 @@ import {MyChart} from "./shared/charts/my-chart.component";
 import {MobileBill} from "./my-dashboard/detail-view/special/mobile-bill.dyn.component";
 import {MyJsonViewer} from "./shared/json formatter/my-json-viewer.component";
 import {MyJsonEditor} from "./shared/json formatter/my-json-editor.component";
+import {ObjectViewComponent} from "./shared/json formatter/object-view.component";
 
 const httpInterceptorProviders: Type<any>[] = [
   RequestInterceptor,
@@ -82,6 +83,7 @@ const httpInterceptorProviders: Type<any>[] = [
     MyDialogContent,
     MyJsonViewer,
     MyJsonEditor,
+    ObjectViewComponent,
     DashboardProductComponent,
     ProductOverviewComponent,
     ProductStatsComponent,

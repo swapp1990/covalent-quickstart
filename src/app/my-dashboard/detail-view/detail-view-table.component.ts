@@ -1,4 +1,4 @@
-import {Component, OnInit, OnChanges, Input, Output, EventEmitter, Injector} from "@angular/core";
+import {Component, OnInit, OnChanges, Input, Output, EventEmitter, Injector, ChangeDetectorRef} from "@angular/core";
 
 @Component({
   selector: 'detail-view-table',
@@ -20,7 +20,9 @@ import {Component, OnInit, OnChanges, Input, Output, EventEmitter, Injector} fro
     </div>
     <my-table [rows]="rowsI" [cols]="colsI" [isInlineEdit]="isInlineEdit" [showPageBar]="false"
                         (selectOutput)="onSelectTableRow($event)"
-                        (updatedRow)="onUpdateRow($event)"></my-table>
+                        (updatedRow)="onUpdateRow($event)"
+                        (isObjectEdit)="showJsonEditor($event)"></my-table>
+    <my-json-editor *ngIf="isJsonEditor" [jsonObject]="jsonObject"></my-json-editor>
   `,
 })
 
@@ -45,7 +47,10 @@ export class DetailViewTable implements OnInit, OnChanges {
 
   isNewColumn: boolean = false;
 
-  constructor(private injector: Injector) {
+  isJsonEditor: boolean = false;
+  jsonObject: any[] = [];
+
+  constructor(private injector: Injector, private detectorChanges: ChangeDetectorRef) {
     //this.cols = this.injector.get('cols');
     //this.rows = this.injector.get('rows');
   }
@@ -64,7 +69,6 @@ export class DetailViewTable implements OnInit, OnChanges {
   onUpdateRow(rowData) {
     this.updatedRow.emit(rowData);
     console.log(rowData);
-
   }
 
   onNewColumn() {
@@ -73,6 +77,10 @@ export class DetailViewTable implements OnInit, OnChanges {
 
   onEdit() {
     this.isInlineEdit = !this.isInlineEdit;
+    if(!this.isInlineEdit) {
+      this.isJsonEditor = false;
+      this.jsonObject = [];
+    }
   }
 
   onAddCol(newColName: string, newcolvalue: string) {
@@ -81,5 +89,12 @@ export class DetailViewTable implements OnInit, OnChanges {
     let rowInfo = [];
     rowInfo[newColName] = newcolvalue;
     this.addRow.emit(rowInfo);
+  }
+
+  showJsonEditor(data: any) {
+    this.isJsonEditor = true;
+    this.jsonObject = [];
+    this.jsonObject = data;
+    this.detectorChanges.detectChanges();
   }
 }

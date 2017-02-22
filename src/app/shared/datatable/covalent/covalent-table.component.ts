@@ -34,7 +34,7 @@ import {ITdDataTableColumn, TdDataTableService, IPageChangeEvent, TdDialogServic
           {{column.label}}
         </th>
          <tr td-data-table-row *ngFor="let row of filteredData">
-          <td td-data-table-cell *ngFor="let column of cols" (click)="inlineEdit(row, column.name)" [numeric]="column.numeric">
+          <td td-data-table-cell *ngFor="let column of cols" (click)="inlineEdit(row, column)" [numeric]="column.numeric">
             {{row[column.name]}}
           </td>
          </tr>
@@ -61,6 +61,7 @@ export class MyCovTable {
 
   @Output() selectOutput = new EventEmitter();
   @Output() updatedRow = new EventEmitter();
+  @Output() isObjectEdit = new EventEmitter();
 
   constructor(private _dataTableService: TdDataTableService,
               private _dialogService: TdDialogService,
@@ -108,17 +109,21 @@ export class MyCovTable {
     this.filteredData = newData;
   }
 
-  inlineEdit(row: any, name: string): void {
-    this._dialogService.openPrompt({
-      message: 'Edit',
-      value: row[name],
-    }).afterClosed().subscribe((value: any) => {
-      if (value !== undefined) {
-        row[name] = value;
-        //console.log("Row ", row);
-        this.updatedRow.emit(row);
-      }
-    });
+  inlineEdit(row: any, column: any): void {
+    if(row[column.name] instanceof Object) {
+      this.isObjectEdit.emit(row[column.name]);
+    } else {
+      this._dialogService.openPrompt({
+        message: 'Edit',
+        value: row[column.name],
+      }).afterClosed().subscribe((value: any) => {
+        if (value !== undefined) {
+          row[column.name] = value;
+          //console.log("Row ", row);
+          this.updatedRow.emit(row);
+        }
+      });
+    }
   }
 
   selectEvent(data) {

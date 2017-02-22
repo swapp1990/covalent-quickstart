@@ -1,61 +1,40 @@
 import {Component, Input, Output, EventEmitter} from "@angular/core";
 import {MdSnackBar, MdSnackBarRef} from "@angular/material";
+import {ObjectViewComponent} from "./object-view.component";
 
 @Component({
   selector: 'my-json-editor',
   template: `
       <md-card>
         <md-card-content>
-          <div *ngFor="let obj of jsonData">
-            <div layout="row" layout-margin>
-              <md-input-container flex="20">
-                <input #ename md-input [(ngModel)]="obj.name">
-              </md-input-container>
-              <md-input-container *ngIf="obj.value" flex="20">
-                <input #evalue md-input [(ngModel)]="obj.value">
-              </md-input-container>
-              <div *ngIf="obj.nestedValue"> 
-                <div *ngFor="let obj2 of obj.nestedValue">
-                <div layout="row">
-                  <md-input-container flex="20">
-                    <input #ename md-input [(ngModel)]="obj2.name">
-                  </md-input-container>
-                  <md-input-container *ngIf="obj2.value" flex="20">
-                    <input #evalue md-input [(ngModel)]="obj2.value">
-                  </md-input-container>
-                </div>
-                </div> 
-              </div>
-            </div> 
-          </div>       
+          <object-view [object]="jsonObject"></object-view>
         </md-card-content>
       </md-card>
-    `,
+    `
 })
 
 export class MyJsonEditor {
 
-  //@Input() jsonObject = {};
-
-  jsonObject: any = {
-    "stringProperty": "This is a string",
-    "dateProperty": "2017-02-20T23:13:05.219Z",
-    "numberProperty": 10000,
-    "booleanProperty": {
-      "Col1": "Value1",
-      "Col2": "Value2",
-    },
-  };
-
-  jsonData: any[] = [];
+  @Input() jsonObject = {};
 
   constructor() {
-
+    //Sampel
+    this.jsonObject = {
+      "stringProperty": "This is a string",
+      "dateProperty": "2017-02-20T23:13:05.219Z",
+      "numberProperty": 10000,
+      "booleanProperty": {
+        "Col1": {
+          "NCol1": "NVal1",
+          "NCol2": "NVal2"
+        },
+        "Col2": "Value2",
+      },
+    };
   }
 
   ngOnInit() {
-   this.jsonData = this.getJsonData(this.jsonObject);
-    console.log("Json ", this.jsonData);
+
   }
 
   getJsonData(mongoData) {
