@@ -60,58 +60,58 @@ export class DetailView implements OnInit, OnChanges {
 
   ngOnInit(): void {
     //----- Sample ------//
-    this.inputData = new TransactionData("Utilities", "2017", "January", "Expense", "true");
-    this.inputData.name = "Mobile Bill";
-    this.inputData.details = [
-      {
-        "Total Bill": 320,
-        "Billing Cycle": "January",
-        "Paid": {
-          "Credit Card": "Discover",
-          "Amount": 315
-        },
-        "Family Plan": {
-          "Prashant": {
-            "Amount": 24,
-            "Transfer Date": "March "
-          },
-          "Binoy": {
-            "Amount": 24,
-            "Transfer Date": "March "
-          },
-          "Abhiram": {
-            "Amount": 62,
-            "Transfer Date": "March "
-          },
-          "Hitesh": {
-            "Amount": 48,
-            "Credit": 4,
-            "Transfer Date": "March "
-          },
-          "Shreyas": {
-            "Amount": 32,
-            "Transfer Date": "March "
-          },
-          "Swapnil": {
-            "Amount": 87,
-            "Division": {
-              "HTC Phone": 25,
-              "Extra": {
-                "Data Pass": {
-                  "Type": "7 Day International",
-                  "Timeline": "January 1st week",
-                  "Amount": 25
-                },
-                "Talk": {
-                  "Type": "Roaming International",
-                  "Amount": 13
-                }
-              }
-            }
-          },
-        },
-      }
-    ];
+    // this.inputData = new TransactionData("Utilities", "2017", "January", "Expense", "true");
+    // this.inputData.name = "Mobile Bill";
+    // this.inputData.details = [
+    //   {
+    //     "Total Bill": 320,
+    //     "Billing Cycle": "January",
+    //     "Paid": {
+    //       "Credit Card": "Discover",
+    //       "Amount": 315
+    //     },
+    //     "Family Plan": {
+    //       "Prashant": {
+    //         "Amount": 24,
+    //         "Transfer Date": "March "
+    //       },
+    //       "Binoy": {
+    //         "Amount": 24,
+    //         "Transfer Date": "March "
+    //       },
+    //       "Abhiram": {
+    //         "Amount": 62,
+    //         "Transfer Date": "March "
+    //       },
+    //       "Hitesh": {
+    //         "Amount": 48,
+    //         "Credit": 4,
+    //         "Transfer Date": "March "
+    //       },
+    //       "Shreyas": {
+    //         "Amount": 32,
+    //         "Transfer Date": "March "
+    //       },
+    //       "Swapnil": {
+    //         "Amount": 87,
+    //         "Division": {
+    //           "HTC Phone": 25,
+    //           "Extra": {
+    //             "Data Pass": {
+    //               "Type": "7 Day International",
+    //               "Timeline": "January 1st week",
+    //               "Amount": 25
+    //             },
+    //             "Talk": {
+    //               "Type": "Roaming International",
+    //               "Amount": 13
+    //             }
+    //           }
+    //         }
+    //       },
+    //     },
+    //   }
+    // ];
     //----- Sample ------//
     this.refreshDetails();
     this.updateSpecialComponent();

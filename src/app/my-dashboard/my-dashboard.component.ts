@@ -65,7 +65,8 @@ export class MyDashboardComponent implements AfterViewInit {
     { name: 'date', label: 'Date' },
     { name: 'name', label: 'Name' },
     { name: 'price', label: 'Price' },
-    { name: 'isEssential', label: 'Is Essential?'}
+    { name: 'isEssential', label: 'Is Essential?'},
+    { name: 'isIncome', label: 'Is Expense?'}
   ];
 
   categories: Category[]; //Category List
@@ -340,7 +341,7 @@ export class MyDashboardComponent implements AfterViewInit {
   }
 
   onDateChangedMobile() {
-    
+
   }
 
   onInlineEditClicked() {
