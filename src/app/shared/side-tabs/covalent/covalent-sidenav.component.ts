@@ -5,7 +5,7 @@ import {ITdDataTableColumn, TdDataTableService, IPageChangeEvent} from "@covalen
   selector: 'my-cov-sidenav',
   template:
     `
-      <md-list class="will-load alert-list">
+      <md-list class="will-load alert-list" style="padding-top: 0px">
         <template tdLoading="alerts.load">
           <template let-item let-last="last" ngFor [ngForOf]="rows">
             <md-list-item layout-align="row" (click)="onClick(item)">
@@ -13,8 +13,8 @@ import {ITdDataTableColumn, TdDataTableService, IPageChangeEvent} from "@covalen
               <md-icon *ngIf="!isSelected(item)" md-list-avatar>{{item.icon}}</md-icon>
               <h3 md-line> {{item.name}} </h3>
               <p md-line> {{item.monthlyAmount.total}} ({{item.monthlyAmount.once}}) </p>
-              
-              <my-progress-bar></my-progress-bar>
+              <my-progress-bar md-line style="padding-top: 10px"
+                    [percent]="calculateValue(item)"></my-progress-bar>
             </md-list-item>
             <md-divider *ngIf="!last" md-inset></md-divider>
           </template>
@@ -40,13 +40,20 @@ export class MyCovSideNav {
 
   }
 
+  calculateValue(item) {
+    let amountSpent = item.expectedAmount - item.monthlyAmount.total;
+    if(item.expectedAmount == 0) return 0;
+    let percent = Math.round((amountSpent/item.expectedAmount)*100);
+    return percent;
+  }
+
   isSelected(item) {
     if(item === this.selectedTab) return true;
     return false;
   }
 
   onClick(event) {
-    console.log("Se ", event);
+    //console.log("Se ", event);
     this.selected.emit(event);
     this.selectedTab = event;
   }

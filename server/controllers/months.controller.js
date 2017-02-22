@@ -38,7 +38,7 @@ module.exports.monthGetCategory = function(req, res) {
     .find()
     .where(query)
     .exec(function(err, months) {
-      //console.log("Found Rows", months.length);
+      console.log("Found Rows", months.length);
       res.json(months);
     });
 };
@@ -180,6 +180,75 @@ module.exports.monthUpdateOne = function(req,res) {
     });
 };
 
+//Aggregation function
+module.exports.getTotalExpense = function(req, res) {
+  var query = {};
+  query.isIncome = 'Expense';
+  if(req.query) {
+    if(req.query.month) {
+      query.month = req.query.month;
+    }
+    if(req.query.year) {
+      query.year = req.query.year;
+    }
+  }
+  Transaction.aggregate([
+    {
+      $match: query
+    },
+    {
+      $group: {
+        _id: {
+          "month": "$month",
+          "year": "$year"
+        },
+        balance: { $sum: "$price"  }
+      }
+    }
+  ], function (err, result) {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    console.log(result);
+    res.json(result);
+  });
+}
+
+//Aggregation function
+module.exports.getTotalIncome = function(req, res) {
+  var query = {};
+  query.isIncome = 'Income';
+  if(req.query) {
+    if(req.query.month) {
+      query.month = req.query.month;
+    }
+    if(req.query.year) {
+      query.year = req.query.year;
+    }
+  }
+  Transaction.aggregate([
+    {
+      $match: query
+    },
+    {
+      $group: {
+        _id: {
+          "month": "$month",
+          "year": "$year"
+        },
+        balance: { $sum: "$price"  }
+      }
+    }
+  ], function (err, result) {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    //console.log(result);
+    res.json(result);
+  });
+}
 
 //Aggregation function
 module.exports.getTotalCost = function(req, res) {

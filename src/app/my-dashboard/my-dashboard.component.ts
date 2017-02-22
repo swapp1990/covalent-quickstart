@@ -11,7 +11,7 @@ import {TransactionData} from "../../models/transaction";
 import {TransactionService} from "../../services/transactions.service";
 import {EnumUtils} from "../../data/enums/EnumUtils";
 import {Amount, Category} from "../../models/catagory";
-import {ComponentType} from "@angular/material";
+import {ComponentType, MdSnackBar} from "@angular/material";
 
 @Component({
   selector: 'dialog-content',
@@ -35,6 +35,11 @@ export class MyDialogContent {
   ]
 })
 export class MyDashboardComponent implements AfterViewInit {
+
+  colorScheme: any = {
+    domain: ['#1565C0', '#03A9F4', '#FFA726', '#FFCC80'],
+  };
+
   single = [
     {
       "name": "Germany",
@@ -49,19 +54,6 @@ export class MyDashboardComponent implements AfterViewInit {
       "value": 7200000
     }
   ];
-  multi: any[];
-  view: any[] = [350, 200];
-  // options
-  showLegend = true;
-
-  colorScheme = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
-  };
-
-  // pie
-  showLabels = true;
-  explodeSlices = false;
-  doughnut = false;
 
   rows = [
     { price: '453', date: '24', name: 'Swimlane', category: "Grocery" },
@@ -73,7 +65,8 @@ export class MyDashboardComponent implements AfterViewInit {
     { name: 'date', label: 'Date' },
     { name: 'name', label: 'Name' },
     { name: 'price', label: 'Price' },
-    { name: 'isEssential', label: 'Is Essential?'}
+    { name: 'isEssential', label: 'Is Essential?'},
+    { name: 'isIncome', label: 'Is Expense?'}
   ];
 
   categories: Category[]; //Category List
@@ -91,15 +84,21 @@ export class MyDashboardComponent implements AfterViewInit {
   totalForCategory: number = 0;
 
   rowSelected: boolean = false;
-  selectedTransaction: TransactionData = null;
+  selectedRows: TransactionData[] = [];
 
   createNew: boolean = false;
   isInlineEdit: boolean = false;
+  isMultipleEdit: boolean = false;
+
+  totalIncome: number = 0;
+  totalExpense: number = 0;
+  highestSpentName: string = "Nothing";
 
   totalAmountByType: number = 0;
   totalAmountOnceByType: number = 0;
   constructor(private transService: TransactionService,
               public media: TdMediaService,
+              private _snackBarService: MdSnackBar,
               private _dialogService: TdDialogService,
               private changeDetector: ChangeDetectorRef) {
 
@@ -109,6 +108,7 @@ export class MyDashboardComponent implements AfterViewInit {
     // broadcast to all listener observables when loading the page
     this.media.broadcast();
     this.initializeCategories();
+    this.getTotalExpense(this.selectedMonth, this.selectedYear);
     this.getMonthlyDataByCategory("");
   }
 
@@ -134,6 +134,30 @@ export class MyDashboardComponent implements AfterViewInit {
     this.categories.map((category: Category) => {
       category.monthlyAmount = new Amount();
     });
+  }
+
+  getTotalExpense(month, year) {
+    this.transService.monthGetTotalExpense(month, year)
+      .subscribe (
+        totalExpense => {
+          if(totalExpense.length > 0) {
+            this.totalExpense = totalExpense[0].balance;
+            this.totalExpense = Math.round(this.totalExpense);
+            this.changeDetector.detectChanges();
+          }
+        });
+  }
+
+  getTotalIncome(month, year) {
+    this.transService.monthGetTotalIncome(month, year)
+      .subscribe (
+        totalIncome => {
+          if(totalIncome.length > 0) {
+            this.totalIncome = totalIncome[0].balance;
+            this.totalIncome = Math.round(this.totalIncome);
+            this.changeDetector.detectChanges();
+          }
+        });
   }
 
   //Total Spent for Monthly Data.
@@ -177,6 +201,13 @@ export class MyDashboardComponent implements AfterViewInit {
         );
   }
 
+  updateRendering() {
+    this.getMonthlyDataByCategory(this.selectedCategory);
+    this.getTotalExpense(this.selectedMonth, this.selectedYear);
+    this.calculateTotalAmount(this.selectedMonth, this.selectedYear);
+    this.getTotalIncome(this.selectedMonth, this.selectedYear);
+  }
+
   onSelected(category) {
     //console.log("Sel ", category);
     this.selectedCategory = category.name;
@@ -186,35 +217,54 @@ export class MyDashboardComponent implements AfterViewInit {
 
   onTypeChange() {
     this.initializeCategories();
-    this.getMonthlyDataByCategory("");
+    this.selectedCategory = this.categories[0].name;
+    this.getMonthlyDataByCategory(this.selectedCategory);
   }
 
   onMonthChange() {
     //console.log("Month");
-    this.calculateTotalAmount(this.selectedMonth, this.selectedYear);
-    this.getMonthlyDataByCategory(this.selectedCategory);
+    this.updateRendering();
   }
 
   onYearChange() {
-    this.getMonthlyDataByCategory(this.selectedCategory);
+    this.updateRendering();
   }
 
   onUpdatedDetail(updatedTransaction) {
     //console.log("Updated ", updatedTransaction);
-    this.selectedTransaction = updatedTransaction;
-    this.updateMonthData(updatedTransaction);
+    if(!this.isMultipleEdit) {
+      this.updateMonthData(updatedTransaction);
+    }
   }
 
   onSelectTableRow(data) {
     //console.log("Dash ", data);
     this.rowSelected = data.selected;
-    if(data.selected) {
-      this.selectedTransaction = data.row;
-      this.createNew = false;
+    if(!this.isMultipleEdit) {
+      if(data.selected) {
+        this.createNew = false;
+      }
+      console.log(" Mul: ", this.selectedRows);
     } else {
-      this.selectedTransaction = null;
+      if(data.selected) {
+
+      } else {
+
+      }
+      console.log(" Mul: ", this.selectedRows);
     }
-    console.log("Selected ", this.selectedTransaction);
+  }
+
+  getSelectedData() {
+    if(!this.isMultipleEdit) {
+      if(this.selectedRows.length > 0) {
+        let lastSelectedRow: TransactionData = this.selectedRows[this.selectedRows.length-1];
+        if(lastSelectedRow && lastSelectedRow.details) {
+          return this.selectedRows[this.selectedRows.length-1];
+        }
+      }
+    }
+    return null;
   }
 
   createMonthData(data: TransactionData) {
@@ -222,7 +272,10 @@ export class MyDashboardComponent implements AfterViewInit {
       .subscribe(
         data => {
           console.log("Create ", data);
-          this.getMonthlyDataByCategory(this.selectedCategory);
+          this._snackBarService.open('Create Success!', 'Close', { duration: 3000 });
+          this.updateRendering();
+          this.selectedRows = [];
+          this.rowSelected = false;
         },
         err => {console.log(err);}
       );
@@ -232,22 +285,29 @@ export class MyDashboardComponent implements AfterViewInit {
     if(!data.year) {
       data.year = "2016";
     }
+    if(data.isIncome === "false") {
+      data.isIncome = "Expense";
+    }
     this.transService.updateMonthlyData(data._id, data)
       .subscribe(
         data => {
-          console.log("Updated ", data);
-          this.getMonthlyDataByCategory(this.selectedCategory);
+          //console.log("Updated ", data);
+          this._snackBarService.open('Update Success!', 'Close', { duration: 3000 });
+          this.updateRendering();
         },
         err => {console.log(err);}
       );
   }
 
   deleteMonthData(data: TransactionData) {
-    this.transService.deleteMonthlyData(this.selectedTransaction._id)
+    this.transService.deleteMonthlyData(data._id)
       .subscribe (
         data => {
-          console.log("Delete " + data);
-          this.getMonthlyDataByCategory(this.selectedCategory);
+          //console.log("Delete " + data);
+          this._snackBarService.open('Delete Success!', 'Close', { duration: 3000 });
+          this.selectedRows = [];
+          this.updateRendering();
+          this.rowSelected = false;
         },
         err => {
           console.log(err);
@@ -256,11 +316,15 @@ export class MyDashboardComponent implements AfterViewInit {
   }
 
   onCopyTransaction() {
-    this.createMonthData(this.selectedTransaction);
+    if(!this.isMultipleEdit) {
+      this.createMonthData(this.selectedRows[0]);
+    }
   }
 
   onDeleteTransaction() {
-    this.deleteMonthData(this.selectedTransaction);
+    if(!this.isMultipleEdit) {
+      this.deleteMonthData(this.selectedRows[0]);
+    }
   }
 
   onEditTransaction() {
@@ -276,8 +340,25 @@ export class MyDashboardComponent implements AfterViewInit {
     this.updateMonthData(row);
   }
 
+  onDateChangedMobile() {
+
+  }
+
   onInlineEditClicked() {
-    this.isInlineEdit = !this.isInlineEdit;
+    if(!this.isInlineEdit && !this.isMultipleEdit) {
+      this.isMultipleEdit = true;
+      this.isInlineEdit = false;
+    }
+    else if(this.isMultipleEdit) {
+      this.isInlineEdit = true;
+      this.isMultipleEdit = false;
+      this.rowSelected = false;
+      this.selectedRows = [];
+    }
+    else if(this.isInlineEdit) {
+      this.isInlineEdit = false;
+      this.isMultipleEdit = false;
+    }
   }
 
   openCreateDialog(): void {
@@ -285,11 +366,11 @@ export class MyDashboardComponent implements AfterViewInit {
   }
 
   addTransaction(date: number, name: string, price: number) {
-    let newData:TransactionData  = new TransactionData(this.selectedCategory, this.selectedYear, this.selectedMonth, "false", "false");
+    let newData:TransactionData  = new TransactionData(this.selectedCategory, this.selectedYear, this.selectedMonth, this.selectedType, "false");
     newData.date = date;
     newData.name = name;
     newData.price = price;
-    console.log("Data ", newData);
+    //console.log("Data ", newData);
     this.createMonthData(newData);
   }
 

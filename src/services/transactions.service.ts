@@ -5,6 +5,7 @@ import {Http, Response, Headers} from "@angular/http";
 import {TransactionData} from "../models/transaction";
 import "rxjs/add/operator/catch";
 import "rxjs/add/operator/map";
+import {MdSnackBar} from "@angular/material";
 
 @Injectable()
 export class TransactionService {
@@ -57,6 +58,22 @@ export class TransactionService {
     return this.http
       .delete(newUrl)
       .map((response: Response) => null);
+  }
+
+  //Get Total Expense for given month and year
+  monthGetTotalExpense(month: string, year: string): Observable<any[]> {
+    let newUrl = this.monthsUrl +'/totalexpense'+ '?month='+ month+ '&year='+ year;
+    return this.http
+      .get(newUrl)
+      .map((response: Response) => response.json());
+  }
+
+  //Get Total income for given month and year
+  monthGetTotalIncome(month: string, year: string): Observable<any[]> {
+    let newUrl = this.monthsUrl +'/totalincome'+ '?month='+ month+ '&year='+ year;
+    return this.http
+      .get(newUrl)
+      .map((response: Response) => response.json());
   }
 
   //Get all Amount (Income & Expense) for Monthly Data.

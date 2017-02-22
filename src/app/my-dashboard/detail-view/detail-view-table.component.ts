@@ -1,8 +1,11 @@
-import {Component, OnInit, OnChanges, Input, Output, EventEmitter, Injector} from "@angular/core";
+import {Component, OnInit, OnChanges, Input, Output, EventEmitter, Injector, ChangeDetectorRef} from "@angular/core";
 
 @Component({
   selector: 'detail-view-table',
   template: `
+    <button (click)="onEdit()" md-icon-button>
+                    <md-icon>edit</md-icon>
+    </button>
     <button *ngIf="!isNewColumn" (click)="onNewColumn()" md-icon-button>
                     <md-icon>add</md-icon>
     </button>
@@ -15,9 +18,11 @@ import {Component, OnInit, OnChanges, Input, Output, EventEmitter, Injector} fro
       </md-input-container>
       <button (click)="onAddCol(newcolname.value, newcolvalue.value)" md-icon-button>  <md-icon>check</md-icon> </button>
     </div>
-    <my-table [rows]="rowsI" [cols]="colsI" [isInlineEdit]="isInlineEdit"
+    <my-table [rows]="rowsI" [cols]="colsI" [isInlineEdit]="isInlineEdit" [showPageBar]="false"
                         (selectOutput)="onSelectTableRow($event)"
-                        (updatedRow)="onUpdateRow($event)"></my-table>
+                        (updatedRow)="onUpdateRow($event)"
+                        (isObjectEdit)="showJsonEditor($event)"></my-table>
+    <my-json-editor *ngIf="isJsonEditor" [jsonObject]="jsonObject"></my-json-editor>
   `,
 })
 
@@ -34,15 +39,18 @@ export class DetailViewTable implements OnInit, OnChanges {
   @Input() colsI = [];
   @Input() rowsI = [];
 
-  @Input() isInlineEdit: boolean = true;
+  @Input() isInlineEdit: boolean = false;
 
   @Output() selectOutput = new EventEmitter();
   @Output() updatedRow = new EventEmitter();
   @Output() addRow = new EventEmitter();
-  
+
   isNewColumn: boolean = false;
 
-  constructor(private injector: Injector) {
+  isJsonEditor: boolean = false;
+  jsonObject: any[] = [];
+
+  constructor(private injector: Injector, private detectorChanges: ChangeDetectorRef) {
     //this.cols = this.injector.get('cols');
     //this.rows = this.injector.get('rows');
   }
@@ -61,11 +69,18 @@ export class DetailViewTable implements OnInit, OnChanges {
   onUpdateRow(rowData) {
     this.updatedRow.emit(rowData);
     console.log(rowData);
-    
   }
 
   onNewColumn() {
     this.isNewColumn = true;
+  }
+
+  onEdit() {
+    this.isInlineEdit = !this.isInlineEdit;
+    if(!this.isInlineEdit) {
+      this.isJsonEditor = false;
+      this.jsonObject = [];
+    }
   }
 
   onAddCol(newColName: string, newcolvalue: string) {
@@ -74,5 +89,12 @@ export class DetailViewTable implements OnInit, OnChanges {
     let rowInfo = [];
     rowInfo[newColName] = newcolvalue;
     this.addRow.emit(rowInfo);
+  }
+
+  showJsonEditor(data: any) {
+    this.isJsonEditor = true;
+    this.jsonObject = [];
+    this.jsonObject = data;
+    this.detectorChanges.detectChanges();
   }
 }

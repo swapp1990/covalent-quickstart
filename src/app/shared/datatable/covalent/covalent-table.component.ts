@@ -1,35 +1,45 @@
-import {Component, Input, Output, EventEmitter} from "@angular/core";
+import {Component, Input, Output, EventEmitter, ChangeDetectorRef} from "@angular/core";
 import {ITdDataTableColumn, TdDataTableService, IPageChangeEvent, TdDialogService} from "@covalent/core";
 
 @Component({
   selector: 'my-cov-table',
   template:
     `
-<td-data-table
-  *ngIf="!isInlineEdit"
-  [data]="filteredData"
-  [columns]="cols"
-  [selectable]="true"
-  [multiple]="false"
-  [sortable]="true"
-  [sortBy]="sortBy"
-  [sortOrder]="sortOrder"
-  (sortChange)="sort($event)"
-  (rowSelect)="selectEvent($event)">
-</td-data-table>
-<table td-data-table *ngIf="isInlineEdit">
-  <th td-data-table-column
-      *ngFor="let column of cols"
-      [numeric]="column.numeric">
-    {{column.label}}
-  </th>
-   <tr td-data-table-row *ngFor="let row of filteredData">
-    <td td-data-table-cell *ngFor="let column of cols" (click)="inlineEdit(row, column.name)" [numeric]="column.numeric">
-      {{row[column.name]}}
-    </td>
-   </tr>
-</table>
-<td-paging-bar *ngIf="showPageBar" [pageSizes]="[5, 10, 15, 20]" [total]="filteredTotal" (change)="page($event)"></td-paging-bar>
+      <td-data-table
+        *ngIf="!isInlineEdit"
+        [data]="filteredData"
+        [columns]="cols"
+        [selectable]="true"
+        [multiple]="isMultipleSelection"
+        [sortable]="true"
+        [sortBy]="sortBy"
+        [sortOrder]="sortOrder"
+        (sortChange)="sort($event)"
+        [(ngModel)]="selectedRows"
+        (rowSelect)="selectEvent($event)">
+        
+        <div *ngFor="let col of jsonCols"> 
+          <template let-column="column" tdDataTableTemplate="{{col}}" let-value="value" let-row="row">
+            <div layout="row">
+              <my-json-viewer [jsonObject]="value"></my-json-viewer>
+            </div>
+          </template>
+        </div>
+        
+      </td-data-table>
+      <table td-data-table *ngIf="isInlineEdit">
+        <th td-data-table-column
+            *ngFor="let column of cols"
+            [numeric]="column.numeric">
+          {{column.label}}
+        </th>
+         <tr td-data-table-row *ngFor="let row of filteredData">
+          <td td-data-table-cell *ngFor="let column of cols" (click)="inlineEdit(row, column)" [numeric]="column.numeric">
+            {{row[column.name]}}
+          </td>
+         </tr>
+      </table>
+      <td-paging-bar *ngIf="showPageBar" [pageSizes]="[5, 10, 15, 20]" [total]="filteredTotal" (change)="page($event)"></td-paging-bar>
     `,
 })
 
@@ -37,7 +47,11 @@ export class MyCovTable {
   @Input() rows: any;
   @Input() cols: any;
   @Input() isInlineEdit: boolean = false;
+  @Input() isMultipleSelection: boolean = false;
   @Input() showPageBar: boolean = true;
+  @Input() selectedRows: any[] = [];
+
+  jsonCols = [];
 
   filteredData: any[] = [];
   filteredTotal: number = 0;
@@ -47,12 +61,28 @@ export class MyCovTable {
 
   @Output() selectOutput = new EventEmitter();
   @Output() updatedRow = new EventEmitter();
+  @Output() isObjectEdit = new EventEmitter();
 
   constructor(private _dataTableService: TdDataTableService,
-              private _dialogService: TdDialogService) {}
+              private _dialogService: TdDialogService,
+              private detectorChanges: ChangeDetectorRef) {}
+
+  ngOnInit() {
+    let jsonColsT = [];
+    this.cols.forEach(col => {
+      if(col.isJsonColumn) {
+        jsonColsT.push(col.name);
+      }
+    });
+    this.jsonCols = jsonColsT;
+    console.log("Col json", this.jsonCols);
+    this.detectorChanges.detectChanges();
+  }
 
   ngAfterViewInit(): void {
     this.filter();
+    //console.log("Col ", this.cols);
+
   }
 
   ngOnChanges(): void {
@@ -79,17 +109,21 @@ export class MyCovTable {
     this.filteredData = newData;
   }
 
-  inlineEdit(row: any, name: string): void {
-    this._dialogService.openPrompt({
-      message: 'Edit',
-      value: row[name],
-    }).afterClosed().subscribe((value: any) => {
-      if (value !== undefined) {
-        row[name] = value;
-        //console.log("Row ", row);
-        this.updatedRow.emit(row);
-      }
-    });
+  inlineEdit(row: any, column: any): void {
+    if(row[column.name] instanceof Object) {
+      this.isObjectEdit.emit(row[column.name]);
+    } else {
+      this._dialogService.openPrompt({
+        message: 'Edit',
+        value: row[column.name],
+      }).afterClosed().subscribe((value: any) => {
+        if (value !== undefined) {
+          row[column.name] = value;
+          //console.log("Row ", row);
+          this.updatedRow.emit(row);
+        }
+      });
+    }
   }
 
   selectEvent(data) {

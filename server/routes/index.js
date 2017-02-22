@@ -9,6 +9,12 @@ router.route('/months')
 router.route('/months/price')
   .get(ctrlMonths.getTotalCost);
 
+router.route('/months/totalexpense')
+  .get(ctrlMonths.getTotalExpense);
+
+router.route('/months/totalincome')
+  .get(ctrlMonths.getTotalIncome);
+
 router.route('/search')
   .get(ctrlMonths.getDataBasedOnQuery);
 
