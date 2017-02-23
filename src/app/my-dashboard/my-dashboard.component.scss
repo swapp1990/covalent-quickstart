@@ -10,6 +10,20 @@
   font-size: 48px;
 }
 
+.my-md-card {
+  margin: 2px;
+}
+
+.my-md-card md-card-content {
+  padding: 2px;
+  height: 100%;
+}
+
+.my-md-card md-card-title {
+  padding: 2px;
+  margin: 0px;
+}
+
 .my-container md-sidenav {
   display: flex;
 }

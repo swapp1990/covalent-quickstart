@@ -12,48 +12,16 @@ import {TransactionService} from "../../services/transactions.service";
 import {EnumUtils} from "../../data/enums/EnumUtils";
 import {Amount, Category} from "../../models/catagory";
 import {ComponentType, MdSnackBar} from "@angular/material";
-
-@Component({
-  selector: 'dialog-content',
-  template:
-    `
-      <h1> My Box </h1>
-    `
-})
-
-export class MyDialogContent {
-
-}
+import {Month} from "../../data/enums/months";
 
 @Component({
   selector: 'qs-dashboard',
   templateUrl: './my-dashboard.component.html',
   styleUrls: ['./my-dashboard.component.scss'],
-  viewProviders: [ ],
-  entryComponents: [
-    MyDialogContent
-  ]
+  viewProviders: [ ]
 })
+
 export class MyDashboardComponent implements AfterViewInit {
-
-  colorScheme: any = {
-    domain: ['#1565C0', '#03A9F4', '#FFA726', '#FFCC80'],
-  };
-
-  single = [
-    {
-      "name": "Germany",
-      "value": 8940000
-    },
-    {
-      "name": "USA",
-      "value": 5000000
-    },
-    {
-      "name": "France",
-      "value": 7200000
-    }
-  ];
 
   rows = [
     { price: '453', date: '24', name: 'Swimlane', category: "Grocery" },
@@ -73,12 +41,9 @@ export class MyDashboardComponent implements AfterViewInit {
 
   monthlyData: TransactionData[] = [];
 
-  types: string[] = ["Expense", "Income"];
   selectedType: string = "Expense";
-  selectedMonth: string = "January";
-  months: any[] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  selectedMonth: string = "February";
   selectedYear: string = "2017";
-  years: any[] = ["2016", "2017"];
 
   selectedCategory: string = "";
   totalForCategory: number = 0;
@@ -178,6 +143,9 @@ export class MyDashboardComponent implements AfterViewInit {
     this.categories.map((category: Category) => {
       if(category.name === categoryName) {
         category.monthlyAmount.total = Math.round(totalAmount);
+        if(category.name === this.selectedCategory) {
+          this.totalForCategory = category.monthlyAmount.total;
+        }
         this.totalAmountByType += category.monthlyAmount.total;
         this.totalAmountByType = Math.round(this.totalAmountByType);
       }
@@ -202,6 +170,9 @@ export class MyDashboardComponent implements AfterViewInit {
   }
 
   updateRendering() {
+    this.totalForCategory = 0;
+    this.totalExpense = 0;
+    this.totalIncome = 0;
     this.getMonthlyDataByCategory(this.selectedCategory);
     this.getTotalExpense(this.selectedMonth, this.selectedYear);
     this.calculateTotalAmount(this.selectedMonth, this.selectedYear);
@@ -340,6 +311,18 @@ export class MyDashboardComponent implements AfterViewInit {
     this.updateMonthData(row);
   }
 
+  onSelection(data) {
+    if(data.month) {
+      this.selectedMonth = data.month;
+    } else if(data.year) {
+      this.selectedYear = data.year;
+    } else if(data.type) {
+      this.selectedType = data.type;
+    }
+    this.updateRendering();
+    console.log("Mon ", this.selectedMonth);
+  }
+
   onDateChangedMobile() {
 
   }
@@ -361,8 +344,30 @@ export class MyDashboardComponent implements AfterViewInit {
     }
   }
 
+  onMonthIncrement() {
+    let monthNumber = Month[this.selectedMonth];
+    monthNumber = monthNumber + 1;
+    if(monthNumber == 12) {
+      this.selectedYear = "2017";
+      monthNumber = 0;
+    }
+    this.selectedMonth = Month[monthNumber];
+    this.updateRendering();
+  }
+
+  onMonthDecrement() {
+    let monthNumber = Month[this.selectedMonth];
+    monthNumber = monthNumber - 1;
+    if(monthNumber == -1) {
+      this.selectedYear = "2016";
+      monthNumber = 11;
+    }
+    this.selectedMonth = Month[monthNumber];
+    this.updateRendering();
+  }
+
   openCreateDialog(): void {
-    this._dialogService.open(MyDialogContent);
+    //this._dialogService.open(MyDialogContent);
   }
 
   addTransaction(date: number, name: string, price: number) {
