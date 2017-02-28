@@ -1,5 +1,6 @@
-import {Component, Input, Output, EventEmitter, ChangeDetectorRef} from "@angular/core";
+import {Component, Input, Output, EventEmitter, ChangeDetectorRef, ViewChild} from "@angular/core";
 import {ITdDataTableColumn, TdDataTableService, IPageChangeEvent, TdDialogService} from "@covalent/core";
+import {TableDialog} from "./table-dialogs.component";
 
 @Component({
   selector: 'my-cov-table',
@@ -39,6 +40,7 @@ import {ITdDataTableColumn, TdDataTableService, IPageChangeEvent, TdDialogServic
           </td>
          </tr>
       </table>
+      <table-dialog #td></table-dialog>
       <td-paging-bar *ngIf="showPageBar" [pageSizes]="[5, 10, 15, 20]" [total]="filteredTotal" (change)="page($event)"></td-paging-bar>
     `,
 })
@@ -50,6 +52,10 @@ export class MyCovTable {
   @Input() isMultipleSelection: boolean = false;
   @Input() showPageBar: boolean = true;
   @Input() selectedRows: any[] = [];
+
+  @ViewChild('td') tableDialog: TableDialog;
+  
+  showDialog: boolean = false;
 
   jsonCols = [];
 
@@ -112,6 +118,14 @@ export class MyCovTable {
   inlineEdit(row: any, column: any): void {
     if(row[column.name] instanceof Object) {
       this.isObjectEdit.emit(row[column.name]);
+    } else if(column.type && (column.type == 'month' || column.type == 'checkbox')) {
+      this.tableDialog.showDialogCall(row[column.name], column.type)
+        .subscribe((value: any) => {
+          if (value !== undefined) {
+            row[column.name] = value;
+            this.updatedRow.emit(row);
+          }
+        });
     } else {
       this._dialogService.openPrompt({
         message: 'Edit',

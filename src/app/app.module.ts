@@ -55,6 +55,8 @@ import {MyJsonViewer} from "./shared/json formatter/my-json-viewer.component";
 import {MyJsonEditor} from "./shared/json formatter/my-json-editor.component";
 import {ObjectViewComponent} from "./shared/json formatter/object-view.component";
 import {SelectDate} from "./views/select-date.component";
+import {MyDialog} from "./shared/dialog/my-dialog.component";
+import {TableDialog} from "./shared/datatable/covalent/table-dialogs.component";
 
 const httpInterceptorProviders: Type<any>[] = [
   RequestInterceptor,
@@ -84,6 +86,8 @@ const httpInterceptorProviders: Type<any>[] = [
     MyChart,
     MyJsonViewer,
     MyJsonEditor,
+    MyDialog,
+    TableDialog,
     ObjectViewComponent,
     DashboardProductComponent,
     ProductOverviewComponent,

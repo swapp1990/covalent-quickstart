@@ -23,18 +23,13 @@ import {Month} from "../../data/enums/months";
 
 export class MyDashboardComponent implements AfterViewInit {
 
-  rows = [
-    { price: '453', date: '24', name: 'Swimlane', category: "Grocery" },
-    { price: '76', date: '26', name: 'KFC' },
-    { price: '25', date: '13', name: 'Burger King' },
-  ];
-
   cols = [
     { name: 'date', label: 'Date' },
     { name: 'name', label: 'Name' },
     { name: 'price', label: 'Price' },
-    { name: 'isEssential', label: 'Is Essential?'},
-    { name: 'isIncome', label: 'Is Expense?'}
+    { name: 'isEssential', label: 'Is Essential?', type: 'checkbox'},
+    { name: 'isIncome', label: 'Is Expense?'},
+    { name: 'month', label: 'Month', type: 'month'}
   ];
 
   categories: Category[]; //Category List
@@ -67,6 +62,13 @@ export class MyDashboardComponent implements AfterViewInit {
               private _dialogService: TdDialogService,
               private changeDetector: ChangeDetectorRef) {
 
+    let data1: TransactionData = new TransactionData('Grocery', '2017', 'January', 'false', 'false');
+    data1.price = 450; data1.name="Smith's"; data1.date = 21;
+    this.monthlyData.push(data1);
+
+    let data2: TransactionData = new TransactionData('Grocery', '2017', 'January', 'false', 'false');
+    data2.price = 32; data2.name="Indian Store"; data2.date = 12;
+    this.monthlyData.push(data2);
   }
 
   ngAfterViewInit(): void {
