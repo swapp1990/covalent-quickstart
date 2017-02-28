@@ -5,9 +5,10 @@ import {Observable, Subject} from "rxjs/Rx";
   selector: 'table-dialog',
   template:
     `
-      <my-dialog [(visible)]="showDialog">
+      <my-dialog [(visible)]="showDialog" (visibleChange)="close($event)">
+        <span class="md-subhead">{{title}}</span>
         <div *ngIf="type == 'month'">
-          <md-select flex placeholder="Select Month" [(ngModel)]="modelData">
+          <md-select flex placeholder="Select Month" [(ngModel)]="modelData" style="margin-top: 22px;">
             <md-option *ngFor="let mth of months" [value]="mth">
               {{mth}}
             </md-option>
@@ -18,7 +19,6 @@ import {Observable, Subject} from "rxjs/Rx";
             {{modelData.name}}
           </md-slide-toggle>
         </div>
-        <button (click)="close()" class="btn">Close</button>
       </my-dialog>
     `,
   styles: [``]
@@ -28,6 +28,7 @@ export class TableDialog {
   @Input() type: any = 'default';
   showDialog: boolean = false;
   modelData: any;
+  title: string = "";
 
   months: any[] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
@@ -49,19 +50,24 @@ export class TableDialog {
 
   }
 
-  close() {
+  close(data: any) {
     this.showDialog = false;
-    if(this.type === 'checkbox') {
-      this.modelData = String(this.modelData.on);
+    if(data.action === "Cancel") {
+
+    } else {
+      if(this.type === 'checkbox') {
+        this.modelData = String(this.modelData.on);
+      }
+      this._afterClosed.next(this.modelData);
     }
-    this._afterClosed.next(this.modelData);
     this._afterClosed.complete();
   }
 
-  showDialogCall(data: any, type: string): Observable<any> {
+  showDialogCall(data: any, column: any): Observable<any> {
     this.showDialog = true;
     this._afterClosed = new Subject();
-    this.type = type;
+    this.type = column.type;
+    this.title = column.label;
     if(this.type === 'checkbox') {
       let toggleData: any = {name: data, on: false};
       if(data === 'true') {

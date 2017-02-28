@@ -8,8 +8,8 @@ import { Component, OnInit, Input, Output, OnChanges, EventEmitter, trigger, sta
       <ng-content></ng-content>
       <div layout="row" class="td-dialog-actions">
         <span flex></span>
-        <button md-raised-button (click)="close()" color="primary">Accept</button>
-        <button md-raised-button color="primary">Cancel</button>
+        <button md-button (click)="close()" color="primary"> ACCEPT </button>
+        <button md-button (click)="cancel()"> CANCEL </button>
       </div>
     </div>
     <div *ngIf="visible" class="overlay" (click)="close()"></div>
@@ -30,7 +30,7 @@ import { Component, OnInit, Input, Output, OnChanges, EventEmitter, trigger, sta
 export class MyDialog implements OnInit {
   @Input() closable = true;
   @Input() visible: boolean;
-  @Output() visibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() visibleChange: EventEmitter<any> = new EventEmitter<any>();
 
   constructor() { }
 
@@ -39,5 +39,11 @@ export class MyDialog implements OnInit {
   close() {
     this.visible = false;
     this.visibleChange.emit(this.visible);
+  }
+
+  cancel() {
+    this.visible = false;
+    let changeData: any = {visible: this.visible, action: "Cancel"};
+    this.visibleChange.emit(changeData);
   }
 }

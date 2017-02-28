@@ -62,13 +62,13 @@ export class MyDashboardComponent implements AfterViewInit {
               private _dialogService: TdDialogService,
               private changeDetector: ChangeDetectorRef) {
 
-    let data1: TransactionData = new TransactionData('Grocery', '2017', 'January', 'false', 'false');
-    data1.price = 450; data1.name="Smith's"; data1.date = 21;
-    this.monthlyData.push(data1);
-
-    let data2: TransactionData = new TransactionData('Grocery', '2017', 'January', 'false', 'false');
-    data2.price = 32; data2.name="Indian Store"; data2.date = 12;
-    this.monthlyData.push(data2);
+    // let data1: TransactionData = new TransactionData('Grocery', '2017', 'January', 'false', 'false');
+    // data1.price = 450; data1.name="Smith's"; data1.date = 21;
+    // this.monthlyData.push(data1);
+    //
+    // let data2: TransactionData = new TransactionData('Grocery', '2017', 'January', 'false', 'false');
+    // data2.price = 32; data2.name="Indian Store"; data2.date = 12;
+    // this.monthlyData.push(data2);
   }
 
   ngAfterViewInit(): void {

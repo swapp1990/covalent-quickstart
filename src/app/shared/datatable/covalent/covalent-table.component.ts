@@ -4,6 +4,7 @@ import {TableDialog} from "./table-dialogs.component";
 
 @Component({
   selector: 'my-cov-table',
+  styleUrls: ['./covalent-table.component.css'],
   template:
     `
       <td-data-table
@@ -26,22 +27,25 @@ import {TableDialog} from "./table-dialogs.component";
             </div>
           </template>
         </div>
-        
       </td-data-table>
-      <table td-data-table *ngIf="isInlineEdit">
-        <th td-data-table-column
-            *ngFor="let column of cols"
-            [numeric]="column.numeric">
-          {{column.label}}
-        </th>
-         <tr td-data-table-row *ngFor="let row of filteredData">
-          <td td-data-table-cell *ngFor="let column of cols" (click)="inlineEdit(row, column)" [numeric]="column.numeric">
-            {{row[column.name]}}
-          </td>
-         </tr>
-      </table>
+            
+      <div class="mat-table-container">  
+        <table td-data-table *ngIf="isInlineEdit" style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+          <th td-data-table-column
+              *ngFor="let column of cols"
+              [numeric]="column.numeric">
+            {{column.label}}
+          </th>
+           <tr td-data-table-row *ngFor="let row of filteredData">
+            <td td-data-table-cell *ngFor="let column of cols" (click)="inlineEdit(row, column)" [numeric]="column.numeric">
+              {{row[column.name]}}
+            </td>
+           </tr>
+        </table>
+      </div>
       <table-dialog #td></table-dialog>
-      <td-paging-bar *ngIf="showPageBar" [pageSizes]="[5, 10, 15, 20]" [total]="filteredTotal" (change)="page($event)"></td-paging-bar>
+
+      <my-paging-bar *ngIf="showPageBar" [pageSizes]="[5, 10, 15, 20]" [total]="filteredTotal" (change)="page($event)"></my-paging-bar>
     `,
 })
 
@@ -54,7 +58,7 @@ export class MyCovTable {
   @Input() selectedRows: any[] = [];
 
   @ViewChild('td') tableDialog: TableDialog;
-  
+
   showDialog: boolean = false;
 
   jsonCols = [];
@@ -119,7 +123,7 @@ export class MyCovTable {
     if(row[column.name] instanceof Object) {
       this.isObjectEdit.emit(row[column.name]);
     } else if(column.type && (column.type == 'month' || column.type == 'checkbox')) {
-      this.tableDialog.showDialogCall(row[column.name], column.type)
+      this.tableDialog.showDialogCall(row[column.name], column)
         .subscribe((value: any) => {
           if (value !== undefined) {
             row[column.name] = value;

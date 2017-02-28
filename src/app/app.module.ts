@@ -57,6 +57,7 @@ import {ObjectViewComponent} from "./shared/json formatter/object-view.component
 import {SelectDate} from "./views/select-date.component";
 import {MyDialog} from "./shared/dialog/my-dialog.component";
 import {TableDialog} from "./shared/datatable/covalent/table-dialogs.component";
+import {MyPagingBar} from "./shared/paging-bar/my-paging-bar.component";
 
 const httpInterceptorProviders: Type<any>[] = [
   RequestInterceptor,
@@ -87,6 +88,7 @@ const httpInterceptorProviders: Type<any>[] = [
     MyJsonViewer,
     MyJsonEditor,
     MyDialog,
+    MyPagingBar,
     TableDialog,
     ObjectViewComponent,
     DashboardProductComponent,
