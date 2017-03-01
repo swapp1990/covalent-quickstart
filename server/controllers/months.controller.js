@@ -53,31 +53,64 @@ module.exports.getDataBasedOnQuery = function(req, res) {
       query.name = req.query.name;
     }
   }
-  Transaction
-    .find({"name":{ "$regex": req.query.name, "$options": "i" } })
-    //.where(query)
-    //.where('details.Game','Gone Home')
-    .exec(function(err, months) {
-      if(months) {
-        console.log("Found Rows", months.length);
-        res.json(months);
-      } else {
-        res.json("");
-      }
-    });
+
+  Transaction.collection.createIndex( { "$**": "text" } );
+  // Transaction
+  //   //.find({"name":{ "$regex": req.query.name, "$options": "i" } })
+  //   .find().or([{"name":{ "$regex": req.query.name, "$options": "i"} },
+  //               {"category":{ "$regex": req.query.name, "$options": "i"}},
+  //               {"month":{ "$regex": req.query.name, "$options": "i"}},
+  //               {"details":{ "$regex": req.query.name, "$options": "i"}}])
+  //   //.where(query)
+  //   //.where('details.Game','Gone Home')
+  //   .exec(function(err, months) {
+  //     if(months) {
+  //       console.log("Found Rows", months.length);
+  //       res.json(months);
+  //     } else {
+  //       res.json("");
+  //     }
+  //   });
+  Transaction.find({
+    $text:
+    {
+      $search: req.query.name,
+      $language: "en",
+      $caseSensitive: false,
+      $diacriticSensitive: false
+    }
+  }).exec(function(err, months) {
+    console.log("Found Rows", months.length);
+    res.json(months);
+  });
 };
 
 module.exports.getDataByDetails = function(req, res) {
   var key = 'details.';
   key = key + req.query.key;
 
-  Transaction
-    .find()
-    .where(key,req.query.value)
-    .exec(function(err, months) {
-      console.log("Found Rows", months.length);
-      res.json(months);
-    });
+  Transaction.collection.createIndex( { "$**": "text" } );
+
+  //console.log("Test ", Transaction.collection.getIndexes());
+  Transaction.find({
+    $text:
+    {
+      $search: "Loan",
+      $language: "en",
+      $caseSensitive: false,
+      $diacriticSensitive: false
+    }
+  }).exec(function(err, months) {
+    console.log("Found Rows", months.length);
+    res.json(months);
+  });
+  // Transaction
+  //   .find()
+  //   .where(key,req.query.value)
+  //   .exec(function(err, months) {
+  //     console.log("Found Rows", months.length);
+  //     res.json(months);
+  //   });
 };
 
 module.exports.monthCreateOne = function(req,res) {

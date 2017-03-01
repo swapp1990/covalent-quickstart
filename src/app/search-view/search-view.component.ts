@@ -26,6 +26,8 @@ import {Month} from "../../data/enums/months";
                         (selectOutput)="onSelectTableRow($event)"
                         (updatedRow)="onUpdateRow($event)"></my-table>
         </md-card>
+ 
+      
         <md-card *ngIf="rowSelected">
           <detail-view [inputData]="selectedTransaction" (updatedDetails)="onUpdatedDetail($event)"></detail-view>
         </md-card>
@@ -55,6 +57,7 @@ import {Month} from "../../data/enums/months";
           <!--</div>-->
         <!--</td-layout-footer>-->
       </td-layout-nav>
+
     `,
   providers: [TdChartsComponent]
 })
@@ -75,7 +78,8 @@ export class MySearchView implements AfterViewInit {
     { name: 'date', label: 'Date' },
     { name: 'name', label: 'Name' },
     { name: 'price', label: 'Price' },
-    { name: 'isEssential', label: 'Is Essential?'}
+    { name: 'isEssential', label: 'Is Essential?'},
+    { name: 'details', label: 'Details', isJsonColumn: true}
   ];
 
   graphData: any = [
@@ -98,10 +102,32 @@ export class MySearchView implements AfterViewInit {
   isInlineEdit: boolean = true;
   searchText: string = "";
 
+  currentState: string = '';
+
+  reactiveStates: any;
+  tdStates: any[];
+  tdDisabled: boolean = false;
+  states: Object[] = [
+    {code: 'AL', name: 'Alabama'},
+    {code: 'AK', name: 'Alaska'},
+    {code: 'AZ', name: 'Arizona'},
+    {code: 'AR', name: 'Arkansas'},
+    {code: 'CA', name: 'California'},
+    {code: 'CO', name: 'Colorado'},
+    {code: 'CT', name: 'Connecticut'},
+    {code: 'DE', name: 'Delaware'},
+    {code: 'FL', name: 'Florida'},
+    {code: 'GA', name: 'Georgia'},
+    {code: 'HI', name: 'Hawaii'}];
+
   constructor(private transService: TransactionService, private changeDetector: ChangeDetectorRef) {}
 
   ngAfterViewInit(): void {
 
+  }
+
+  filterStates(val: string): Object[] {
+    return val ? this.states.filter((s: any) => s.name.match(new RegExp(val, 'gi'))) : this.states;
   }
 
   onUpdateRow(row) {

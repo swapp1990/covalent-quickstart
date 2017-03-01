@@ -85,7 +85,7 @@ export class MyCovTable {
       }
     });
     this.jsonCols = jsonColsT;
-    console.log("Col json", this.jsonCols);
+    //console.log("Col json", this.jsonCols);
     this.detectorChanges.detectChanges();
   }
 

@@ -56,6 +56,16 @@ export class MyDashboardComponent implements AfterViewInit {
 
   totalAmountByType: number = 0;
   totalAmountOnceByType: number = 0;
+
+  color: string;
+
+  chips: Object = [
+    { name: 'Default', color: '', selected: false },
+    { name: 'Default (selected)', color: '', selected: true },
+    { name: 'Primary (selected)', color: 'primary', selected: true },
+    { name: 'Accent (selected)', color: 'accent', selected: true },
+    { name: 'Warn (selected)', color: 'warn', selected: true },
+  ];
   constructor(private transService: TransactionService,
               public media: TdMediaService,
               private _snackBarService: MdSnackBar,

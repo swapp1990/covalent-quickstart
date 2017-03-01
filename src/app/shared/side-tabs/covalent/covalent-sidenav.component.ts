@@ -11,10 +11,18 @@ import {ITdDataTableColumn, TdDataTableService, IPageChangeEvent} from "@covalen
             <md-list-item layout-align="row" (click)="onClick(item)">
               <md-icon *ngIf="isSelected(item)" md-list-avatar class="bgc-amber-800">{{item.icon}}</md-icon>
               <md-icon *ngIf="!isSelected(item)" md-list-avatar>{{item.icon}}</md-icon>
-              <h3 md-line> {{item.name}} </h3>
-              <p md-line> {{item.monthlyAmount.total}} ({{item.monthlyAmount.once}}) </p>
-              <my-progress-bar md-line style="padding-top: 10px"
-                    [percent]="calculateValue(item)"></my-progress-bar>
+              <div layout="column" flex="100">
+                <div layout="row">
+                  <h3 md-line style="margin-bottom: 5px; margin-top: 5px"> {{item.name}} </h3>
+                  <md-chip-list flex-gt-xs="40" style="margin-left: auto;" class="mat-chip-list-stacked">
+                    <md-chip [selected]="false" color="">
+                      {{item.monthlyAmount.total}} ({{item.monthlyAmount.once}})
+                    </md-chip>
+                  </md-chip-list>
+                </div>
+                <my-progress-bar md-line style="padding-top: 6px"
+                      [percent]="calculateValue(item)"></my-progress-bar>
+              </div>      
             </md-list-item>
             <md-divider *ngIf="!last" md-inset></md-divider>
           </template>
