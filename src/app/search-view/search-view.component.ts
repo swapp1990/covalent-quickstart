@@ -11,7 +11,10 @@ import {Month} from "../../data/enums/months";
       <td-layout-nav logo="assets:covalent">
         <md-card tdMediaToggle="gt-xs" [mediaClasses]="['push']">
            <td-search-box class="push-left push-right" placeholder="search" [alwaysVisible]="true"
-           (searchDebounce)="filterResult($event)"></td-search-box>
+           (searchDebounce)="filterResult($event)" (search)="onSearchEnter($event)"></td-search-box>
+            <td-chips [items]="items" [(ngModel)]="itemsRequireMatch" 
+            [readOnly]="false" (remove)="onRemoveChip($event)" requireMatch></td-chips>      
+
            <button *ngIf="rowSelected" (click)="onCopyTransaction()" md-icon-button>
                     <md-icon>content_copy</md-icon>
            </button>
@@ -19,15 +22,15 @@ import {Month} from "../../data/enums/months";
                     <md-icon>delete</md-icon>
            </button>
            <button *ngIf="!rowSelected" (click)="onInlineEditClicked()"md-icon-button>
-                  <md-icon>edit</md-icon>
+             <md-icon>edit</md-icon>
            </button>
            <md-divider></md-divider>
            <my-table [rows]="data" [cols]="cols" [isInlineEdit]="isInlineEdit" [showPageBar]="true"
+                        [searchHighlightText]="searchText"
                         (selectOutput)="onSelectTableRow($event)"
                         (updatedRow)="onUpdateRow($event)"></my-table>
         </md-card>
  
-      
         <md-card *ngIf="rowSelected">
           <detail-view [inputData]="selectedTransaction" (updatedDetails)="onUpdatedDetail($event)"></detail-view>
         </md-card>
@@ -64,12 +67,15 @@ import {Month} from "../../data/enums/months";
 
 export class MySearchView implements AfterViewInit {
   rows = [
-    { price: '453', date: '24', name: 'Swimlane', category: "Grocery" },
-    { price: '76', date: '26', name: 'KFC' },
-    { price: '25', date: '13', name: 'Burger King' },
+    { price: '453', date: '24', name: 'Swimlane', category: "Grocery", month: "January", year: "2017" },
+    { price: '76', date: '26', name: 'KFC',category: "Grocery", month: "January", year: "2017" },
+    { price: '25', date: '13', name: 'Burger King',category: "Grocery", month: "January", year: "2017" },
   ];
 
   data: TransactionData[] = [];
+
+  items: string[] = [];
+  itemsRequireMatch: string[] = this.items.slice(0, 6);
 
   cols = [
     { name: 'category', label: 'Category' },
@@ -104,8 +110,6 @@ export class MySearchView implements AfterViewInit {
 
   currentState: string = '';
 
-  reactiveStates: any;
-  tdStates: any[];
   tdDisabled: boolean = false;
   states: Object[] = [
     {code: 'AL', name: 'Alabama'},
@@ -180,6 +184,15 @@ export class MySearchView implements AfterViewInit {
     }
   }
 
+  onSearchEnter(displayName: string = ''): void {
+    this.searchText = displayName;
+    if(this.searchText !== "") {
+      this.items.push(this.searchText);
+      this.itemsRequireMatch = this.items.slice(0, 6);
+      this.searchText = "";
+    }
+  }
+
   getDataBySearchTag(searchText: string) {
     this.transService.getAllDataBasedOnQuery(searchText)
       .subscribe (
@@ -247,5 +260,9 @@ export class MySearchView implements AfterViewInit {
 
   onInlineEditClicked() {
     this.isInlineEdit = !this.isInlineEdit;
+  }
+
+  onRemoveChip(chipLabel) {
+    console.log(this.items, " T ", this.itemsRequireMatch);
   }
 }

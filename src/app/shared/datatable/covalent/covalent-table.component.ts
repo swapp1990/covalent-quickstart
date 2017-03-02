@@ -37,8 +37,14 @@ import {TableDialog} from "./table-dialogs.component";
             {{column.label}}
           </th>
            <tr td-data-table-row *ngFor="let row of filteredData">
-            <td td-data-table-cell *ngFor="let column of cols" (click)="inlineEdit(row, column)" [numeric]="column.numeric">
-              {{row[column.name]}}
+            <td td-data-table-cell *ngFor="let column of cols" 
+                (click)="inlineEdit(row, column)" [numeric]="column.numeric">
+              <span *ngIf="shouldHighlight(row[column.name])" [ngStyle]="{'background-color': 'yellow'}">
+                {{row[column.name]}}
+              </span>
+               <span *ngIf="!shouldHighlight(row[column.name])">
+                {{row[column.name]}}
+              </span>
             </td>
            </tr>
         </table>
@@ -57,6 +63,8 @@ export class MyCovTable {
   @Input() showPageBar: boolean = true;
   @Input() selectedRows: any[] = [];
 
+  @Input() searchHighlightText: string = "";
+  
   @ViewChild('td') tableDialog: TableDialog;
 
   showDialog: boolean = false;
@@ -146,5 +154,13 @@ export class MyCovTable {
 
   selectEvent(data) {
     this.selectOutput.emit(data);
+  }
+
+  shouldHighlight(rowData) {
+    if(rowData === this.searchHighlightText) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

@@ -14,7 +14,7 @@ import {ITdDataTableColumn, TdDataTableService, IPageChangeEvent} from "@covalen
               <div layout="column" flex="100">
                 <div layout="row">
                   <h3 md-line style="margin-bottom: 5px; margin-top: 5px"> {{item.name}} </h3>
-                  <md-chip-list flex-gt-xs="40" style="margin-left: auto;" class="mat-chip-list-stacked">
+                  <md-chip-list flex-gt-xs="50" style="margin-left: auto;" class="mat-chip-list-stacked">
                     <md-chip [selected]="false" color="">
                       {{item.monthlyAmount.total}} ({{item.monthlyAmount.once}})
                     </md-chip>
