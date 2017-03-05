@@ -1,8 +1,10 @@
-import {Component, Input, Output, EventEmitter, ChangeDetectorRef} from "@angular/core";
+import {Component, Input, Output, EventEmitter, ChangeDetectorRef, ViewChild} from "@angular/core";
 import {ITdDataTableColumn, TdDataTableService, IPageChangeEvent, TdDialogService} from "@covalent/core";
+import {TableDialog} from "./table-dialogs.component";
 
 @Component({
   selector: 'my-cov-table',
+  styleUrls: ['./covalent-table.component.css'],
   template:
     `
       <td-data-table
@@ -25,21 +27,31 @@ import {ITdDataTableColumn, TdDataTableService, IPageChangeEvent, TdDialogServic
             </div>
           </template>
         </div>
-        
       </td-data-table>
-      <table td-data-table *ngIf="isInlineEdit">
-        <th td-data-table-column
-            *ngFor="let column of cols"
-            [numeric]="column.numeric">
-          {{column.label}}
-        </th>
-         <tr td-data-table-row *ngFor="let row of filteredData">
-          <td td-data-table-cell *ngFor="let column of cols" (click)="inlineEdit(row, column)" [numeric]="column.numeric">
-            {{row[column.name]}}
-          </td>
-         </tr>
-      </table>
-      <td-paging-bar *ngIf="showPageBar" [pageSizes]="[5, 10, 15, 20]" [total]="filteredTotal" (change)="page($event)"></td-paging-bar>
+            
+      <div class="mat-table-container">  
+        <table td-data-table *ngIf="isInlineEdit" style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+          <th td-data-table-column
+              *ngFor="let column of cols"
+              [numeric]="column.numeric">
+            {{column.label}}
+          </th>
+           <tr td-data-table-row *ngFor="let row of filteredData">
+            <td td-data-table-cell *ngFor="let column of cols" 
+                (click)="inlineEdit(row, column)" [numeric]="column.numeric">
+              <span *ngIf="shouldHighlight(row[column.name])" [ngStyle]="{'background-color': 'yellow'}">
+                {{row[column.name]}}
+              </span>
+               <span *ngIf="!shouldHighlight(row[column.name])">
+                {{row[column.name]}}
+              </span>
+            </td>
+           </tr>
+        </table>
+      </div>
+      <table-dialog #td></table-dialog>
+
+      <my-paging-bar *ngIf="showPageBar" [pageSizes]="[5, 10, 15, 20]" [total]="filteredTotal" (change)="page($event)"></my-paging-bar>
     `,
 })
 
@@ -50,6 +62,12 @@ export class MyCovTable {
   @Input() isMultipleSelection: boolean = false;
   @Input() showPageBar: boolean = true;
   @Input() selectedRows: any[] = [];
+
+  @Input() searchHighlightText: string = "";
+  
+  @ViewChild('td') tableDialog: TableDialog;
+
+  showDialog: boolean = false;
 
   jsonCols = [];
 
@@ -75,7 +93,7 @@ export class MyCovTable {
       }
     });
     this.jsonCols = jsonColsT;
-    console.log("Col json", this.jsonCols);
+    //console.log("Col json", this.jsonCols);
     this.detectorChanges.detectChanges();
   }
 
@@ -112,6 +130,14 @@ export class MyCovTable {
   inlineEdit(row: any, column: any): void {
     if(row[column.name] instanceof Object) {
       this.isObjectEdit.emit(row[column.name]);
+    } else if(column.type && (column.type == 'month' || column.type == 'checkbox')) {
+      this.tableDialog.showDialogCall(row[column.name], column)
+        .subscribe((value: any) => {
+          if (value !== undefined) {
+            row[column.name] = value;
+            this.updatedRow.emit(row);
+          }
+        });
     } else {
       this._dialogService.openPrompt({
         message: 'Edit',
@@ -128,5 +154,13 @@ export class MyCovTable {
 
   selectEvent(data) {
     this.selectOutput.emit(data);
+  }
+
+  shouldHighlight(rowData) {
+    if(rowData === this.searchHighlightText) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

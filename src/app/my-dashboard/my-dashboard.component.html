@@ -12,50 +12,51 @@
     <md-nav-list td-sidenav-content>
       <my-side-tabs [rows]="categories" (selected)="onSelected($event)"></my-side-tabs>
     </md-nav-list>
-    <div td-toolbar-content layout="row" flex>
-      <md-card flex hide-xs flex-gt-xs="20">
-        <md-card-content>
-          <md-radio-group layout="column" name="group1" layout-align="right" (change)="onTypeChange()" [(ngModel)]="selectedType">
-            <md-radio-button *ngFor="let t of types" [value]="t">
-              {{t}}
-            </md-radio-button>
-          </md-radio-group>
-        </md-card-content>
-      </md-card>
-      <md-card flex flex-gt-xs="40">
-        <md-card-content style="padding: 8px">
+    <div td-toolbar-content layout="row" flex style="height: 100%;">
+
+      <md-card class="my-md-card" flex flex-gt-xs="100">
+        <md-card-content style="padding: 0px">
           <h1 align="center" style="margin-bottom: 0px;"><span style="color:blue">+{{totalIncome}}</span>
             /<span style="color:red">-{{totalExpense}}</span></h1>
           <h3 align="center" style="margin-top: 0px;">{{highestSpentName}}</h3>
         </md-card-content>
       </md-card>
-      <md-card flex hide-xs>
-        <md-card-content layout-align="center" style="padding-top: 30px">
-          <md-select flex placeholder="Select Month" [(ngModel)]="selectedMonth"  (ngModelChange)="onMonthChange($event)">
-            <md-option *ngFor="let mth of months" [value]="mth">
-              {{mth}}
-            </md-option>
-          </md-select>
-          <md-select flex="20" placeholder="Select Year" [(ngModel)]="selectedYear"  (ngModelChange)="onMonthChange($event)">
-            <md-option *ngFor="let year of years" [value]="year">
-              {{year}}
-            </md-option>
-          </md-select>
+      <select-date flex flex-gt-xs="50" hide-xs
+          (onSelection)="onSelection($event)"></select-date>
+      <button show-xs hide-lg md-icon-button><md-icon class="md-24">settings</md-icon></button>
+      <!--<md-card class="my-md-card" flex="20" show-xs hide-lg>-->
+        <!--<md-card-content layout-align="center" style="padding: 0px; height: 100%">-->
+          <!--<button color="accent" (click)="onDateChangedMobile()">-->
+            <!--<md-icon>description</md-icon>-->
+          <!--</button>-->
+        <!--</md-card-content>-->
+      <!--</md-card>-->
+    </div>
+    <div layout="row" flex hide-gt-lg hide-gt-md>
+      <md-card class="my-md-card" flex="10">
+        <md-card-content layout="row" layout-align="center center">
+          <a md-icon-button (click)="onMonthDecrement()"><md-icon>fast_rewind</md-icon> </a>
         </md-card-content>
       </md-card>
-      <md-card flex="20" show-xs hide-lg>
-        <md-card-content layout-align="center" style="padding-top: 30px">
-          <button md-mini-fab color="accent" (click)="onDateChangedMobile()">
-            <md-icon>description</md-icon>
-          </button>
+      <md-card class="my-md-card" flex="80">
+        <md-card-title layout="row" layout-align="center center">
+          {{selectedCategory}} - {{totalForCategory}}
+        </md-card-title>
+        <md-card-subtitle layout="row" layout-align="center center">
+          {{selectedMonth}}, {{selectedYear}}
+        </md-card-subtitle>
+      </md-card>
+      <md-card class="my-md-card" flex="10">
+        <md-card-content layout="row" layout-align="center center">
+          <a md-icon-button (click)="onMonthIncrement()"><md-icon>fast_forward</md-icon> </a>
         </md-card-content>
       </md-card>
     </div>
     <div class="md-content" flex md-scroll-y>
-      <div layout="column" layout-gt-sm="row" class="inset">
+      <div layout="column" layout-gt-sm="row">
         <div flex-gt-sm="60">
           <div layout="column">
-            <md-card>
+            <md-card class="my-md-card">
               <!--<md-card-title>{{selectedCategory}}</md-card-title>-->
               <!--<md-card-subtitle>Total {{totalForCategory}}</md-card-subtitle>-->
               <!--<md-divider></md-divider>-->

@@ -34,7 +34,7 @@ import { RequestInterceptor } from '../config/interceptors/request.interceptor';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
-import {MyDashboardComponent, MyDialogContent} from "./my-dashboard/my-dashboard.component";
+import {MyDashboardComponent} from "./my-dashboard/my-dashboard.component";
 import {TransactionService} from "../services/transactions.service";
 import {MyTable} from "./shared/datatable/my-table.component";
 import {MyNGXTable} from "./shared/datatable/ngx/ngx-table.component";
@@ -54,6 +54,12 @@ import {MobileBill} from "./my-dashboard/detail-view/special/mobile-bill.dyn.com
 import {MyJsonViewer} from "./shared/json formatter/my-json-viewer.component";
 import {MyJsonEditor} from "./shared/json formatter/my-json-editor.component";
 import {ObjectViewComponent} from "./shared/json formatter/object-view.component";
+import {SelectDate} from "./views/select-date.component";
+import {MyDialog} from "./shared/dialog/my-dialog.component";
+import {TableDialog} from "./shared/datatable/covalent/table-dialogs.component";
+import {MyPagingBar} from "./shared/paging-bar/my-paging-bar.component";
+import {FormsModule} from "@angular/forms";
+import {CovalentDynamicFormsModule} from "@covalent/dynamic-forms";
 
 const httpInterceptorProviders: Type<any>[] = [
   RequestInterceptor,
@@ -71,6 +77,7 @@ const httpInterceptorProviders: Type<any>[] = [
     DetailViewTable,
     EducationLoan,
     CarLoan,
+    SelectDate,
     MobileBill,
     MyExpansionPanel,
     MyTable,
@@ -80,9 +87,11 @@ const httpInterceptorProviders: Type<any>[] = [
     MyCovSideNav,
     MyProgressBar,
     MyChart,
-    MyDialogContent,
     MyJsonViewer,
     MyJsonEditor,
+    MyDialog,
+    MyPagingBar,
+    TableDialog,
     ObjectViewComponent,
     DashboardProductComponent,
     ProductOverviewComponent,
@@ -103,6 +112,7 @@ const httpInterceptorProviders: Type<any>[] = [
   ], // directives, components, and pipes owned by this NgModule
   imports: [
     BrowserModule,
+    FormsModule,
     CovalentCoreModule.forRoot(),
     CovalentChartsModule.forRoot(),
     CovalentHttpModule.forRoot({
@@ -113,6 +123,7 @@ const httpInterceptorProviders: Type<any>[] = [
     CovalentHighlightModule.forRoot(),
     CovalentMarkdownModule.forRoot(),
     CovalentJsonFormatterModule.forRoot(),
+    CovalentDynamicFormsModule,
     appRoutes,
     NgxChartsModule,
     NgxDatatableModule
