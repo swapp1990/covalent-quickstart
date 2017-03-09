@@ -129,7 +129,7 @@ export class MyCovTable {
 
   inlineEdit(row: any, column: any): void {
     if(row[column.name] instanceof Object) {
-      this.isObjectEdit.emit(row[column.name]);
+      this.isObjectEdit.emit({object: row[column.name], columnName: column.name});
     } else if(column.type && (column.type == 'month' || column.type == 'checkbox')) {
       this.tableDialog.showDialogCall(row[column.name], column)
         .subscribe((value: any) => {

@@ -11,10 +11,15 @@ import {Component, OnInit, OnChanges, Input, Output, EventEmitter, Injector, Cha
     </button>
     <div *ngIf="isNewColumn" layout="row" layout-margin>
       <md-input-container flex>
-          <input #newcolname md-input placeholder="Column Name">
+        <input #newcolname md-input placeholder="Column Name">
       </md-input-container>
+      <md-select flex [(ngModel)]="valueType" (ngModelChange)="onValueTypeChange($event)">
+        <md-option *ngFor="let type of valueTypes" [value]="type">
+          {{type}}
+        </md-option>
+      </md-select>
       <md-input-container flex>
-          <input #newcolvalue md-input placeholder="Column Value">
+        <input #newcolvalue md-input placeholder="Column Value">
       </md-input-container>
       <button (click)="onAddCol(newcolname.value, newcolvalue.value)" md-icon-button>  <md-icon>check</md-icon> </button>
     </div>
@@ -22,7 +27,7 @@ import {Component, OnInit, OnChanges, Input, Output, EventEmitter, Injector, Cha
                         (selectOutput)="onSelectTableRow($event)"
                         (updatedRow)="onUpdateRow($event)"
                         (isObjectEdit)="showJsonEditor($event)"></my-table>
-    <my-json-editor *ngIf="isJsonEditor" [jsonObject]="jsonObject"></my-json-editor>
+    <my-json-editor *ngIf="isJsonEditor" [objectName]="jsonObjectColumnName" [jsonObject]="jsonObject" (updatedJson)="onUpdateJson($event)"></my-json-editor>
   `,
 })
 
@@ -49,6 +54,10 @@ export class DetailViewTable implements OnInit, OnChanges {
 
   isJsonEditor: boolean = false;
   jsonObject: any[] = [];
+  jsonObjectColumnName: string = "";
+
+  valueTypes: string[] = ['String', 'Object'];
+  valueType: string = 'String';
 
   constructor(private injector: Injector, private detectorChanges: ChangeDetectorRef) {
     //this.cols = this.injector.get('cols');
@@ -87,14 +96,29 @@ export class DetailViewTable implements OnInit, OnChanges {
     this.isNewColumn = false;
     //console.log(newColName);
     let rowInfo = [];
-    rowInfo[newColName] = newcolvalue;
+    if(this.valueType == 'String') {
+      rowInfo[newColName] = newcolvalue;
+    } else {
+      rowInfo[newColName] = {};
+    }
+
     this.addRow.emit(rowInfo);
+  }
+
+  onUpdateJson(updatedJson: any) {
+    console.log(this.rowsI);
+    this.updatedRow.emit(this.rowsI);
   }
 
   showJsonEditor(data: any) {
     this.isJsonEditor = true;
     this.jsonObject = [];
-    this.jsonObject = data;
+    this.jsonObject = data.object;
+    this.jsonObjectColumnName = data.columnName;
     this.detectorChanges.detectChanges();
+  }
+
+  onValueTypeChange() {
+
   }
 }

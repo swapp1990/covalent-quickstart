@@ -23,14 +23,8 @@
       </md-card>
       <select-date flex flex-gt-xs="50" hide-xs
           (onSelection)="onSelection($event)"></select-date>
-      <button show-xs hide-lg md-icon-button><md-icon class="md-24">settings</md-icon></button>
-      <!--<md-card class="my-md-card" flex="20" show-xs hide-lg>-->
-        <!--<md-card-content layout-align="center" style="padding: 0px; height: 100%">-->
-          <!--<button color="accent" (click)="onDateChangedMobile()">-->
-            <!--<md-icon>description</md-icon>-->
-          <!--</button>-->
-        <!--</md-card-content>-->
-      <!--</md-card>-->
+      <button show-xs hide-lg md-icon-button (click)="onSettings($event)"><md-icon class="md-24">settings</md-icon></button>
+      <table-dialog #td></table-dialog>
     </div>
     <div layout="row" flex hide-gt-lg hide-gt-md>
       <md-card class="my-md-card" flex="10">

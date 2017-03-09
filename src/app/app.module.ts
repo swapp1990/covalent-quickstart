@@ -60,6 +60,7 @@ import {TableDialog} from "./shared/datatable/covalent/table-dialogs.component";
 import {MyPagingBar} from "./shared/paging-bar/my-paging-bar.component";
 import {FormsModule} from "@angular/forms";
 import {CovalentDynamicFormsModule} from "@covalent/dynamic-forms";
+import {ValueViewComponent} from "./shared/json formatter/value-view.component";
 
 const httpInterceptorProviders: Type<any>[] = [
   RequestInterceptor,
@@ -93,6 +94,7 @@ const httpInterceptorProviders: Type<any>[] = [
     MyPagingBar,
     TableDialog,
     ObjectViewComponent,
+    ValueViewComponent,
     DashboardProductComponent,
     ProductOverviewComponent,
     ProductStatsComponent,

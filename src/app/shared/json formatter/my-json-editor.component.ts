@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter} from "@angular/core";
+import {Component, Input, Output, EventEmitter, ChangeDetectorRef, ViewChild} from "@angular/core";
 import {MdSnackBar, MdSnackBarRef} from "@angular/material";
 import {ObjectViewComponent} from "./object-view.component";
 
@@ -7,7 +7,13 @@ import {ObjectViewComponent} from "./object-view.component";
   template: `
       <md-card>
         <md-card-content>
-          <object-view [object]="jsonObject"></object-view>
+          <div>
+            <md-divider></md-divider>
+            <button md-button (click)="update()" color="primary"> UPDATE </button>
+            <button md-button (click)="close()" color="primary"> CANCEL </button>
+            <md-divider></md-divider>
+          </div>
+          <object-view #ov [object]="jsonObject" (updatedDetails)="onUpdate($event)"></object-view>
         </md-card-content>
       </md-card>
     `
@@ -16,8 +22,13 @@ import {ObjectViewComponent} from "./object-view.component";
 export class MyJsonEditor {
 
   @Input() jsonObject = {};
+  @Input() objectName = "";
 
-  constructor() {
+  @ViewChild('ov') objectView: any;
+
+  @Output() updatedJson = new EventEmitter();
+
+  constructor(private detectorChanges: ChangeDetectorRef) {
     //Sampel
     this.jsonObject = {
       "stringProperty": "This is a string",
@@ -55,5 +66,21 @@ export class MyJsonEditor {
 
   onClick() {
     //console.log("Json ", this.jsonObject);
+  }
+
+  onUpdate(details) {
+    console.log("Details ", details);
+    this.jsonObject = details;
+    this.detectorChanges.detectChanges();
+    this.objectView.refreshDetails();
+  }
+
+  update() {
+    console.log("Json ", this.jsonObject);
+    //this.updatedJson.emit({object: this.jsonObject, name: this.objectName});
+  }
+
+  cancel() {
+
   }
 }

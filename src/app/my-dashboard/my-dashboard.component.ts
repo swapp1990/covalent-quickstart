@@ -1,4 +1,4 @@
-import {Component, AfterViewInit, ChangeDetectorRef} from '@angular/core';
+import {Component, AfterViewInit, ChangeDetectorRef, ViewChild} from '@angular/core';
 
 import { Title }     from '@angular/platform-browser';
 
@@ -13,6 +13,7 @@ import {EnumUtils} from "../../data/enums/EnumUtils";
 import {Amount, Category} from "../../models/catagory";
 import {ComponentType, MdSnackBar} from "@angular/material";
 import {Month} from "../../data/enums/months";
+import {TableDialog} from "../shared/datatable/covalent/table-dialogs.component";
 
 @Component({
   selector: 'qs-dashboard',
@@ -22,6 +23,8 @@ import {Month} from "../../data/enums/months";
 })
 
 export class MyDashboardComponent implements AfterViewInit {
+
+  @ViewChild('td') tableDialog: TableDialog;
 
   cols = [
     { name: 'date', label: 'Date' },
@@ -185,6 +188,7 @@ export class MyDashboardComponent implements AfterViewInit {
     this.totalForCategory = 0;
     this.totalExpense = 0;
     this.totalIncome = 0;
+    this.initializeCategories();
     this.getMonthlyDataByCategory(this.selectedCategory);
     this.getTotalExpense(this.selectedMonth, this.selectedYear);
     this.calculateTotalAmount(this.selectedMonth, this.selectedYear);
@@ -376,6 +380,21 @@ export class MyDashboardComponent implements AfterViewInit {
     }
     this.selectedMonth = Month[monthNumber];
     this.updateRendering();
+  }
+
+  onSettings() {
+    let settingsData: any = {
+      isIncome: this.selectedType,
+      types: ["Expense", "Income"],
+      displayType: 'Toggle'
+    }
+    console.log("Set ", settingsData);
+    this.tableDialog.showDialogMain('Settings', settingsData)
+      .subscribe((value: any) => {
+        console.log("Show ", value);
+        this.selectedType = value.selectedType;
+        this.updateRendering();
+      });
   }
 
   openCreateDialog(): void {

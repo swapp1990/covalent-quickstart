@@ -19,6 +19,16 @@ import {Observable, Subject} from "rxjs/Rx";
             {{modelData.name}}
           </md-slide-toggle>
         </div>
+        <div *ngIf="type == 'typeToggle'">
+          <div layout="row" layout-align="center center" style="height: 100%;">
+            <md-radio-group layout="column" name="group1"
+                            [(ngModel)]="modelData.selectedType">
+              <md-radio-button *ngFor="let t of modelData.types" [value]="t">
+                {{t}}
+              </md-radio-button>
+            </md-radio-group>
+          </div>
+        </div>
       </my-dialog>
     `,
   styles: [``]
@@ -57,7 +67,7 @@ export class TableDialog {
     } else {
       if(this.type === 'checkbox') {
         this.modelData = String(this.modelData.on);
-      }
+      } 
       this._afterClosed.next(this.modelData);
     }
     this._afterClosed.complete();
@@ -78,6 +88,19 @@ export class TableDialog {
       this.modelData = data;
     }
 
+    return this._afterClosed.asObservable();
+  }
+
+  showDialogMain(title: string, settingsData: any): Observable<any> {
+    this.showDialog = true;
+    this._afterClosed = new Subject();
+    this.title = title;
+    if(settingsData.displayType == 'Toggle') {
+      this.type = 'typeToggle';
+      this.modelData = {};
+      this.modelData.selectedType = settingsData.isIncome;
+      this.modelData.types = settingsData.types;
+    }
     return this._afterClosed.asObservable();
   }
 }
