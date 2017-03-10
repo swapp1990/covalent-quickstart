@@ -1,123 +1,124 @@
 <td-layout-nav>  <!--logo="assets:covalent">-->
   <div td-toolbar-content layout="row" layout-align="center center" flex>
-    <span>Expense App</span>
-    <span flex></span>
-    <a md-icon-button mdTooltip="Docs" href="https://teradata.github.io/covalent/" target="_blank"><md-icon>chrome_reader_mode</md-icon></a>
-    <a md-icon-button mdTooltip="Github" href="https://github.com/teradata/covalent" target="_blank"><md-icon svgIcon="assets:github"></md-icon></a>
+    <!--<span>Expense App</span>-->
+    <!--<span flex></span>-->
+    <!--<a md-icon-button mdTooltip="Docs" href="https://teradata.github.io/covalent/" target="_blank"><md-icon>chrome_reader_mode</md-icon></a>-->
+    <!--<a md-icon-button mdTooltip="Github" href="https://github.com/teradata/covalent" target="_blank"><md-icon svgIcon="assets:github"></md-icon></a>-->
+    <current-month-bar></current-month-bar>
   </div>
-  <td-layout-manage-list
-    [opened]="media.registerQuery('gt-sm') | async"
-    [mode]="(media.registerQuery('gt-sm') | async) ? 'side' :  'over'"
-    sidenavWidth="257px">
-    <md-nav-list td-sidenav-content>
-      <my-side-tabs [rows]="categories" (selected)="onSelected($event)"></my-side-tabs>
-    </md-nav-list>
-    <div td-toolbar-content layout="row" flex style="height: 100%;">
 
-      <md-card class="my-md-card" flex flex-gt-xs="100">
-        <md-card-content style="padding: 0px">
-          <h1 align="center" style="margin-bottom: 0px;"><span style="color:blue">+{{totalIncome}}</span>
-            /<span style="color:red">-{{totalExpense}}</span></h1>
-          <h3 align="center" style="margin-top: 0px;">{{highestSpentName}}</h3>
-        </md-card-content>
-      </md-card>
-      <select-date flex flex-gt-xs="50" hide-xs
-          (onSelection)="onSelection($event)"></select-date>
-      <button show-xs hide-lg md-icon-button (click)="onSettings($event)"><md-icon class="md-24">settings</md-icon></button>
-      <table-dialog #td></table-dialog>
-    </div>
-    <div layout="row" flex hide-gt-lg hide-gt-md>
-      <md-card class="my-md-card" flex="10">
-        <md-card-content layout="row" layout-align="center center">
-          <a md-icon-button (click)="onMonthDecrement()"><md-icon>fast_rewind</md-icon> </a>
-        </md-card-content>
-      </md-card>
-      <md-card class="my-md-card" flex="80">
-        <md-card-title layout="row" layout-align="center center">
-          {{selectedCategory}} - {{totalForCategory}}
-        </md-card-title>
-        <md-card-subtitle layout="row" layout-align="center center">
-          {{selectedMonth}}, {{selectedYear}}
-        </md-card-subtitle>
-      </md-card>
-      <md-card class="my-md-card" flex="10">
-        <md-card-content layout="row" layout-align="center center">
-          <a md-icon-button (click)="onMonthIncrement()"><md-icon>fast_forward</md-icon> </a>
-        </md-card-content>
-      </md-card>
-    </div>
-    <div class="md-content" flex md-scroll-y>
-      <div layout="column" layout-gt-sm="row">
-        <div flex-gt-sm="60">
-          <div layout="column">
-            <md-card class="my-md-card">
-              <!--<md-card-title>{{selectedCategory}}</md-card-title>-->
-              <!--<md-card-subtitle>Total {{totalForCategory}}</md-card-subtitle>-->
-              <!--<md-divider></md-divider>-->
-              <div layout="row" layout-align="start center" class="pad-left-sm pad-right-sm">
-                <span class="push-left-sm">
-                  <span class="md-title">{{selectedCategory}}</span>
-                </span>
-                <td-search-box #searchBox backIcon="arrow_back" class="push-right-sm" placeholder="Search here" flex>
-                </td-search-box>
-                <!--<button *ngIf="rowSelected" (click)="onEditTransaction()" md-icon-button>-->
-                    <!--<md-icon>edit</md-icon>-->
-                <!--</button>-->
-                <button *ngIf="rowSelected" (click)="onCopyTransaction()" md-icon-button>
-                    <md-icon>content_copy</md-icon>
-                </button>
-                <button *ngIf="rowSelected" (click)="onDeleteTransaction()" md-icon-button>
-                    <md-icon>delete</md-icon>
-                </button>
-                <button *ngIf="!rowSelected" (click)="onCreateClicked()" md-icon-button>
-                  <md-icon *ngIf="!createNew">add</md-icon>
-                  <md-icon *ngIf="createNew" color="primary">add</md-icon>
-                </button>
-                <button (click)="onInlineEditClicked()" md-icon-button>
-                  <md-icon *ngIf="isInlineEdit">edit</md-icon>
-                  <md-icon *ngIf="!isInlineEdit && !this.isMultipleEdit" color="primary">edit</md-icon>
-                  <md-icon *ngIf="isMultipleEdit" color="primary">dehaze</md-icon>
-                </button>
-              </div>
-              <form *ngIf="createNew">
-                <div layout="row" layout-margin>
-                  <md-input-container flex>
-                    <input #edate type="number" md-input placeholder="Date">
-                  </md-input-container>
-                  <md-input-container flex>
-                    <input #ename md-input placeholder="Name">
-                  </md-input-container>
-                  <md-input-container flex>
-                    <input #eprice type="number" step="0.01" md-input placeholder="Price">
-                  </md-input-container>
-                  <button md-mini-fab color="accent" (click)="addTransaction(edate.value, ename.value, eprice.value)">
-                    <md-icon>add</md-icon>
+  <td-layout-manage-list
+      [opened]="media.registerQuery('gt-sm') | async"
+      [mode]="(media.registerQuery('gt-sm') | async) ? 'side' :  'over'"
+      sidenavWidth="257px">
+      <md-nav-list td-sidenav-content>
+        <my-side-tabs [rows]="categories" (selected)="onSelected($event)"></my-side-tabs>
+      </md-nav-list>
+      <div td-toolbar-content layout="row" flex style="height: 100%;">
+
+        <md-card class="my-md-card" flex flex-gt-xs="100">
+          <md-card-content style="padding: 0px">
+            <h1 align="center" style="margin-bottom: 0px;"><span style="color:blue">+{{totalIncome}}</span>
+              /<span style="color:red">-{{totalExpense}}</span></h1>
+            <h3 align="center" style="margin-top: 0px;">{{highestSpentName}}</h3>
+          </md-card-content>
+        </md-card>
+        <select-date flex flex-gt-xs="50" hide-xs
+            (onSelection)="onSelection($event)"></select-date>
+        <button show-xs hide-lg md-icon-button (click)="onSettings($event)"><md-icon class="md-24">settings</md-icon></button>
+        <table-dialog #td></table-dialog>
+      </div>
+      <div layout="row" flex hide-gt-lg hide-gt-md>
+        <md-card class="my-md-card" flex="10">
+          <md-card-content layout="row" layout-align="center center">
+            <a md-icon-button (click)="onMonthDecrement()"><md-icon>fast_rewind</md-icon> </a>
+          </md-card-content>
+        </md-card>
+        <md-card class="my-md-card" flex="80">
+          <md-card-title layout="row" layout-align="center center">
+            {{selectedCategory}} - {{totalForCategory}}
+          </md-card-title>
+          <md-card-subtitle layout="row" layout-align="center center">
+            {{selectedMonth}}, {{selectedYear}}
+          </md-card-subtitle>
+        </md-card>
+        <md-card class="my-md-card" flex="10">
+          <md-card-content layout="row" layout-align="center center">
+            <a md-icon-button (click)="onMonthIncrement()"><md-icon>fast_forward</md-icon> </a>
+          </md-card-content>
+        </md-card>
+      </div>
+      <div class="md-content" flex md-scroll-y>
+        <div layout="column" layout-gt-sm="row">
+          <div flex-gt-sm="60">
+            <div layout="column">
+              <md-card class="my-md-card">
+                <!--<md-card-title>{{selectedCategory}}</md-card-title>-->
+                <!--<md-card-subtitle>Total {{totalForCategory}}</md-card-subtitle>-->
+                <!--<md-divider></md-divider>-->
+                <div layout="row" layout-align="start center" class="pad-left-sm pad-right-sm">
+                  <span class="push-left-sm">
+                    <span class="md-title">{{selectedCategory}}</span>
+                  </span>
+                  <td-search-box #searchBox backIcon="arrow_back" class="push-right-sm" placeholder="Search here" flex>
+                  </td-search-box>
+                  <!--<button *ngIf="rowSelected" (click)="onEditTransaction()" md-icon-button>-->
+                      <!--<md-icon>edit</md-icon>-->
+                  <!--</button>-->
+                  <button *ngIf="rowSelected" (click)="onCopyTransaction()" md-icon-button>
+                      <md-icon>content_copy</md-icon>
+                  </button>
+                  <button *ngIf="rowSelected" (click)="onDeleteTransaction()" md-icon-button>
+                      <md-icon>delete</md-icon>
+                  </button>
+                  <button *ngIf="!rowSelected" (click)="onCreateClicked()" md-icon-button>
+                    <md-icon *ngIf="!createNew">add</md-icon>
+                    <md-icon *ngIf="createNew" color="primary">add</md-icon>
+                  </button>
+                  <button (click)="onInlineEditClicked()" md-icon-button>
+                    <md-icon *ngIf="isInlineEdit">edit</md-icon>
+                    <md-icon *ngIf="!isInlineEdit && !this.isMultipleEdit" color="primary">edit</md-icon>
+                    <md-icon *ngIf="isMultipleEdit" color="primary">dehaze</md-icon>
                   </button>
                 </div>
-              </form>
-              <md-divider></md-divider>
-              <my-table [rows]="monthlyData" [cols]="cols" [isInlineEdit]="isInlineEdit"
-                        [isMultipleSelection]="isMultipleEdit" [selectedRows]="selectedRows"
-                        (selectOutput)="onSelectTableRow($event)"
-                        (updatedRow)="onUpdateRow($event)"></my-table>
-            </md-card>
-            <md-card *ngIf="rowSelected && !isMultipleEdit">
-              <detail-view [inputData]="getSelectedData()" (updatedDetails)="onUpdatedDetail($event)"></detail-view>
-            </md-card>
+                <form *ngIf="createNew">
+                  <div layout="row" layout-margin>
+                    <md-input-container flex>
+                      <input #edate type="number" md-input placeholder="Date">
+                    </md-input-container>
+                    <md-input-container flex>
+                      <input #ename md-input placeholder="Name">
+                    </md-input-container>
+                    <md-input-container flex>
+                      <input #eprice type="number" step="0.01" md-input placeholder="Price">
+                    </md-input-container>
+                    <button md-mini-fab color="accent" (click)="addTransaction(edate.value, ename.value, eprice.value)">
+                      <md-icon>add</md-icon>
+                    </button>
+                  </div>
+                </form>
+                <md-divider></md-divider>
+                <my-table [rows]="monthlyData" [cols]="cols" [isInlineEdit]="isInlineEdit"
+                          [isMultipleSelection]="isMultipleEdit" [selectedRows]="selectedRows"
+                          (selectOutput)="onSelectTableRow($event)"
+                          (updatedRow)="onUpdateRow($event)"></my-table>
+              </md-card>
+              <md-card *ngIf="rowSelected && !isMultipleEdit">
+                <detail-view [inputData]="getSelectedData()" (updatedDetails)="onUpdatedDetail($event)"></detail-view>
+              </md-card>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!--<div layout-gt-xs="row" flex>-->
-      <!--<div flex-gt-xs="100">-->
-        <!--<md-card>-->
-          <!--<detail-view></detail-view>-->
-        <!--</md-card>-->
+      <!--<div layout-gt-xs="row" flex>-->
+        <!--<div flex-gt-xs="100">-->
+          <!--<md-card>-->
+            <!--<detail-view></detail-view>-->
+          <!--</md-card>-->
+        <!--</div>-->
       <!--</div>-->
-    <!--</div>-->
   </td-layout-manage-list>
-
   <td-layout-footer>
     <div layout="row" layout-align="start center">
       <span class="md-caption">Copyright &copy; 2017 OldMonk90. All rights reserved</span>
