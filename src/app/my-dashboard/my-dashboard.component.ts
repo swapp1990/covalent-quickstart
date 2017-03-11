@@ -14,6 +14,10 @@ import {Amount, Category} from "../../models/catagory";
 import {ComponentType, MdSnackBar} from "@angular/material";
 import {Month} from "../../data/enums/months";
 import {TableDialog} from "../shared/datatable/covalent/table-dialogs.component";
+import {Observable} from "rxjs/Rx";
+import {NgRedux, select, DevToolsExtension} from "@angular-redux/store";
+import {AppState} from "../store";
+import {CounterActions} from "../actions";
 
 @Component({
   selector: 'qs-dashboard',
@@ -42,8 +46,10 @@ export class MyDashboardComponent implements AfterViewInit {
   selectedType: string = "Expense";
   selectedMonth: string = "February";
   selectedYear: string = "2017";
+  @select() readonly selectedMonth$: Observable<string>;
+  @select() readonly selectedYear$: Observable<string>;
 
-  selectedCategory: string = "";
+  selectedCategory: string = "All";
   totalForCategory: number = 0;
 
   rowSelected: boolean = false;
@@ -73,7 +79,9 @@ export class MyDashboardComponent implements AfterViewInit {
               public media: TdMediaService,
               private _snackBarService: MdSnackBar,
               private _dialogService: TdDialogService,
-              private changeDetector: ChangeDetectorRef) {
+              private changeDetector: ChangeDetectorRef,
+              private ngRedux: NgRedux<AppState>,
+              private actions: CounterActions) {
 
     // let data1: TransactionData = new TransactionData('Grocery', '2017', 'January', 'false', 'false');
     // data1.price = 450; data1.name="Smith's"; data1.date = 21;
@@ -82,6 +90,25 @@ export class MyDashboardComponent implements AfterViewInit {
     // let data2: TransactionData = new TransactionData('Grocery', '2017', 'January', 'false', 'false');
     // data2.price = 32; data2.name="Indian Store"; data2.date = 12;
     // this.monthlyData.push(data2);
+  }
+
+  ngOnInit() {
+    this.ngRedux.subscribe(() => {
+      let newState = this.ngRedux.getState();
+      if(this.selectedMonth !== newState.selectedMonth
+        || this.selectedYear !== newState.selectedYear
+        || this.selectedType !== newState.selectedType) {
+        this.selectedMonth = newState.selectedMonth;
+        this.selectedYear = newState.selectedYear;
+        this.selectedType = newState.selectedType;
+        this.updateRendering();
+      }
+    });
+  }
+
+  updateFromStore() {
+    console.log("Change in Month");
+    this.updateRendering();
   }
 
   ngAfterViewInit(): void {
@@ -104,7 +131,6 @@ export class MyDashboardComponent implements AfterViewInit {
         this.categories.push({name: income, icon:'local_grocery_store', monthlyAmount: new Amount(), expectedAmount: 0});
       });
     }
-    this.selectedCategory = "";
     this.calculateTotalAmount(this.selectedMonth, this.selectedYear);
   }
 
@@ -123,7 +149,10 @@ export class MyDashboardComponent implements AfterViewInit {
           if(totalExpense.length > 0) {
             this.totalExpense = totalExpense[0].balance;
             this.totalExpense = Math.round(this.totalExpense);
+            this.actions.totalExpense(this.totalExpense);
             this.changeDetector.detectChanges();
+          } else {
+            this.actions.totalExpense(0);
           }
         });
   }
@@ -135,7 +164,10 @@ export class MyDashboardComponent implements AfterViewInit {
           if(totalIncome.length > 0) {
             this.totalIncome = totalIncome[0].balance;
             this.totalIncome = Math.round(this.totalIncome);
+            this.actions.totalIncome(this.totalIncome);
             this.changeDetector.detectChanges();
+          } else {
+            this.actions.totalExpense(0);
           }
         });
   }
@@ -168,20 +200,23 @@ export class MyDashboardComponent implements AfterViewInit {
   }
 
   getMonthlyDataByCategory(changedCategory: string) {
-      this.transService.getMonthlyDataByCategory(this.selectedYear, this.selectedMonth, changedCategory)
-        .subscribe (
-          (monthlyData: TransactionData[]) => {
-            this.monthlyData = monthlyData;
-            //console.log("Get Data", this.monthlyData);
-            console.log("Got Data ", this.monthlyData.length);
-            if(this.monthlyData.length == 0) {
-              this.rowSelected = false;
-            }
-          },
-          err => {
-            console.log(err);
+    if(changedCategory === "All") {
+      changedCategory = "";
+    }
+    this.transService.getMonthlyDataByCategory(this.selectedYear, this.selectedMonth, changedCategory)
+      .subscribe (
+        (monthlyData: TransactionData[]) => {
+          this.monthlyData = monthlyData;
+          //console.log("Get Data", this.monthlyData);
+          console.log("Got Data ", this.monthlyData.length);
+          if(this.monthlyData.length == 0) {
+            this.rowSelected = false;
           }
-        );
+        },
+        err => {
+          console.log(err);
+        }
+      );
   }
 
   updateRendering() {
@@ -329,11 +364,11 @@ export class MyDashboardComponent implements AfterViewInit {
 
   onSelection(data) {
     if(data.month) {
-      this.selectedMonth = data.month;
+      //this.selectedMonth = data.month;
     } else if(data.year) {
-      this.selectedYear = data.year;
+      //this.selectedYear = data.year;
     } else if(data.type) {
-      this.selectedType = data.type;
+      //this.selectedType = data.type;
     }
     this.updateRendering();
     console.log("Mon ", this.selectedMonth);
@@ -361,25 +396,11 @@ export class MyDashboardComponent implements AfterViewInit {
   }
 
   onMonthIncrement() {
-    let monthNumber = Month[this.selectedMonth];
-    monthNumber = monthNumber + 1;
-    if(monthNumber == 12) {
-      this.selectedYear = "2017";
-      monthNumber = 0;
-    }
-    this.selectedMonth = Month[monthNumber];
-    this.updateRendering();
+
   }
 
   onMonthDecrement() {
-    let monthNumber = Month[this.selectedMonth];
-    monthNumber = monthNumber - 1;
-    if(monthNumber == -1) {
-      this.selectedYear = "2016";
-      monthNumber = 11;
-    }
-    this.selectedMonth = Month[monthNumber];
-    this.updateRendering();
+
   }
 
   onSettings() {
@@ -412,6 +433,10 @@ export class MyDashboardComponent implements AfterViewInit {
 
   ngOnChanges(): void {
     this.getMonthlyDataByCategory(this.selectedCategory);
+    this.selectedMonth$.subscribe((data) => {
+      this.selectedMonth = data;
+      this.updateFromStore();
+    });
     this.changeDetector.detectChanges();
   }
 }

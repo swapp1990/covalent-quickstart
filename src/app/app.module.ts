@@ -34,6 +34,9 @@ import { RequestInterceptor } from '../config/interceptors/request.interceptor';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
+import { NgReduxModule }  from '@angular-redux/store';
+import { CounterActions } from './actions';
+
 import {MyDashboardComponent} from "./my-dashboard/my-dashboard.component";
 import {TransactionService} from "../services/transactions.service";
 import {MyTable} from "./shared/datatable/my-table.component";
@@ -61,6 +64,7 @@ import {MyPagingBar} from "./shared/paging-bar/my-paging-bar.component";
 import {FormsModule} from "@angular/forms";
 import {CovalentDynamicFormsModule} from "@covalent/dynamic-forms";
 import {ValueViewComponent} from "./shared/json formatter/value-view.component";
+import {CurrentMonthTitle} from "./my-dashboard/current-month-title.component";
 
 const httpInterceptorProviders: Type<any>[] = [
   RequestInterceptor,
@@ -72,6 +76,7 @@ const httpInterceptorProviders: Type<any>[] = [
     MainComponent,
     DashboardComponent,
     MyDashboardComponent,
+    CurrentMonthTitle,
     MySearchView,
     DynamicComponent,
     DetailView,
@@ -128,13 +133,15 @@ const httpInterceptorProviders: Type<any>[] = [
     CovalentDynamicFormsModule,
     appRoutes,
     NgxChartsModule,
-    NgxDatatableModule
+    NgxDatatableModule,
+    NgReduxModule
   ], // modules needed to run this module
   providers: [
     appRoutingProviders,
     httpInterceptorProviders,
     Title,
-    TransactionService
+    TransactionService,
+    CounterActions
   ], // additional providers needed for this module
   entryComponents: [ ],
   bootstrap: [ AppComponent ],

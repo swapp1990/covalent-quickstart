@@ -15,38 +15,15 @@
         <my-side-tabs [rows]="categories" (selected)="onSelected($event)"></my-side-tabs>
       </md-nav-list>
       <div td-toolbar-content layout="row" flex style="height: 100%;">
-
-        <md-card class="my-md-card" flex flex-gt-xs="100">
-          <md-card-content style="padding: 0px">
-            <h1 align="center" style="margin-bottom: 0px;"><span style="color:blue">+{{totalIncome}}</span>
-              /<span style="color:red">-{{totalExpense}}</span></h1>
-            <h3 align="center" style="margin-top: 0px;">{{highestSpentName}}</h3>
-          </md-card-content>
-        </md-card>
-        <select-date flex flex-gt-xs="50" hide-xs
-            (onSelection)="onSelection($event)"></select-date>
-        <button show-xs hide-lg md-icon-button (click)="onSettings($event)"><md-icon class="md-24">settings</md-icon></button>
-        <table-dialog #td></table-dialog>
+        <!--<select-date flex flex-gt-xs="50" hide-xs-->
+            <!--(onSelection)="onSelection($event)"></select-date>-->
+        <div layout="row" layout-align="start center" class="pad-left-sm pad-right-sm">
+          <span class="md-title">{{selectedCategory}}</span>
+          <span class="md-subhead" style="margin-top: 4px; margin-left: 5px;">  {{totalForCategory}}</span>
+        </div>
       </div>
       <div layout="row" flex hide-gt-lg hide-gt-md>
-        <md-card class="my-md-card" flex="10">
-          <md-card-content layout="row" layout-align="center center">
-            <a md-icon-button (click)="onMonthDecrement()"><md-icon>fast_rewind</md-icon> </a>
-          </md-card-content>
-        </md-card>
-        <md-card class="my-md-card" flex="80">
-          <md-card-title layout="row" layout-align="center center">
-            {{selectedCategory}} - {{totalForCategory}}
-          </md-card-title>
-          <md-card-subtitle layout="row" layout-align="center center">
-            {{selectedMonth}}, {{selectedYear}}
-          </md-card-subtitle>
-        </md-card>
-        <md-card class="my-md-card" flex="10">
-          <md-card-content layout="row" layout-align="center center">
-            <a md-icon-button (click)="onMonthIncrement()"><md-icon>fast_forward</md-icon> </a>
-          </md-card-content>
-        </md-card>
+
       </div>
       <div class="md-content" flex md-scroll-y>
         <div layout="column" layout-gt-sm="row">
@@ -57,19 +34,16 @@
                 <!--<md-card-subtitle>Total {{totalForCategory}}</md-card-subtitle>-->
                 <!--<md-divider></md-divider>-->
                 <div layout="row" layout-align="start center" class="pad-left-sm pad-right-sm">
-                  <span class="push-left-sm">
-                    <span class="md-title">{{selectedCategory}}</span>
-                  </span>
                   <td-search-box #searchBox backIcon="arrow_back" class="push-right-sm" placeholder="Search here" flex>
                   </td-search-box>
                   <!--<button *ngIf="rowSelected" (click)="onEditTransaction()" md-icon-button>-->
-                      <!--<md-icon>edit</md-icon>-->
+                  <!--<md-icon>edit</md-icon>-->
                   <!--</button>-->
                   <button *ngIf="rowSelected" (click)="onCopyTransaction()" md-icon-button>
-                      <md-icon>content_copy</md-icon>
+                    <md-icon>content_copy</md-icon>
                   </button>
                   <button *ngIf="rowSelected" (click)="onDeleteTransaction()" md-icon-button>
-                      <md-icon>delete</md-icon>
+                    <md-icon>delete</md-icon>
                   </button>
                   <button *ngIf="!rowSelected" (click)="onCreateClicked()" md-icon-button>
                     <md-icon *ngIf="!createNew">add</md-icon>
@@ -80,6 +54,10 @@
                     <md-icon *ngIf="!isInlineEdit && !this.isMultipleEdit" color="primary">edit</md-icon>
                     <md-icon *ngIf="isMultipleEdit" color="primary">dehaze</md-icon>
                   </button>
+                  <!--<button *ngIf="rowSelected" (click)="onEditTransaction()" md-icon-button>-->
+                      <!--<md-icon>edit</md-icon>-->
+                  <!--</button>-->
+
                 </div>
                 <form *ngIf="createNew">
                   <div layout="row" layout-margin>
