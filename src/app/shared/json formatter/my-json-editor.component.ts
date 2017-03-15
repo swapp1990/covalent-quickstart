@@ -77,7 +77,7 @@ export class MyJsonEditor {
 
   update() {
     console.log("Json ", this.jsonObject);
-    //this.updatedJson.emit({object: this.jsonObject, name: this.objectName});
+    this.updatedJson.emit({object: this.jsonObject, name: this.objectName});
   }
 
   cancel() {

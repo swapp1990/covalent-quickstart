@@ -4,7 +4,7 @@ import {Component, Input,Output,EventEmitter, ChangeDetectorRef} from "@angular/
   selector: 'value-view',
   template: `
     <md-input-container flex="20">
-      <input #evalue md-input [(ngModel)]="objectValue">
+      <input #evalue md-input [(ngModel)]="objectValue" (blur)="onBlur()">
     </md-input-container>
     <button *ngIf="!creation" (click)="showCreateColumn($event)" md-icon-button><md-icon class="md-24">add circle</md-icon></button>
     <button *ngIf="!creation" (click)="deleteColumn($event)" md-icon-button><md-icon class="md-24">remove</md-icon></button>
@@ -59,7 +59,7 @@ export class ValueViewComponent {
   addData(colName, colValue) {
     let newObject = {};
     newObject[colName] = colValue;
-    let returnObject = {newObject: newObject, columnName: this.objectName};
+    let returnObject = {newObject: newObject, columnName: this.objectName, type: 'Create'};
     this.updatedValue.emit(returnObject);
     this.creation = false;
   }
@@ -69,7 +69,15 @@ export class ValueViewComponent {
   }
 
   deleteColumn() {
-    
+
+  }
+
+  onBlur() {
+    let newObject = {};
+    newObject[this.objectName] = this.objectValue;
+    let returnObject = {columnValue: this.objectValue, columnName: this.objectName, type: 'Update'};
+    this.updatedValue.emit(returnObject);
+    this.creation = false;
   }
 
   onUpdate(details) {

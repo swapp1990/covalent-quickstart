@@ -1,4 +1,4 @@
-import {Component, OnInit, OnChanges, Input, Output, EventEmitter} from "@angular/core";
+import {Component, OnInit, OnChanges, Input, Output, EventEmitter, ChangeDetectorRef} from "@angular/core";
 
 @Component({
   selector: 'my-progress-bar',
@@ -19,12 +19,22 @@ export class MyProgressBar implements OnInit, OnChanges {
 
   @Output() selected = new EventEmitter();
 
+  constructor(private changeDetector: ChangeDetectorRef) {
+
+  }
+
   ngOnInit(): void {
 
   }
 
   ngOnChanges(changes) {
-
+    if(this.percent >70) {
+      this.color = "warn";
+    } else if(this.percent > 90) {
+      this.color = "accent";
+    }
+    //console.log("Color Change");
+    this.changeDetector.detectChanges();
   }
 
   onSelected(event) {

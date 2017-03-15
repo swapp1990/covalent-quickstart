@@ -100,6 +100,7 @@ export class DetailViewTable implements OnInit, OnChanges {
       rowInfo[newColName] = newcolvalue;
     } else {
       rowInfo[newColName] = {};
+      rowInfo[newColName][newcolvalue] = "Test";
     }
 
     this.addRow.emit(rowInfo);

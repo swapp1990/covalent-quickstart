@@ -39,7 +39,6 @@ import {TableDialog} from "../shared/datatable/covalent/table-dialogs.component"
       <button td-menu-button><md-icon (click)="onSettings($event)">settings</md-icon></button>
       <table-dialog #td></table-dialog>
     </div>    
-
     `,
     styles: [`
       .my-md-card {

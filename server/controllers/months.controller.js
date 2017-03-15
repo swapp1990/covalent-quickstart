@@ -194,6 +194,7 @@ module.exports.monthUpdateOne = function(req,res) {
           doc.isIncome = req.body.isIncome;
           doc.isEssential = req.body.isEssential;
           if(req.body.details) {
+            console.log("updated details " , req.body.details);
             doc.details = req.body.details;
           } else {
             // var value = {"val1": 5, "val2": "hello"};

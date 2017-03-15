@@ -86,8 +86,13 @@ export class ObjectViewComponent {
   }
 
   onValueToObject(returnObject: any) {
-    console.log("New ", returnObject.newObject);
-    this.object[returnObject.columnName] = returnObject.newObject;
+    console.log("New ", returnObject.newObject, " Obj ", this.object);
+    if(returnObject.type == "Create") {
+      this.object[returnObject.columnName] = returnObject.newObject;
+    } else {
+      this.object[returnObject.columnName] = returnObject.columnValue;
+    }
+
     this.refreshDetails();
   }
 

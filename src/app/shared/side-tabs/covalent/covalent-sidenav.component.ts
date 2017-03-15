@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter} from "@angular/core";
+import {Component, Input, Output, EventEmitter, ChangeDetectorRef} from "@angular/core";
 import {ITdDataTableColumn, TdDataTableService, IPageChangeEvent} from "@covalent/core";
 
 @Component({
@@ -38,21 +38,25 @@ export class MyCovSideNav {
 
   selectedTab: any;
 
-  constructor() {}
+  constructor(private changeDetector: ChangeDetectorRef) {}
 
   ngAfterViewInit(): void {
     //console.log(this.rows);
+
   }
 
   ngOnChanges(): void {
-
+    // console.log(this.rows);
+    this.changeDetector.detectChanges();
   }
 
   calculateValue(item) {
     let amountSpent = item.expectedAmount - item.monthlyAmount.total;
     if(item.expectedAmount == 0) return 0;
+    if(item.expectedAmount < item.monthlyAmount.total) return 100;
+
     let percent = Math.round((amountSpent/item.expectedAmount)*100);
-    return percent;
+    return 100-percent;
   }
 
   isSelected(item) {

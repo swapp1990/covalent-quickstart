@@ -123,8 +123,9 @@ export class MyDashboardComponent implements AfterViewInit {
   initializeCategories() {
     this.categories = [];
     if(this.selectedType === "Expense") {
-      EnumUtils.getExpenseCategoriesString().map(expense => {
-        this.categories.push({name: expense, icon:'local_grocery_store', monthlyAmount: new Amount(), expectedAmount: 0});
+      EnumUtils.getExpenseCategories().map(expense => {
+        this.categories.push({name: expense.name, icon: expense.icon,
+                              monthlyAmount: new Amount(), expectedAmount: expense.expectedAmount});
       });
     } else {
       EnumUtils.getIncomeCategoriesString().map(income => {
