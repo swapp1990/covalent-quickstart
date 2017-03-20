@@ -3,6 +3,10 @@ import {MdSnackBar, MdSnackBarRef} from "@angular/material";
 
 @Component({
   selector: 'my-json-viewer',
+  styles: [` :host /deep/ .td-json-formatter-wrapper .value .string {
+        word-break: normal; 
+      }
+  `],
   template: `
       <td-json-formatter [data]="jsonObject" [levelsOpen]="1" (click)="onClick()">
       </td-json-formatter>

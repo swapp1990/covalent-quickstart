@@ -14,6 +14,7 @@ export interface AppState {
   selectedType: string;
   totalIncome: number;
   totalExpense: number;
+  searchText: string
 }
 
 export const INITIAL_STATE: AppState = {
@@ -23,7 +24,8 @@ export const INITIAL_STATE: AppState = {
   selectedCategory: '',
   selectedType: 'Expense',
   totalIncome: 0,
-  totalExpense: 0
+  totalExpense: 0,
+  searchText: 'Seasons'
 };
 
 export function rootReducer(state: AppState, action: IPayloadAction): AppState {
@@ -58,6 +60,10 @@ export function rootReducer(state: AppState, action: IPayloadAction): AppState {
     }
     case CounterActions.TOTALINCOME: {
       state.totalIncome = action.payload;
+      return state;
+    }
+    case CounterActions.SEARCHTEXT: {
+      state.searchText = action.payload;
       return state;
     }
     default: return state;

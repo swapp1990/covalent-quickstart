@@ -81,7 +81,7 @@
                           (selectOutput)="onSelectTableRow($event)"
                           (updatedRow)="onUpdateRow($event)"></my-table>
               </md-card>
-              <md-card *ngIf="rowSelected && !isMultipleEdit">
+              <md-card *ngIf="rowSelected && !isMultipleEdit && showDetailView">
                 <detail-view [inputData]="getSelectedData()" (updatedDetails)="onUpdatedDetail($event)"></detail-view>
               </md-card>
             </div>

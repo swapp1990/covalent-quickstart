@@ -58,6 +58,7 @@ export class MyDashboardComponent implements AfterViewInit {
   createNew: boolean = false;
   isInlineEdit: boolean = false;
   isMultipleEdit: boolean = false;
+  showDetailView: boolean = false;
 
   totalIncome: number = 0;
   totalExpense: number = 0;
@@ -102,6 +103,7 @@ export class MyDashboardComponent implements AfterViewInit {
         this.selectedYear = newState.selectedYear;
         this.selectedType = newState.selectedType;
         this.updateRendering();
+        this.showDetailView = false;
       }
     });
   }
@@ -213,6 +215,8 @@ export class MyDashboardComponent implements AfterViewInit {
           if(this.monthlyData.length == 0) {
             this.rowSelected = false;
           }
+          //this.selectedRows = [];
+          //this.selectedRows.push(this.monthlyData[0]);
         },
         err => {
           console.log(err);
@@ -264,6 +268,7 @@ export class MyDashboardComponent implements AfterViewInit {
     //console.log("Dash ", data);
     this.rowSelected = data.selected;
     if(!this.isMultipleEdit) {
+      this.showDetailView = true;
       if(data.selected) {
         this.createNew = false;
       }
@@ -405,18 +410,7 @@ export class MyDashboardComponent implements AfterViewInit {
   }
 
   onSettings() {
-    let settingsData: any = {
-      isIncome: this.selectedType,
-      types: ["Expense", "Income"],
-      displayType: 'Toggle'
-    }
-    console.log("Set ", settingsData);
-    this.tableDialog.showDialogMain('Settings', settingsData)
-      .subscribe((value: any) => {
-        console.log("Show ", value);
-        this.selectedType = value.selectedType;
-        this.updateRendering();
-      });
+
   }
 
   openCreateDialog(): void {

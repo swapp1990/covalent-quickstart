@@ -71,10 +71,19 @@ module.exports.getDataBasedOnQuery = function(req, res) {
   //       res.json("");
   //     }
   //   });
+
+  var searchTerms = req.query.name.split(" ");
+  var searchString = "";
+  for (i=0; i<searchTerms.length; i++)
+  {
+    var term = searchTerms[i];
+    searchString += "\\\"" + term + "\"\\";
+  }
+  console.log("searchString: ", searchString);
   Transaction.find({
     $text:
     {
-      $search: req.query.name,
+      $search: searchString,
       $language: "en",
       $caseSensitive: false,
       $diacriticSensitive: false

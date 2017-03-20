@@ -29,6 +29,18 @@ import {Observable, Subject} from "rxjs/Rx";
             </md-radio-group>
           </div>
         </div>
+        <div *ngIf="type == 'jsonEdit'">
+          <div layout="column" layout-align="center center" style="height: 100%;">
+            <md-input-container flex="10">
+              <input #cname md-input style="background-color: #00e5ff"
+                [(ngModel)]="modelData.name">
+            </md-input-container>
+            <md-input-container flex="10">
+              <input #cvalue md-input style="background-color: #00e5ff"
+                [(ngModel)]="modelData.value">
+            </md-input-container>
+          </div>
+        </div>
       </my-dialog>
     `,
   styles: [``]
@@ -67,7 +79,7 @@ export class TableDialog {
     } else {
       if(this.type === 'checkbox') {
         this.modelData = String(this.modelData.on);
-      } 
+      }
       this._afterClosed.next(this.modelData);
     }
     this._afterClosed.complete();

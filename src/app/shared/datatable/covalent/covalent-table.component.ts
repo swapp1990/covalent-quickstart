@@ -1,6 +1,8 @@
 import {Component, Input, Output, EventEmitter, ChangeDetectorRef, ViewChild} from "@angular/core";
 import {ITdDataTableColumn, TdDataTableService, IPageChangeEvent, TdDialogService} from "@covalent/core";
 import {TableDialog} from "./table-dialogs.component";
+import {NgRedux, select, DevToolsExtension} from "@angular-redux/store";
+import {Observable} from "rxjs/Rx";
 
 @Component({
   selector: 'my-cov-table',
@@ -63,9 +65,11 @@ export class MyCovTable {
   @Input() showPageBar: boolean = true;
   @Input() selectedRows: any[] = [];
 
-  @Input() searchHighlightText: string = "";
-  
+  searchHighlightText: string = "Seasons";
+
   @ViewChild('td') tableDialog: TableDialog;
+
+  @select() readonly searchText$: Observable<string>;
 
   showDialog: boolean = false;
 
@@ -105,6 +109,9 @@ export class MyCovTable {
 
   ngOnChanges(): void {
     this.filter();
+    this.searchText$.subscribe((data) => {
+      this.searchHighlightText = data;
+    });
   }
 
   reset() {
@@ -157,10 +164,21 @@ export class MyCovTable {
   }
 
   shouldHighlight(rowData) {
-    if(rowData === this.searchHighlightText) {
-      return true;
-    } else {
+    if(!rowData || rowData == null) return false;
+    if(this.searchHighlightText == "") return false;
+    if(typeof rowData !== 'string') {
       return false;
     }
+
+    var searchTerms = this.searchHighlightText.split(" ");
+    let shouldHighlight = false;
+    for (let i=0; i<searchTerms.length; i++) {
+      var term = searchTerms[i];
+      var result = rowData.toLowerCase().indexOf(term.toLowerCase())>=0;
+      if(result) {
+        return true;
+      }
+    }
+    return false;
   }
 }

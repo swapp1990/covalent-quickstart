@@ -3,6 +3,7 @@ import {TdChartsComponent} from "@covalent/charts";
 import {TransactionData} from "../../models/transaction";
 import {TransactionService} from "../../services/transactions.service";
 import {Month} from "../../data/enums/months";
+import {CounterActions} from "../actions";
 
 @Component({
   selector: 'search-view',
@@ -26,7 +27,6 @@ import {Month} from "../../data/enums/months";
            </button>
            <md-divider></md-divider>
            <my-table [rows]="data" [cols]="cols" [isInlineEdit]="isInlineEdit" [showPageBar]="true"
-                        [searchHighlightText]="searchText"
                         (selectOutput)="onSelectTableRow($event)"
                         (updatedRow)="onUpdateRow($event)"></my-table>
         </md-card>
@@ -78,13 +78,13 @@ export class MySearchView implements AfterViewInit {
   itemsRequireMatch: string[] = this.items.slice(0, 6);
 
   cols = [
+    { name: 'name', label: 'Name' },
     { name: 'category', label: 'Category' },
-    { name: 'month', label: 'Month' },
+    { name: 'month', label: 'Month', type: 'month'},
     { name: 'year', label: 'Year' },
     { name: 'date', label: 'Date' },
-    { name: 'name', label: 'Name' },
     { name: 'price', label: 'Price' },
-    { name: 'isEssential', label: 'Is Essential?'},
+    { name: 'isEssential', label: 'Is Essential?', type: 'checkbox'},
     { name: 'details', label: 'Details', isJsonColumn: true}
   ];
 
@@ -124,7 +124,9 @@ export class MySearchView implements AfterViewInit {
     {code: 'GA', name: 'Georgia'},
     {code: 'HI', name: 'Hawaii'}];
 
-  constructor(private transService: TransactionService, private changeDetector: ChangeDetectorRef) {}
+  constructor(private transService: TransactionService,
+              private changeDetector: ChangeDetectorRef,
+              private actions: CounterActions) {}
 
   ngAfterViewInit(): void {
 
@@ -181,6 +183,7 @@ export class MySearchView implements AfterViewInit {
     this.searchText = displayName;
     if(this.searchText !== "") {
       this.getDataBySearchTag(displayName);
+      this.actions.searchText(this.searchText);
     }
   }
 

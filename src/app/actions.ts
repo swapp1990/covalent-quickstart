@@ -12,7 +12,8 @@ export class CounterActions {
   static CATEGORY = 'CATEGORY';
   static TOTALEXPENSE = 'TOTALEXPENSE';
   static TOTALINCOME = 'TOTALINCOME';
-
+  static SEARCHTEXT = 'SEARCHTEXT';
+  
   constructor(private ngRedux: NgRedux<AppState>) {}
 
   increment() {
@@ -45,5 +46,9 @@ export class CounterActions {
 
   totalExpense(value: number) {
     this.ngRedux.dispatch({ type: CounterActions.TOTALEXPENSE, payload: value });
+  }
+  
+  searchText(text: string) {
+    this.ngRedux.dispatch({ type: CounterActions.SEARCHTEXT, payload: text });
   }
 }
